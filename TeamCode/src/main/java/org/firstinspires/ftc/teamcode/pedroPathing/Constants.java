@@ -10,6 +10,8 @@ import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 public class Constants {
     public static FollowerConstants followerConstants;
 
@@ -19,6 +21,7 @@ public class Constants {
     }
 
     public static MecanumConstants mecanumConstants = new MecanumConstants()
+            .maxPower(1)
             .leftFrontMotorName("FL")
             .leftRearMotorName("BL")
             .rightFrontMotorName("FR")
@@ -31,10 +34,12 @@ public class Constants {
     public static PinpointConstants pinpointConstants = new PinpointConstants()
             .hardwareMapName("POC")
             // forwardPodY: forward/back position of the X (strafe-tracking) pod, forward = positive
-            .forwardPodY(1.0)
+            .forwardPodY(0.8595)
             // strafePodX: left/right position of the Y (forward-tracking) pod, left = positive
-            .strafePodX(-2.25)
-            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
+            .strafePodX(-3.9962)
+            .distanceUnit(DistanceUnit.INCH)
+            .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
+            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
