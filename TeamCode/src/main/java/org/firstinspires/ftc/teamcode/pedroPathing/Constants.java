@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.pedroPathing;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
+import com.pedropathing.ftc.drivetrains.MecanumConstants;
+import com.pedropathing.ftc.localization.constants.PinpointConstants;
 import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,30 +14,32 @@ public class Constants {
 
     static {
         followerConstants = new FollowerConstants();
-
-        followerConstants.leftFrontMotorName = "FL";
-        followerConstants.leftRearMotorName = "BL";
-        followerConstants.rightFrontMotorName = "FR";
-        followerConstants.rightRearMotorName = "BR";
-
-        // Standard mecanum wiring — swap FORWARD/REVERSE on a side if the robot drives wrong
-        followerConstants.leftFrontMotorDirection = DcMotorSimple.Direction.REVERSE;
-        followerConstants.leftRearMotorDirection = DcMotorSimple.Direction.REVERSE;
-        followerConstants.rightFrontMotorDirection = DcMotorSimple.Direction.FORWARD;
-        followerConstants.rightRearMotorDirection = DcMotorSimple.Direction.FORWARD;
-
         followerConstants.mass = 4.5;
     }
 
-    // These will be dialed in during tuning; leave as-is until you reach that step
+    public static MecanumConstants mecanumConstants = new MecanumConstants()
+            .leftFrontMotorName("FL")
+            .leftRearMotorName("BL")
+            .rightFrontMotorName("FR")
+            .rightRearMotorName("BR")
+            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
+
+    public static PinpointConstants pinpointConstants = new PinpointConstants()
+            .hardwareMapName("POC")
+            // forwardPodY: forward/back position of the X (strafe-tracking) pod, forward = positive
+            .forwardPodY(1.0)
+            // strafePodX: left/right position of the Y (forward-tracking) pod, left = positive
+            .strafePodX(-2.25);
+
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
-                // "pinpoint" must match the I2C device name you set in Driver Hub
-                // xOffset = Y-pod offset left/right of center (inches, right = positive)
-                // yOffset = X-pod offset forward/back of center (inches, forward = positive)
-                .pinpointLocalizer("POC", 2.25, 1.0)
+                .mecanumDrivetrain(mecanumConstants)
+                .pinpointLocalizer(pinpointConstants)
                 .pathConstraints(pathConstraints)
                 .build();
     }
