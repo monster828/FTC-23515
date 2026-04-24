@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:mymaven.bylazar.com)",
+      "WebFetch(domain:pedropathing.com)",
+      "WebFetch(domain:github.com)"
+    ]
+  }
+}
