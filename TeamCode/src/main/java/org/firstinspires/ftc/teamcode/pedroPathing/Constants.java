@@ -13,11 +13,10 @@ public class Constants {
     static {
         followerConstants = new FollowerConstants();
 
-        // TODO: update these to match your Driver Hub motor configuration names
-        followerConstants.leftFrontMotorName = "leftFront";
-        followerConstants.leftRearMotorName = "leftRear";
-        followerConstants.rightFrontMotorName = "rightFront";
-        followerConstants.rightRearMotorName = "rightRear";
+        followerConstants.leftFrontMotorName = "FL";
+        followerConstants.leftRearMotorName = "BL";
+        followerConstants.rightFrontMotorName = "FR";
+        followerConstants.rightRearMotorName = "BR";
 
         // Standard mecanum wiring — swap FORWARD/REVERSE on a side if the robot drives wrong
         followerConstants.leftFrontMotorDirection = DcMotorSimple.Direction.REVERSE;
@@ -25,8 +24,7 @@ public class Constants {
         followerConstants.rightFrontMotorDirection = DcMotorSimple.Direction.FORWARD;
         followerConstants.rightRearMotorDirection = DcMotorSimple.Direction.FORWARD;
 
-        // TODO: weigh your fully-assembled robot and update this value (kg)
-        followerConstants.mass = 10;
+        followerConstants.mass = 4.5;
     }
 
     // These will be dialed in during tuning; leave as-is until you reach that step
@@ -35,10 +33,9 @@ public class Constants {
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 // "pinpoint" must match the I2C device name you set in Driver Hub
-                // xOffset = distance (inches) the Y-pod is left/right of robot center (+ = right)
-                // yOffset = distance (inches) the X-pod is forward/back of robot center (+ = forward)
-                // TODO: measure your pod offsets and replace the two 0.0 values
-                .pinpointLocalizer("pinpoint", 0.0, 0.0)
+                // xOffset = Y-pod offset left/right of center (inches, right = positive)
+                // yOffset = X-pod offset forward/back of center (inches, forward = positive)
+                .pinpointLocalizer("pinpoint", 2.25, 1.0)
                 .pathConstraints(pathConstraints)
                 .build();
     }
