@@ -35,7 +35,7 @@ public class Constants {
                 // "pinpoint" must match the I2C device name you set in Driver Hub
                 // xOffset = Y-pod offset left/right of center (inches, right = positive)
                 // yOffset = X-pod offset forward/back of center (inches, forward = positive)
-                .pinpointLocalizer("pinpoint", 2.25, 1.0)
+                .pinpointLocalizer("POC", 2.25, 1.0)
                 .pathConstraints(pathConstraints)
                 .build();
     }
