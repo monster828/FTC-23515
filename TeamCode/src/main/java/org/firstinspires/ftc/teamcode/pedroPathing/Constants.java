@@ -17,11 +17,11 @@ public class Constants {
 
     static {
         followerConstants = new FollowerConstants();
-        followerConstants.mass = 4.5;
+        followerConstants.mass = 12.7; //Kg
     }
 
     public static MecanumConstants mecanumConstants = new MecanumConstants()
-            .xVelocity(62.7338)
+            //.xVelocity(62.7338)
             .maxPower(1)
             .leftFrontMotorName("FL")
             .leftRearMotorName("BL")
@@ -33,11 +33,11 @@ public class Constants {
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
 
     public static PinpointConstants pinpointConstants = new PinpointConstants()
-            .hardwareMapName("POC")
+            //Other Robot.hardwareMapName("POC")
             // forwardPodY: forward/back position of the X (strafe-tracking) pod, forward = positive
-            .forwardPodY(0.8595)
+            //.forwardPodY(0.8595)
             // strafePodX: left/right position of the Y (forward-tracking) pod, left = positive
-            .strafePodX(-3.9962)
+            //.strafePodX(-3.9962)
             .distanceUnit(DistanceUnit.INCH)
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
