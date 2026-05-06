@@ -98,8 +98,8 @@ public class MazeRunner extends OpMode {
 
     void driveOneCell() {
         Pose2D pose2D = _pinpoint.getPosition();
-        _startX = pose2D.getX(DistanceUnit.INCH) / 25.4; // mm → inches
-        _startY = pose2D.getY(DistanceUnit.INCH) / 25.4;
+        _startX = pose2D.getX(DistanceUnit.INCH);
+        _startY = pose2D.getY(DistanceUnit.INCH);
         _fl.setPower(DRIVE_POWER); _bl.setPower(DRIVE_POWER);
         _fr.setPower(DRIVE_POWER); _br.setPower(DRIVE_POWER);
         _isMovingToGrid = true;
@@ -121,8 +121,8 @@ public class MazeRunner extends OpMode {
 
     double distanceTraveled() {
         Pose2D pose2D = _pinpoint.getPosition();
-        double dx = pose2D.getX(DistanceUnit.INCH) / 25.4 - _startX;
-        double dy = pose2D.getY(DistanceUnit.INCH) / 25.4 - _startY;
+        double dx = pose2D.getX(DistanceUnit.INCH) - _startX;
+        double dy = pose2D.getY(DistanceUnit.INCH) - _startY;
         return Math.sqrt(dx * dx + dy * dy);
     }
 
