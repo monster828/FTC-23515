@@ -1,19 +1,21 @@
 package org.firstinspires.ftc.teamcode.summerDriveTests;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import com.bylazar.configurables.annotations.Configurable;
-import com.bylazar.telemetry.TelemetryManager;
 import com.bylazar.telemetry.PanelsTelemetry;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import com.bylazar.telemetry.TelemetryManager;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.follower.Follower;
-import com.pedropathing.paths.PathChain;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathChain;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-@Autonomous(name = "pedroPathingAutoTest")
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+@Autonomous(name = "pedroPathingAutoTest2")
 @Configurable // Panels
-public class pedroPathingAutoTest extends OpMode {
+public class pedroPathingAutoTest_2 extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     public Follower follower; // Pedro Pathing follower instance
     private int pathState; // Current autonomous path state (state machine)
@@ -47,66 +49,64 @@ public class pedroPathingAutoTest extends OpMode {
 
     public static class Paths {
         public PathChain ScorePreloads;
-        public PathChain ScoreSpikes;
 
         public Paths(Follower follower) {
             ScorePreloads = follower.pathBuilder()
                     .addPath(
-                            new BezierLine(
-                                    new Pose(9.000, 9.000),
-                                    new Pose(58.567, 16.626)
-                            )
-                    )
-                    .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
-                    .build();
-
-            ScoreSpikes = follower.pathBuilder()
-                    .addPath(
                             new BezierCurve(
-                                    new Pose(58.567, 16.626),
-                                    new Pose(39.431, 40.224),
-                                    new Pose(14.058, 34.517)
+                                    new Pose(58.600, 16.600),
+                                    new Pose(49.559, 39.842),
+                                    new Pose(11.705, 35.532)
                             )
                     )
                     .setTangentHeadingInterpolation()
                     .addPath(
-                            new BezierLine(
-                                    new Pose(14.058, 34.517),
-                                    new Pose(58.330, 16.724)
-                            )
-                    )
-                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(135))
-                    .addPath(
                             new BezierCurve(
-                                    new Pose(58.330, 16.724),
-                                    new Pose(51.889, 46.544),
-                                    new Pose(55.983, 62.362),
-                                    new Pose(10.472, 56.901)
-                            )
-                    )
-                    .setTangentHeadingInterpolation()
-                    .addPath(
-                            new BezierLine(
-                                    new Pose(18.091, 83.052),
-                                    new Pose(48.087, 108.819)
-                            )
-                    )
-                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(135))
-                    .addPath(
-                            new BezierCurve(
-                                    new Pose(44.996, 58.114),
-                                    new Pose(53.652, 84.916),
-                                    new Pose(18.091, 83.052)
-                            )
-                    )
-                    .setTangentHeadingInterpolation()
-                    .addPath(
-                            new BezierLine(
-                                    new Pose(10.472, 56.901),
-                                    new Pose(44.996, 58.114)
+                                    new Pose(11.705, 35.532),
+                                    new Pose(45.426, 30.659),
+                                    new Pose(58.755, 22.081)
                             )
                     )
                     .setConstantHeadingInterpolation(Math.toRadians(180))
+                    .addPath(
+                            new BezierCurve(
+                                    new Pose(58.755, 22.081),
+                                    new Pose(49.893, 70.759),
+                                    new Pose(8.274, 55.631)
+                            )
+                    )
+                    .setTangentHeadingInterpolation()
+                    .addPath(
+                            new BezierCurve(
+                                    new Pose(8.274, 55.631),
+                                    new Pose(38.030, 44.791),
+                                    new Pose(58.690, 18.902)
+                            )
+                    )
+                    .setTangentHeadingInterpolation()
+                    .addPath(
+                            new BezierCurve(
+                                    new Pose(58.690, 18.902),
+                                    new Pose(61.487, 86.562),
+                                    new Pose(14.778, 83.248)
+                            )
+                    )
+                    .setTangentHeadingInterpolation()
+                    .addPath(
+                            new BezierCurve(
+                                    new Pose(14.778, 83.248),
+                                    new Pose(44.415, 52.581),
+                                    new Pose(59.159, 17.775)
+                            )
+                    )
+                    .setTangentHeadingInterpolation()
+                    .addPath(
+                            new BezierLine(
+                                    new Pose(9.000, 9.000),
+                                    new Pose(58.600, 16.600)
+                            )
+                    )
+                    .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
                     .build();
         }
     }
@@ -130,7 +130,6 @@ public class pedroPathingAutoTest extends OpMode {
                     /* Score Preload */
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(paths.ScoreSpikes,true);
                     setPathState(2);
                 }
                 break;
