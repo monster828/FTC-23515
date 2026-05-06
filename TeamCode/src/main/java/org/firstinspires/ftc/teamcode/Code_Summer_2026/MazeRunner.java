@@ -14,6 +14,9 @@ public class MazeRunner extends OpMode {
 
     @Override
     public void loop(){
-        // Move forward
+        // Retrieve info about maze mind to determine if changing direction
+
+        // Move forward or stop motors and rotate
+
     }
 }
