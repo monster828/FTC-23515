@@ -112,40 +112,9 @@ public class pedroPathingAutoTest extends OpMode {
     }
 
     public int autonomousPathUpdate() {
-        switch (pathState) {
-            case 0:
-                follower.followPath(paths.ScorePreloads);
-                setPathState(1);
-                break;
-            case 1:
-
-            /* You could check for
-            - Follower State: "if(!follower.isBusy()) {}"
-            - Time: "if(pathTimer.getElapsedTimeSeconds() > 1) {}"
-            - Robot Position: "if(follower.getPose().getX() > 36) {}"
-            */
-
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if(!follower.isBusy()) {
-                    /* Score Preload */
-
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(paths.ScoreSpikes,true);
-                    setPathState(2);
-                }
-                break;
-            case 2:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
-                if(!follower.isBusy()) {
-
-                }
-                break;
-        }
-        return pathState;
-    }
-
-    /** These change the states of the paths and actions. It will also reset the timers of the individual switches **/
-    public void setPathState(int pState) {
-        pathState = pState;
+        // Add your state machine Here
+        // Access paths with paths.pathName
+        // Refer to the Pedro Pathing Docs (Auto Example) for an example state machine
+        return 0;
     }
 }
