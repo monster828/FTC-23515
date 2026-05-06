@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 public class MazeRunner extends OpMode {
     MazeRunnerMind _mind;
 
-    DcMotor _fl, _bl, _fr, _br;
+    DcMotor _left, _right;
     DistanceSensor _sensorFront, _sensorLeft, _sensorRight;
     GoBildaPinpointDriver _pinpoint;
 
@@ -31,17 +31,13 @@ public class MazeRunner extends OpMode {
 
     @Override
     public void init() {
-        _fl = hardwareMap.get(DcMotor.class, "FL");
-        _bl = hardwareMap.get(DcMotor.class, "BL");
-        _fr = hardwareMap.get(DcMotor.class, "FR");
-        _br = hardwareMap.get(DcMotor.class, "BR");
+        _left  = hardwareMap.get(DcMotor.class, "left");
+        _right = hardwareMap.get(DcMotor.class, "right");
 
-        _fl.setDirection(DcMotor.Direction.REVERSE);
-        _bl.setDirection(DcMotor.Direction.REVERSE);
-        _fr.setDirection(DcMotor.Direction.FORWARD);
-        _br.setDirection(DcMotor.Direction.FORWARD);
+        _left.setDirection(DcMotor.Direction.REVERSE);
+        _right.setDirection(DcMotor.Direction.FORWARD);
 
-        for (DcMotor m : new DcMotor[]{_fl, _bl, _fr, _br}) {
+        for (DcMotor m : new DcMotor[]{_left, _right}) {
             m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
@@ -100,8 +96,8 @@ public class MazeRunner extends OpMode {
         Pose2D pose2D = _pinpoint.getPosition();
         _startX = pose2D.getX(DistanceUnit.INCH);
         _startY = pose2D.getY(DistanceUnit.INCH);
-        _fl.setPower(DRIVE_POWER); _bl.setPower(DRIVE_POWER);
-        _fr.setPower(DRIVE_POWER); _br.setPower(DRIVE_POWER);
+        _left.setPower(DRIVE_POWER);
+        _right.setPower(DRIVE_POWER);
         _isMovingToGrid = true;
     }
 
@@ -110,13 +106,13 @@ public class MazeRunner extends OpMode {
         _targetAngle  = (dir == 2) ? Math.PI : Math.PI / 2;
         double leftPower  = (dir > 0) ?  TURN_POWER : -TURN_POWER;
         double rightPower = (dir > 0) ? -TURN_POWER :  TURN_POWER;
-        _fl.setPower(leftPower);  _bl.setPower(leftPower);
-        _fr.setPower(rightPower); _br.setPower(rightPower);
+        _left.setPower(leftPower);
+        _right.setPower(rightPower);
     }
 
     void stopMotors() {
-        _fl.setPower(0); _bl.setPower(0);
-        _fr.setPower(0); _br.setPower(0);
+        _left.setPower(0);
+        _right.setPower(0);
     }
 
     double distanceTraveled() {
