@@ -6,6 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+
 @TeleOp(name = "Maze Runner")
 public class MazeRunner extends OpMode {
     MazeRunnerMind _mind;
@@ -61,7 +65,7 @@ public class MazeRunner extends OpMode {
         _pinpoint.update();
 
         if (_isTurning) {
-            if (Math.abs(normalizeAngle(_pinpoint.getHeading() - _startHeading)) >= _targetAngle) {
+            if (Math.abs(normalizeAngle(_pinpoint.getHeading(AngleUnit.RADIANS) - _startHeading)) >= _targetAngle) {
                 stopMotors();
                 _mind.currentHeading = (_mind.currentHeading + _turnHeadingDelta) % 4;
                 _isTurning = false;
@@ -93,15 +97,16 @@ public class MazeRunner extends OpMode {
     }
 
     void driveOneCell() {
-        _startX = _pinpoint.getXPosition() / 25.4; // mm → inches
-        _startY = _pinpoint.getYPosition() / 25.4;
+        Pose2D pose2D = _pinpoint.getPosition();
+        _startX = pose2D.getX(DistanceUnit.INCH) / 25.4; // mm → inches
+        _startY = pose2D.getY(DistanceUnit.INCH) / 25.4;
         _fl.setPower(DRIVE_POWER); _bl.setPower(DRIVE_POWER);
         _fr.setPower(DRIVE_POWER); _br.setPower(DRIVE_POWER);
         _isMovingToGrid = true;
     }
 
     void startTurn(int dir) {
-        _startHeading = _pinpoint.getHeading();
+        _startHeading = _pinpoint.getHeading(AngleUnit.RADIANS);
         _targetAngle  = (dir == 2) ? Math.PI : Math.PI / 2;
         double leftPower  = (dir > 0) ?  TURN_POWER : -TURN_POWER;
         double rightPower = (dir > 0) ? -TURN_POWER :  TURN_POWER;
@@ -115,8 +120,9 @@ public class MazeRunner extends OpMode {
     }
 
     double distanceTraveled() {
-        double dx = _pinpoint.getXPosition() / 25.4 - _startX;
-        double dy = _pinpoint.getYPosition() / 25.4 - _startY;
+        Pose2D pose2D = _pinpoint.getPosition();
+        double dx = pose2D.getX(DistanceUnit.INCH) / 25.4 - _startX;
+        double dy = pose2D.getY(DistanceUnit.INCH) / 25.4 - _startY;
         return Math.sqrt(dx * dx + dy * dy);
     }
 
