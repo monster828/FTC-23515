@@ -38,7 +38,7 @@ public class far_Side_Start_PedroPathing extends OpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
         Scheduler.reset();
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(72, 8, Math.toRadians(323)));
+        follower.setStartingPose(new Pose(23.4, 123.6, Math.toRadians(323)));
         buildPaths();
         panelsTelemetry.debug("Status", "Initialized");
         panelsTelemetry.update(telemetry);
@@ -92,14 +92,14 @@ public class far_Side_Start_PedroPathing extends OpMode {
                             new BezierCurve(
                                     new Pose(48.625, 82.991),
                                     new Pose(49.389, 55.897),
-                                    new Pose(19.227, 58.508)
+                                    new Pose(18.804, 54.907)
                             )
                     )
                     .setTangentHeadingInterpolation()
                     .addPath(
                             new BezierCurve(
-                                    new Pose(19.227, 58.508),
-                                    new Pose(51.272, 53.472),
+                                    new Pose(18.804, 54.907),
+                                    new Pose(62.499, 38.856),
                                     new Pose(58.178, 100.569)
                             )
                     )
