@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name = "Maze Runner")
 public class MazeRunner extends OpMode {
     MazeRunnerMind _mind;
+    boolean _isMovingToGrid;
 
     @Override
     public void init(){
@@ -14,9 +15,17 @@ public class MazeRunner extends OpMode {
 
     @Override
     public void loop(){
-        // Retrieve info about maze mind to determine if changing direction
 
-        // Move forward or stop motors and rotate
+        if (_isMovingToGrid){
+            // Go to position then set _isMovingToGrid to false
+            _isMovingToGrid = false;
+        }else {
+            // Retrieve info about maze mind to determine if changing direction
+            int mazeMind = _mind.DoMazeRunnerMind(); // 0 means to go forward, 1 means to go right, -1 means to go left, 2 is backwards
 
+            // Move forward or stop motors and rotate
+
+            _isMovingToGrid = true;
+        }
     }
 }
