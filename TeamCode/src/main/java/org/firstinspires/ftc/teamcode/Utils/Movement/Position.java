@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Utils.Movement;
 
-import androidx.annotation.NonNull;
-
 public class Position {
 
     private int type = 0;

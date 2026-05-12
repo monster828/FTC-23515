@@ -1,17 +1,20 @@
 package org.firstinspires.ftc.teamcode.summerDriveTests;
 
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.SparkfunPosGet;
 import org.firstinspires.ftc.teamcode.Utils.Threads.MoveThread;
 import org.firstinspires.ftc.teamcode.Utils.Threads.MoveThreadComm;
 
 import java.io.File;
 
+@Autonomous
 public class homemadeMoveCodeTest extends LinearOpMode {
 
     public DcMotor[] mot = {
@@ -32,5 +35,6 @@ public class homemadeMoveCodeTest extends LinearOpMode {
                 posGet
         );
         m.run();
+        DriveUtils.stop(mot);
     }
 }

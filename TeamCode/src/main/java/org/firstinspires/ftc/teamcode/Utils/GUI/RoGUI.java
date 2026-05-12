@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.Utils.GUI;
 
-import static java.lang.Thread.sleep;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class RoGUI {
 
