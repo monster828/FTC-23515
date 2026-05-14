@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Code_Summer_2026;
+package org.firstinspires.ftc.teamcode.MazeRunner_2026;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
