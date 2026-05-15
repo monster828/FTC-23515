@@ -32,7 +32,7 @@ public class MoveRotTest extends LinearOpMode {
             long s = System.currentTimeMillis();
             double accel = 0;
             int i = 0;
-            while(System.currentTimeMillis()-s < 100) {
+            while(System.currentTimeMillis()-s < 300) {
                 accel += Math.sqrt(Math.pow(spark.getAcceleration().x, 2) + Math.pow(spark.getAcceleration().y, 2));
                 i += 1;
                 sleep(2);
