@@ -92,6 +92,7 @@ public class MazeRunner extends OpMode {
         }
     }
 
+    /**This is to move the robot to the next square in the direction it previously decided**/
     void driveOneCell() {
         Pose2D pose2D = _pinpoint.getPosition();
         _startX = pose2D.getX(DistanceUnit.INCH);
@@ -101,6 +102,7 @@ public class MazeRunner extends OpMode {
         _isMovingToGrid = true;
     }
 
+    /**Starts turning the robot to go in a better direction**/
     void startTurn(int dir) {
         _startHeading = _pinpoint.getHeading(AngleUnit.RADIANS);
         _targetAngle  = (dir == 2) ? Math.PI : Math.PI / 2;
@@ -110,11 +112,13 @@ public class MazeRunner extends OpMode {
         _right.setPower(rightPower);
     }
 
+    /**Stop the motors so we can make an educated guess where to move**/
     void stopMotors() {
         _left.setPower(0);
         _right.setPower(0);
     }
 
+    /**Get the distance traveled**/
     double distanceTraveled() {
         Pose2D pose2D = _pinpoint.getPosition();
         double dx = pose2D.getX(DistanceUnit.INCH) - _startX;
@@ -122,6 +126,7 @@ public class MazeRunner extends OpMode {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
+    /**Converts the radians to -pie to pie**/
     double normalizeAngle(double angle) {
         while (angle >  Math.PI) angle -= 2 * Math.PI;
         while (angle < -Math.PI) angle += 2 * Math.PI;
