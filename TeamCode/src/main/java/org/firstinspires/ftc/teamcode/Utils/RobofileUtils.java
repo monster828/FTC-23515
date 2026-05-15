@@ -174,7 +174,7 @@ public class RobofileUtils {
             } else {
                 type = temp+8;
             }
-            System.out.println(type);
+            //System.out.println(type);
             Position p = new Position(0,0,0);
             /*int[] bitList = new int[10];
             byte idk;
@@ -208,22 +208,22 @@ public class RobofileUtils {
             for(int i = 0; i < 8; i++) {
                 bytes[i+12] = b8[i];
             }
-            System.out.println(Arrays.toString(bytes));
+            //System.out.println(Arrays.toString(bytes));
             float x = -128*bytes[0];
             for(int i = 1; i < 10; i++) {
                 x += (float) (bytes[i] * Math.pow(2,7-i));
             }
             p.setX(x);
-            System.out.println(x);
+            //System.out.println(x);
             float y = -128*bytes[10];
             for(int i = 1; i < 10; i++) {
                 y += (float) (bytes[i+10] * Math.pow(2,7-i));
             }
             p.setY(y);
-            System.out.println(y);
+            //System.out.println(y);
             float r = in[scan+3]/0.7f;
             p.setR(r);
-            System.out.println(r);
+            //System.out.println(r);
             int timeDiff = 128+in[scan+4];
             time += timeDiff;
             p.setTimeStamp(time);
