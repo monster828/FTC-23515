@@ -42,6 +42,7 @@ public class homemadeMoveCodeTest extends LinearOpMode {
         );
         waitForStart();
         m.start();
+        move.start();
         sleep(30000);
     }
 }
