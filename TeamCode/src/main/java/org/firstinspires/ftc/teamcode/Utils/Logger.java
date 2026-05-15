@@ -1,91 +1,125 @@
 package org.firstinspires.ftc.teamcode.Utils;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Logger {
 
-    String filePath = MiscUtils.dataFolder;
+    /*
+    LOG FILE:
+    [LABEL]10000000[DATA]10000000[TIME 16b2B]
+     */
 
-    public Logger(String filePath) {
-        this.filePath = MiscUtils.dataFolder+filePath;
+    File f;
+    long start;
+
+    public Logger(File file) {
+        f = file;
+        start = System.currentTimeMillis();
+        try {
+            f.delete();
+            f.createNewFile();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void write(String label, byte data) {
-        byte[] file = MiscUtils.readFile(filePath);
-        ArrayList<Byte> dataList = new ArrayList<Byte>();
-        for(byte f : file) dataList.add(f);
-        dataList.add(data);
-        byte[] labelB = label.getBytes(StandardCharsets.UTF_8);
-        for(byte b : labelB) dataList.add(b);
-        dataList.add((byte) 0b1111111);
-        byte[] out = new byte[dataList.size()];
-        for(int i = 0; i < out.length; i++) {
-            out[i] = dataList.get(0);
-            dataList.remove(0);
-        }
-        MiscUtils.writeFile(filePath,out);
-    }
-    public void reset() {
-        MiscUtils.writeFile(filePath,new byte[] {});
-    }
-    public String[] readLabels() {
-        byte[] file = MiscUtils.readFile(filePath);
-        int i = 1;
-        ArrayList<String> out = new ArrayList<>();
-        while(i < file.length) {
-            StringBuilder builder = new StringBuilder();
-            if(file[i] != (byte)0b1111111) {
-                builder.append(new String(new byte[] {file[i]},StandardCharsets.UTF_8));
-                i++;
-            } else {
-                i += 2;
-                out.add(builder.toString());
-                builder = new StringBuilder();
+    /**
+     * DATA CANNOT CONTAIN 10000000
+     * @param name label for the data
+     * @param data the data
+     */
+    public void add(String name, byte[] data) {
+        byte[] in;
+        if(f.exists()) {
+            in = new byte[Math.toIntExact(f.length())];
+            try {
+                FileInputStream i = new FileInputStream(f);
+                i.read(in);
+                i.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        } else {
+            in = new byte[0];
         }
-        return out.toArray(new String[0]);
+
+        byte[] out = new byte[in.length+name.length()+ data.length+5];
+        for(int i = 0; i < in.length; i++) {
+            out[i] = in[i];
+        }
+        int i = in.length;
+
+        byte[] a = name.getBytes();
+        for(byte b : a) {
+            out[i] = b;i++;
+        }
+        out[i] = (byte) -128;i++;
+        for (byte b : data) {
+            out[i] = b;i++;
+        }
+        out[i] = (byte) -128;i++;
+        out[i] = (byte)(((System.currentTimeMillis()-start)%256)-128);i++;
+        out[i] = (byte)(Math.floor(((double) (System.currentTimeMillis() - start) /256))-128);
+        try {
+            FileOutputStream o = new FileOutputStream(f);
+            o.write(out);
+            o.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
-    public ArrayList<String> readLabelsList() {
-        byte[] file = MiscUtils.readFile(filePath);
-        int i = 1;
-        ArrayList<String> out = new ArrayList<>();
-        while(i < file.length) {
-            StringBuilder builder = new StringBuilder();
-            if(file[i] != (byte)0b1111111) {
-                builder.append(new String(new byte[] {file[i]},StandardCharsets.UTF_8));
-                i++;
-            } else {
-                i += 2;
-                out.add(builder.toString());
-                builder = new StringBuilder();
-            }
+
+    /**
+     * reads the log
+     * @return an Object array (out). out[x][0] = the name (String), out[x][1] = the data (byte[]), out[x][2] = the timestamp for the data (long)
+     */
+    public Object[][] read() {
+        ArrayList<Object[]> o = new ArrayList<>();
+        byte[] in = new byte[Math.toIntExact(f.length())];
+        try {
+            FileInputStream i = new FileInputStream(f);
+            i.read(in);
+            i.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return out;
-    }
-    public byte[] readData() {
-        byte[] file = MiscUtils.readFile(filePath);
-        int i = 1;
-        ArrayList<Byte> data = new ArrayList<>();
-        data.add(file[0]);
-        while(i < file.length) {
-            if(file[i] != (byte)0b1111111) {
-                i++;
-            } else {
-                i++;
-                if(i < file.length) {
-                    data.add(file[i]);
-                }
+        int i = 0;
+        while(i < in.length-1) {
+            Object[] oh = new Object[3];
+            StringBuilder s = new StringBuilder();
+            while(in[i] != -128) {
+                s.append(new String(new byte[]{in[i]}));
                 i++;
             }
+            i++;
+            //System.out.println("String read");
+            oh[0] = s.toString();
+            ArrayList<Byte> b = new ArrayList<>();
+            while(in[i] != -128) {
+                b.add(in[i]);
+                i++;
+            }
+            byte[] b2 = new byte[b.size()];
+            for(int a = 0; a < b.size(); a++) {
+                b2[a] = b.get(a);
+            }
+            oh[1] = b2;
+            long time = 0;
+            time += in[i+1]+128;
+            time += (in[i+2]+128)*128;
+            i += 4;
+            oh[2] = time;
+            o.add(oh);
         }
-        byte[] out = new byte[data.size()];
-        for(i = 0; i < out.length; i++) {
-           out[i] = data.get(0);
-           data.remove(0);
-        }
-        return out;
+        return o.toArray(new Object[][]{});
     }
 
 }
