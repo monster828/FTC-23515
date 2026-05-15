@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.summerDriveTests;
+/*package org.firstinspires.ftc.teamcode.summerDriveTests;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -18,7 +18,8 @@ import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
-@Autonomous(name = "ivyCodeBase", group = "Autonomous")
+/* Copy this into a new opmode to begin using Ivy */
+/*@Autonomous(name = "ivyCodeBase", group = "Autonomous")
 @Configurable // Panels
 public class ivyCodeBase extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
@@ -68,4 +69,4 @@ public class ivyCodeBase extends OpMode {
         //Line name here// = follower.pathBuilder()
 
     }
-}
+}*/
