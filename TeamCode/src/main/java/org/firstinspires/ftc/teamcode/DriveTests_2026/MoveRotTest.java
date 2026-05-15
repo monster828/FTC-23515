@@ -5,22 +5,26 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
 
 @TeleOp
 public class MoveRotTest extends LinearOpMode {
 
-    public DcMotor[] mot = {
-            hardwareMap.get(DcMotorEx.class,"BL"), //back left
-            hardwareMap.get(DcMotorEx.class,"BR"), //back right
-            hardwareMap.get(DcMotorEx.class,"FL"), //front left
-            hardwareMap.get(DcMotorEx.class,"FR") //front right
-    };
-    public SparkFunOTOS spark = hardwareMap.get(SparkFunOTOS.class,"spark");
 
     @Override
     public void runOpMode() {
+        DcMotor[] mot = {
+                hardwareMap.get(DcMotorEx.class,"BL"), //back left
+                hardwareMap.get(DcMotorEx.class,"BR"), //back right
+                hardwareMap.get(DcMotorEx.class,"FL"), //front left
+                hardwareMap.get(DcMotorEx.class,"FR") //front right
+        };
+        SparkFunOTOS spark = hardwareMap.get(SparkFunOTOS.class,"spark");
+
+        mot[0].setDirection(DcMotorSimple.Direction.REVERSE);
+        mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
         spark.resetTracking();
         for(int a = 0; a <= 90; a += 10) {
             while(!gamepad1.a);

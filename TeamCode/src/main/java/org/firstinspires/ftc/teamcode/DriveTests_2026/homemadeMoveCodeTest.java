@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
@@ -17,16 +18,20 @@ import java.io.File;
 @Autonomous
 public class homemadeMoveCodeTest extends LinearOpMode {
 
-    public DcMotor[] mot = {
-            hardwareMap.get(DcMotorEx.class,"BL"), //back left
-            hardwareMap.get(DcMotorEx.class,"BR"), //back right
-            hardwareMap.get(DcMotorEx.class,"FL"), //front left
-            hardwareMap.get(DcMotorEx.class,"FR") //front right
-    };
-    public SparkFunOTOS spark = hardwareMap.get(SparkFunOTOS.class,"spark");
+
 
     @Override
     public void runOpMode() {
+        DcMotor[] mot = {
+                hardwareMap.get(DcMotorEx.class,"BL"), //back left
+                hardwareMap.get(DcMotorEx.class,"BR"), //back right
+                hardwareMap.get(DcMotorEx.class,"FL"), //front left
+                hardwareMap.get(DcMotorEx.class,"FR") //front right
+        };
+        SparkFunOTOS spark = hardwareMap.get(SparkFunOTOS.class,"spark");
+
+        mot[0].setDirection(DcMotorSimple.Direction.REVERSE);
+        mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
         spark.resetTracking();
         SparkfunPosGet posGet = new SparkfunPosGet(spark);
         MoveThreadComm move = new MoveThreadComm();
@@ -35,6 +40,7 @@ public class homemadeMoveCodeTest extends LinearOpMode {
                 telemetry,
                 posGet
         );
+        waitForStart();
         m.run();
         DriveUtils.stop(mot);
     }
