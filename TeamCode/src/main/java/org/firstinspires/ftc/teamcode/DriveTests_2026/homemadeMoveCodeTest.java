@@ -41,7 +41,7 @@ public class homemadeMoveCodeTest extends LinearOpMode {
                 posGet
         );
         waitForStart();
-        m.run();
-        DriveUtils.stop(mot);
+        m.start();
+        sleep(30000);
     }
 }

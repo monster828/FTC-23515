@@ -63,7 +63,7 @@ public class MoveThread extends Thread {
             int posNum = 1;
             float tP = 0.5f;
             long pauseTimeRemaining = 0;
-            while (System.currentTimeMillis() - delaystart < 30000 && opModeCheck) {
+            while (System.currentTimeMillis() - delaystart < 30000 && opModeCheck && posNum < positions.length-1) {
                 Position p = posGet.getPosi();
 
                 if(comm.isRunning() && !comm.isPaused()) {
@@ -94,13 +94,13 @@ public class MoveThread extends Thread {
                     }
                     if(i < lookAhead && !skip) {
                         moveTime = positions[posNum+1].getTimeStamp();
-                        posNum += i;
+                        if(posNum+i < positions.length) posNum += i;
                         tP = 0.5f;
                     }
 
                     //check if the robot is at the target point
                     if(positions[posNum].getDistTo(p) < tolerance) {
-                        posNum += 1;
+                        if(posNum < positions.length-1) posNum += 1;
                         tP = 0.5f;
                     }
 
@@ -123,7 +123,7 @@ public class MoveThread extends Thread {
                 }
                 if(pauseTimeRemaining <= 0 && comm.isPaused()) {
                     comm.setPaused(false);
-                    posNum += 1;
+                    if(posNum < positions.length-1) posNum += 1;
                 }
                 lastTime = System.currentTimeMillis();
                 comm.setAhead(moveTime-actualTime);
@@ -131,6 +131,7 @@ public class MoveThread extends Thread {
                 //check if the main OpMode is still running.
                 if(opMode != null)opModeCheck = opMode.opModeIsActive() || opMode.opModeInInit();
             }
+            DriveUtils.stop(mot);
         } catch (Exception e) {
 
         }
