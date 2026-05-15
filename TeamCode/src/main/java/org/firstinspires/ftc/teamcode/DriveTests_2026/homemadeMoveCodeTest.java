@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.Utils.Logger;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.SparkfunPosGet;
@@ -40,7 +41,11 @@ public class homemadeMoveCodeTest extends LinearOpMode {
                 telemetry,
                 posGet
         );
+        File loggerFile = new File(MiscUtils.dataFolder+"/log.robolog");
+        Logger l = new Logger(loggerFile);
+        m.addLog(l);
         waitForStart();
+        l.add("Opmode Started",new byte[0]);
         m.start();
         move.start();
         sleep(30000);

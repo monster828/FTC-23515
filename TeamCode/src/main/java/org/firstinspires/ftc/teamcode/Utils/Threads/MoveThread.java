@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Utils.Logger;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
@@ -21,6 +22,7 @@ public class MoveThread extends Thread {
     PositionGetter posGet;
     MoveThreadComm comm;
     DcMotor[] mot;
+    Logger log;
 
     /**
      * Create a new MoveThread, this thread moves the robot according to a RoboPath file.
@@ -63,6 +65,7 @@ public class MoveThread extends Thread {
             int posNum = 1;
             float tP = 0.5f;
             long pauseTimeRemaining = 0;
+            long logTime = System.currentTimeMillis();
             while (System.currentTimeMillis() - delaystart < 30000 && opModeCheck && posNum < positions.length-1) {
                 Position p = posGet.getPosi();
 
@@ -128,6 +131,17 @@ public class MoveThread extends Thread {
                 lastTime = System.currentTimeMillis();
                 comm.setAhead(moveTime-actualTime);
 
+                if(tem != null) {
+                    tem.addData("Target Point", positions[posNum].toString());
+                    tem.addData("Current Pos", posGet.getPosi().toString());
+                }
+                if(System.currentTimeMillis()-logTime > 50 && log != null) {
+                    log.add("Target Point", new byte[] {(byte) positions[posNum].x(),(byte) positions[posNum].y(),(byte) positions[posNum].r()});
+                    log.add("Current Point", new byte[] {(byte) posGet.getPosi().x(),(byte) posGet.getPosi().y(),(byte) posGet.getPosi().r()});
+                    logTime = System.currentTimeMillis();
+                }
+                tem.update();
+
                 //check if the main OpMode is still running.
                 if(opMode != null)opModeCheck = opMode.opModeIsActive() || opMode.opModeInInit();
             }
@@ -152,5 +166,13 @@ public class MoveThread extends Thread {
      */
     public void setLookAhead(int i) {
         lookAhead = i;
+    }
+
+    /**
+     * Adds a log
+     * @param log the log to add
+     */
+    public void addLog(Logger log) {
+        this.log = log;
     }
 }
