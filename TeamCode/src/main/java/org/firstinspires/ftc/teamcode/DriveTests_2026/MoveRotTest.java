@@ -21,6 +21,7 @@ public class MoveRotTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        spark.resetTracking();
         for(int a = 0; a <= 90; a += 10) {
             while(!gamepad1.a);
             DriveUtils.DriveThing((float) Math.cos(Math.toRadians(a)), (float) Math.sin(Math.toRadians(a)),0,1,mot);

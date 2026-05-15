@@ -27,6 +27,7 @@ public class homemadeMoveCodeTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        spark.resetTracking();
         SparkfunPosGet posGet = new SparkfunPosGet(spark);
         MoveThreadComm move = new MoveThreadComm();
         MoveThread m = new MoveThread(this,move,mot,
