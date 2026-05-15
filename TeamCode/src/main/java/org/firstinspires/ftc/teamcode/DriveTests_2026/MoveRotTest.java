@@ -26,6 +26,7 @@ public class MoveRotTest extends LinearOpMode {
         mot[0].setDirection(DcMotorSimple.Direction.REVERSE);
         mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
         spark.resetTracking();
+        waitForStart();
         for(int a = 0; a <= 90; a += 10) {
             while(!gamepad1.a);
             DriveUtils.DriveThing((float) Math.cos(Math.toRadians(a)), (float) Math.sin(Math.toRadians(a)),0,1,mot);
@@ -46,6 +47,6 @@ public class MoveRotTest extends LinearOpMode {
             telemetry.update();
             sleep(200);
         }
-
+        sleep(10000);
     }
 }
