@@ -21,7 +21,7 @@ public class MoveRotTest extends LinearOpMode {
                 hardwareMap.get(DcMotorEx.class,"FL"), //front left
                 hardwareMap.get(DcMotorEx.class,"FR") //front right
         };
-        SparkFunOTOS spark = hardwareMap.get(SparkFunOTOS.class,"spark");
+        SparkFunOTOS spark = hardwareMap.get(SparkFunOTOS.class,"SF");
 
         mot[0].setDirection(DcMotorSimple.Direction.REVERSE);
         mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
