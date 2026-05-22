@@ -63,7 +63,7 @@ public class MoveThread extends Thread {
             long actualTime = 0;
             long lastTime = System.currentTimeMillis();
             int posNum = 1;
-            float tP = 0.7f;
+            float tP = 1.0f;
             long pauseTimeRemaining = 0;
             long logTime = System.currentTimeMillis();
             while (System.currentTimeMillis() - delaystart < 30000 && opModeCheck && posNum < positions.length-1) {
@@ -99,13 +99,13 @@ public class MoveThread extends Thread {
                     if(i < lookAhead && !skip) {
                         moveTime = positions[posNum+1].getTimeStamp();
                         if(posNum+i < positions.length) posNum += i;
-                        tP = 0.7f;
+                        tP = 1.0f;
                     }
 
                     //check if the robot is at the target point
                     if(positions[posNum].getDistTo(p) < tolerance) {
                         if(posNum < positions.length-1) posNum += 1;
-                        tP = 0.7f;
+                        tP = 1.0f;
                     }
 
                     if(positions[posNum].getType() == 3) {
