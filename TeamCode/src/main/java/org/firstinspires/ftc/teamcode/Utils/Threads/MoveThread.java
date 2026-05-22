@@ -140,6 +140,7 @@ public class MoveThread extends Thread {
                 if(System.currentTimeMillis()-logTime > 50 && log != null) {
                     log.add("Target Point", new byte[] {(byte) positions[posNum].x(),(byte) positions[posNum].y(),(byte) positions[posNum].r()});
                     log.add("Current Point", new byte[] {(byte) posGet.getPosi().x(),(byte) posGet.getPosi().y(),(byte) posGet.getPosi().r()});
+                    log.add("Angle to target",new byte[] {(byte) Math.toDegrees(angle)});
                     logTime = System.currentTimeMillis();
                 }
                 tem.update();
