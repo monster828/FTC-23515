@@ -30,10 +30,20 @@ public class PinpointPosGet extends PositionGetter {
     public float[] getPos() {
         UpdatePinpoint();
         return new float[] {
-                (float) pinpoint.getPosY(DistanceUnit.INCH),
+                -(float) pinpoint.getPosY(DistanceUnit.INCH),
                 (float) pinpoint.getPosX(DistanceUnit.INCH),
-                (float) pinpoint.getHeading(AngleUnit.DEGREES)
+                -(float) pinpoint.getHeading(AngleUnit.DEGREES)
         };
+    }
+
+    @Override
+    public Position getPosi() {
+        UpdatePinpoint();
+        return new Position(
+                -(float) pinpoint.getPosY(DistanceUnit.INCH),
+                (float) pinpoint.getPosX(DistanceUnit.INCH),
+                -(float) pinpoint.getHeading(AngleUnit.DEGREES)
+        );
     }
 
     private void UpdatePinpoint(){
@@ -41,16 +51,6 @@ public class PinpointPosGet extends PositionGetter {
             pinpoint.update();
             _timeOfLastUpdate = System.currentTimeMillis();
         }
-    }
-
-    @Override
-    public Position getPosi() {
-        UpdatePinpoint();
-        return new Position(
-                (float) pinpoint.getPosY(DistanceUnit.INCH),
-                (float) pinpoint.getPosX(DistanceUnit.INCH),
-                (float) pinpoint.getHeading(AngleUnit.DEGREES)
-        );
     }
 
     @Override
