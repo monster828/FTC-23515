@@ -6,9 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @TeleOp(name = "Maze Runner")
 public class MazeRunner extends OpMode {
@@ -43,9 +45,14 @@ public class MazeRunner extends OpMode {
         }
 
         _pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "POC");
-        _pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        _pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD,
-                                       GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        _pinpoint.setEncoderResolution(Constants.pinpointConstants.encoderResolution);
+        _pinpoint.setEncoderDirections(Constants.pinpointConstants.forwardEncoderDirection,
+                                       Constants.pinpointConstants.strafeEncoderDirection);
+
+        _pinpoint.setOffsets(Constants.pinpointConstants.strafePodX,
+                Constants.pinpointConstants.forwardPodY,
+                Constants.pinpointConstants.distanceUnit);
+
         _pinpoint.resetPosAndIMU();
 
         // TODO: fill in your sensor hardware map names

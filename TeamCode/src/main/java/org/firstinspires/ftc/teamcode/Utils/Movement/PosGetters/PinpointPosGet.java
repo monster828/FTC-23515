@@ -8,20 +8,22 @@ import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 public class PinpointPosGet extends PositionGetter {
-    long _timeOfLastUpdate;
-    GoBildaPinpointDriver pinpoint;
+    private long _timeOfLastUpdate;
+    private GoBildaPinpointDriver _pinpoint;
+    private float _pinpointUpdateWait = 3;
 
-    public PinpointPosGet(GoBildaPinpointDriver pinpoint) {
-        this.pinpoint = pinpoint;
-        pinpoint.setEncoderResolution(Constants.pinpointConstants.encoderResolution);
-        pinpoint.setEncoderDirections(Constants.pinpointConstants.forwardEncoderDirection,
+
+    public PinpointPosGet(GoBildaPinpointDriver _pinpoint) {
+        this._pinpoint = _pinpoint;
+        _pinpoint.setEncoderResolution(Constants.pinpointConstants.encoderResolution);
+        _pinpoint.setEncoderDirections(Constants.pinpointConstants.forwardEncoderDirection,
                 Constants.pinpointConstants.strafeEncoderDirection);
 
-        pinpoint.setOffsets(Constants.pinpointConstants.strafePodX,
+        _pinpoint.setOffsets(Constants.pinpointConstants.strafePodX,
                 Constants.pinpointConstants.forwardPodY,
                 Constants.pinpointConstants.distanceUnit);
 
-        pinpoint.resetPosAndIMU();
+        _pinpoint.resetPosAndIMU();
 
         _timeOfLastUpdate = System.currentTimeMillis();
     }
@@ -30,9 +32,9 @@ public class PinpointPosGet extends PositionGetter {
     public float[] getPos() {
         UpdatePinpoint();
         return new float[] {
-                -(float) pinpoint.getPosY(DistanceUnit.INCH),
-                (float) pinpoint.getPosX(DistanceUnit.INCH),
-                -(float) pinpoint.getHeading(AngleUnit.DEGREES)
+                -(float) _pinpoint.getPosY(DistanceUnit.INCH),
+                (float) _pinpoint.getPosX(DistanceUnit.INCH),
+                -(float) _pinpoint.getHeading(AngleUnit.DEGREES)
         };
     }
 
@@ -40,15 +42,15 @@ public class PinpointPosGet extends PositionGetter {
     public Position getPosi() {
         UpdatePinpoint();
         return new Position(
-                -(float) pinpoint.getPosY(DistanceUnit.INCH),
-                (float) pinpoint.getPosX(DistanceUnit.INCH),
-                -(float) pinpoint.getHeading(AngleUnit.DEGREES)
+                -(float) _pinpoint.getPosY(DistanceUnit.INCH),
+                (float) _pinpoint.getPosX(DistanceUnit.INCH),
+                -(float) _pinpoint.getHeading(AngleUnit.DEGREES)
         );
     }
 
     private void UpdatePinpoint(){
-        if (System.currentTimeMillis() - _timeOfLastUpdate > 3){
-            pinpoint.update();
+        if (System.currentTimeMillis() - _timeOfLastUpdate > _pinpointUpdateWait){
+            _pinpoint.update();
             _timeOfLastUpdate = System.currentTimeMillis();
         }
     }
