@@ -78,7 +78,7 @@ public class MoveThread extends Thread {
                     if (Math.abs(positions[posNum].r() - p.r()) > rT) {
                          rP = MiscUtils.Clamp(((positions[posNum].r() - p.r()) / 15),-1.0f,1.0f);
                     }
-                    DriveUtils.FieldDriveThing((float)Math.cos(angle),(float)Math.sin(angle),rP,tP,p.r(),mot);
+                    DriveUtils.FieldDriveThing((float)Math.sin(angle),(float)Math.cos(angle),rP,tP,p.r(),mot);
 
                     //check if the robot has passed the target point
                     int i = 1;
