@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.DriveTests_2026;
 
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -10,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.Utils.Logger;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
+import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PinpointPosGet;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.SparkfunPosGet;
 import org.firstinspires.ftc.teamcode.Utils.Threads.MoveThread;
 import org.firstinspires.ftc.teamcode.Utils.Threads.MoveThreadComm;
@@ -29,15 +31,14 @@ public class homemadeMoveCodeTest extends LinearOpMode {
                 hardwareMap.get(DcMotorEx.class,"FL"), //front left
                 hardwareMap.get(DcMotorEx.class,"FR") //front right
         };
-        SparkFunOTOS spark = hardwareMap.get(SparkFunOTOS.class,"SF");
 
         mot[0].setDirection(DcMotorSimple.Direction.REVERSE);
         mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
-        spark.resetTracking();
-        SparkfunPosGet posGet = new SparkfunPosGet(spark);
+        GoBildaPinpointDriver pin = hardwareMap.get(GoBildaPinpointDriver.class,"POC");
+        PinpointPosGet posGet = new PinpointPosGet(pin);
         MoveThreadComm move = new MoveThreadComm();
         MoveThread m = new MoveThread(this,move,mot,
-                new File(MiscUtils.dataFolder+"/testpath.robopath"),
+                new File(MiscUtils.dataFolder+"/testpath2.robopath"),
                 telemetry,
                 posGet
         );

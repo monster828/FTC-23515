@@ -50,9 +50,10 @@ public class MoveThread extends Thread {
         }
     }
 
-    float tolerance = 0.1f;
-    int lookAhead = 5;
+    float tolerance = 1f;
+    int lookAhead = 15;
     float rT = 5;
+    float antiJERK = 1.0f;
 
     @Override
     public void run() {
@@ -63,7 +64,7 @@ public class MoveThread extends Thread {
             long actualTime = 0;
             long lastTime = System.currentTimeMillis();
             int posNum = 1;
-            float tP = 0.5f;
+            float tP = 1.0f;
             long pauseTimeRemaining = 0;
             long logTime = System.currentTimeMillis();
             while (System.currentTimeMillis() - delaystart < 30000 && opModeCheck && posNum < positions.length-1) {
@@ -78,7 +79,8 @@ public class MoveThread extends Thread {
                     if (Math.abs(positions[posNum].r() - p.r()) > rT) {
                          rP = MiscUtils.Clamp(((positions[posNum].r() - p.r()) / 15),-1.0f,1.0f);
                     }
-                    DriveUtils.FieldDriveThing((float)Math.sin(angle),(float)Math.cos(angle),rP,tP,p.r(),mot);
+                    float p2 = MiscUtils.Clamp((tP/antiJERK)*positions[posNum].getDistTo(p),0.2f,1.0f);
+                    DriveUtils.FieldDriveThing((float)Math.sin(angle),(float)Math.cos(angle),rP,p2, (float) Math.toRadians(p.r()),mot);
 
                     //check if the robot has passed the target point
                     int i = 1;
@@ -99,13 +101,13 @@ public class MoveThread extends Thread {
                     if(i < lookAhead && !skip) {
                         moveTime = positions[posNum+1].getTimeStamp();
                         if(posNum+i < positions.length) posNum += i;
-                        tP = 0.5f;
+                        tP = 1.0f;
                     }
 
                     //check if the robot is at the target point
                     if(positions[posNum].getDistTo(p) < tolerance) {
                         if(posNum < positions.length-1) posNum += 1;
-                        tP = 0.5f;
+                        tP = 1.0f;
                     }
 
                     if(positions[posNum].getType() == 3) {
@@ -136,6 +138,7 @@ public class MoveThread extends Thread {
                     tem.addData("Target Point", positions[posNum].toString());
                     tem.addData("Current Pos", posGet.getPosi().toString());
                     tem.addData("Angle to target", Math.toDegrees(angle));
+                    tem.addData("Predicted time difference",moveTime-actualTime);
                 }
                 if(System.currentTimeMillis()-logTime > 50 && log != null) {
                     log.add("Target Point", new byte[] {(byte) positions[posNum].x(),(byte) positions[posNum].y(),(byte) positions[posNum].r()});
@@ -177,5 +180,13 @@ public class MoveThread extends Thread {
      */
     public void addLog(Logger log) {
         this.log = log;
+    }
+
+    /**
+     * Sets the anti jerk variable
+     * @param aJ how little of a jerk the robot should be
+     */
+    public void setAntiJERK(float aJ) {
+        antiJERK = aJ;
     }
 }
