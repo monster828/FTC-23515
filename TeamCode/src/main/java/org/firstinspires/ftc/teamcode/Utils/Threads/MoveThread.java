@@ -53,6 +53,7 @@ public class MoveThread extends Thread {
     float tolerance = 1f;
     int lookAhead = 15;
     float rT = 5;
+    float antiJERK = 1.2f;
 
     @Override
     public void run() {
@@ -78,7 +79,7 @@ public class MoveThread extends Thread {
                     if (Math.abs(positions[posNum].r() - p.r()) > rT) {
                          rP = MiscUtils.Clamp(((positions[posNum].r() - p.r()) / 15),-1.0f,1.0f);
                     }
-                    float p2 = MiscUtils.Clamp((tP/1.5f)*positions[posNum].getDistTo(p),0.2f,1.0f);
+                    float p2 = MiscUtils.Clamp((tP/antiJERK)*positions[posNum].getDistTo(p),0.2f,1.0f);
                     DriveUtils.FieldDriveThing((float)Math.sin(angle),(float)Math.cos(angle),rP,p2, (float) Math.toRadians(p.r()),mot);
 
                     //check if the robot has passed the target point
@@ -179,5 +180,13 @@ public class MoveThread extends Thread {
      */
     public void addLog(Logger log) {
         this.log = log;
+    }
+
+    /**
+     * Sets the anti jerk variable
+     * @param aJ how little of a jerk the robot should be
+     */
+    public void setAntiJERK(float aJ) {
+        antiJERK = aJ;
     }
 }
