@@ -68,11 +68,12 @@ public class MoveThread extends Thread {
             long logTime = System.currentTimeMillis();
             while (System.currentTimeMillis() - delaystart < 30000 && opModeCheck && posNum < positions.length-1) {
                 Position p = posGet.getPosi();
+                float angle = 0;
 
                 if(comm.isRunning() && !comm.isPaused()) {
 
                     //TEMPORARY TEST MOVE CODE BIT THING IDK SYSTEM DEVICE
-                    float angle = (float) Math.atan2(positions[posNum].x()-p.x(),positions[posNum].y()-p.y());
+                    angle = (float) Math.atan2(positions[posNum].x()-p.x(),positions[posNum].y()-p.y());
                     float rP = 0.0f;
                     if (Math.abs(positions[posNum].r() - p.r()) > rT) {
                          rP = MiscUtils.Clamp(((positions[posNum].r() - p.r()) / 15),-1.0f,1.0f);
@@ -134,6 +135,7 @@ public class MoveThread extends Thread {
                 if(tem != null) {
                     tem.addData("Target Point", positions[posNum].toString());
                     tem.addData("Current Pos", posGet.getPosi().toString());
+                    tem.addData("Angle to target", Math.toDegrees(angle));
                 }
                 if(System.currentTimeMillis()-logTime > 50 && log != null) {
                     log.add("Target Point", new byte[] {(byte) positions[posNum].x(),(byte) positions[posNum].y(),(byte) positions[posNum].r()});
