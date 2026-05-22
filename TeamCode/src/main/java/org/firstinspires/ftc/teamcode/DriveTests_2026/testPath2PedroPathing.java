@@ -34,7 +34,7 @@ public class testPath2PedroPathing extends OpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
         Scheduler.reset();
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(103.5, 14.5, Math.toRadians(323))); //Start Pose, right it 0
+        follower.setStartingPose(new Pose(103.5, 14.5, Math.toRadians(90))); //Start Pose, right it 0
         buildPaths();
         panelsTelemetry.debug("Status", "Initialized");
         panelsTelemetry.update(telemetry);
