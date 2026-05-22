@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
-@Autonomous(name = "ivyCodeBase", group = "Autonomous")
+@Autonomous(name = "testPath2PedroPathing", group = "Autonomous")
 @Configurable // Panels
 public class testPath2PedroPathing extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
