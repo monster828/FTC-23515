@@ -11,7 +11,7 @@ public class BestToleranceFinder {
     public static float INITIAL_TOLERANCE = 5;
     private float _currentTolerance;
 
-    private List<Float[]> _timesTolerance;
+    private List<Float[]> _timesTolerance = new ArrayList<>();
 
     private float _currentDirection = 0;
 
