@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.teamcode.Utils.Logger;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
@@ -51,7 +52,7 @@ public class MoveThread extends Thread {
     }
 
     float tolerance = 1f;
-    int lookAhead = 25;
+    int lookAhead = 40;
     float rT = 5;
     float antiJERK = 1.0f;
 
@@ -79,7 +80,11 @@ public class MoveThread extends Thread {
                     if (Math.abs(positions[posNum].r() - p.r()) > rT) {
                          rP = MiscUtils.Clamp(((positions[posNum].r() - p.r()) / 15),-1.0f,1.0f);
                     }
-                    float p2 = MiscUtils.Clamp((tP/antiJERK)*positions[posNum].getDistTo(p),0.2f,1.0f);
+                    float transP = 0;
+                    if(positions[posNum].getDistTo(p) > tolerance) {
+                        transP = tP;
+                    }
+                    float p2 = MiscUtils.Clamp((transP/antiJERK)*positions[posNum].getDistTo(p),0.2f,1.0f);
                     DriveUtils.FieldDriveThing((float)Math.sin(angle),(float)Math.cos(angle),rP,p2, (float) Math.toRadians(p.r()),mot);
 
                     //check if the robot has passed the target point
@@ -105,7 +110,7 @@ public class MoveThread extends Thread {
                     }
 
                     //check if the robot is at the target point
-                    if(positions[posNum].getDistTo(p) < tolerance) {
+                    if(positions[posNum].getDistTo(p) < tolerance && MiscUtils.getAngleDifferenceDegrees(positions[posNum].r(),p.r()) < rT) {
                         if(posNum < positions.length-1) posNum += 1;
                         tP = 1.0f;
                     }

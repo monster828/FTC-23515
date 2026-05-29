@@ -192,6 +192,16 @@ public class MiscUtils {
         return file.exists();
     }
 
+    public static float getAngleDifferenceDegrees(float a1, float a2) {
+        float op1 = a2-a1;
+        float op2 = 360-(a1-a2);
+        if(Math.abs(op1) <= Math.abs(op2)) {
+            return op1;
+        } else {
+            return op2;
+        }
+    }
+
     public static void intake() {
 
     }
