@@ -9,6 +9,8 @@ public class BestToleranceFinder {
 
     private float _currentDirection = 0;
 
+    public int Test = 10;
+
     public void CompletedTestResults(float time, float accuracy){
         _timesTolerance.add(new Float[] {GetCurrentTolerance(), time, accuracy});
         UpdateTestResults();
