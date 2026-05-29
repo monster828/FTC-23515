@@ -51,7 +51,7 @@ public class MoveThread extends Thread {
     }
 
     float tolerance = 1f;
-    int lookAhead = 15;
+    int lookAhead = 25;
     float rT = 5;
     float antiJERK = 1.0f;
 
@@ -133,6 +133,7 @@ public class MoveThread extends Thread {
                 }
                 lastTime = System.currentTimeMillis();
                 comm.setAhead(moveTime-actualTime);
+                comm.setDriveTime(actualTime);
 
                 if(tem != null) {
                     tem.addData("Target Point", positions[posNum].toString());

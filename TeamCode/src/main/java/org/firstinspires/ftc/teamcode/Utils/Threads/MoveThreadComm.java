@@ -5,6 +5,7 @@ public class MoveThreadComm {
     private boolean running = false;
     private boolean paused = false;
     private long ahead = 0;
+    private long driveTime = 0;
     public MoveThreadComm() {
     }
 
@@ -46,4 +47,6 @@ public class MoveThreadComm {
     public long getAhead() {
         return ahead;
     }
+    public void setDriveTime(long t) {driveTime = t;}
+    public long getDriveTime() {return driveTime;}
 }

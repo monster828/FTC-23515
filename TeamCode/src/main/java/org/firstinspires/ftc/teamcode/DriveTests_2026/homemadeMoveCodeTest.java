@@ -49,6 +49,9 @@ public class homemadeMoveCodeTest extends LinearOpMode {
         l.add("Opmode Started",new byte[0]);
         m.start();
         move.start();
+        telemetry.addData("Move time",move.getDriveTime());
+        telemetry.addData("Time difference",move.getAhead());
+        telemetry.update();
         sleep(30000);
     }
 }
