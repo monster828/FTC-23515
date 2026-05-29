@@ -5,14 +5,12 @@ import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
-import org.firstinspires.ftc.teamcode.Utils.Movement.Testing.BestToleranceFinder;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 public class PinpointPosGet extends PositionGetter {
     private long _timeOfLastUpdate;
     private GoBildaPinpointDriver _pinpoint;
     private float _pinpointUpdateWait = 3;
-
 
     public PinpointPosGet(GoBildaPinpointDriver _pinpoint) {
         this._pinpoint = _pinpoint;
@@ -27,10 +25,6 @@ public class PinpointPosGet extends PositionGetter {
         _pinpoint.resetPosAndIMU();
 
         _timeOfLastUpdate = System.currentTimeMillis();
-
-        // DELETE THIS
-        BestToleranceFinder best = new BestToleranceFinder();
-        best.SaveData();
     }
 
     @Override

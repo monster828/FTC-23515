@@ -76,11 +76,6 @@ public class BestToleranceFinder {
 
     public void SaveData(){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            if (_timesTolerance.isEmpty()){
-                _timesTolerance.add(new Float[] {5f, 3.0f, 5.11f});
-                _timesTolerance.add(new Float[] {3.3f, 3.8f, 6.13f});
-            }
-
             for (int i = 0; i < _timesTolerance.size(); i++){
                 writer.write("Test " + i + ":");
 
