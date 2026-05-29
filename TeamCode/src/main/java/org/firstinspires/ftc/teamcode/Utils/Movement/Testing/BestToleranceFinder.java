@@ -1,4 +1,10 @@
 package org.firstinspires.ftc.teamcode.Utils.Movement.Testing;
+import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BestToleranceFinder {
@@ -10,6 +16,8 @@ public class BestToleranceFinder {
     private float _currentDirection = 0;
 
     public int Test = 10;
+
+    static String path = MiscUtils.dataFolder + "/tolerance.txt";
 
     public void CompletedTestResults(float time, float accuracy){
         _timesTolerance.add(new Float[] {GetCurrentTolerance(), time, accuracy});
@@ -63,6 +71,41 @@ public class BestToleranceFinder {
             Float[] bestTest = _timesTolerance.get(indexOfHighestScore);
 
             _currentDirection = (previousTest[0] - bestTest[0]) / 2;
+        }
+    }
+
+    public void SaveData(){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            if (_timesTolerance.isEmpty()){
+                _timesTolerance.add(new Float[] {5f, 3.0f, 5.11f});
+                _timesTolerance.add(new Float[] {3.3f, 3.8f, 6.13f});
+            }
+
+            for (int i = 0; i < _timesTolerance.size(); i++){
+                writer.write("Test " + i + ":");
+
+                writer.newLine();
+
+                float tolerance = _timesTolerance.get(i)[0];
+                writer.write("Tolerance: " + tolerance);
+
+                writer.newLine();
+
+                float time = _timesTolerance.get(i)[1];
+                writer.write("Time: " + time);
+
+                writer.newLine();
+
+                float accuracy = _timesTolerance.get(i)[2];
+                writer.write("Accuracy: " + accuracy);
+
+                writer.newLine();
+                writer.newLine();
+            }
+
+            writer.newLine(); // Adds a system-dependent newline
+        } catch (IOException e) {
+            // Error
         }
     }
 }
