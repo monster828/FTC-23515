@@ -51,7 +51,7 @@ public class MoveThread extends Thread {
         }
     }
 
-    float tolerance = 1f;
+    float tolerance = 2f;
     int lookAhead = 40;
     float rT = 5;
     float antiJERK = 1.0f;
@@ -110,7 +110,7 @@ public class MoveThread extends Thread {
                     }
 
                     //check if the robot is at the target point
-                    if(positions[posNum].getDistTo(p) < tolerance && MiscUtils.getAngleDifferenceDegrees(positions[posNum].r(),p.r()) < rT) {
+                    if(positions[posNum].getDistTo(p) < tolerance && (MiscUtils.getAngleDifferenceDegrees(positions[posNum].r(),p.r()) < rT || positions[posNum].getType() == 0)) {
                         if(posNum < positions.length-1) posNum += 1;
                         tP = 1.0f;
                     }
