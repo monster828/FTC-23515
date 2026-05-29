@@ -157,6 +157,7 @@ public class MoveThread extends Thread {
                 //check if the main OpMode is still running.
                 if(opMode != null)opModeCheck = opMode.opModeIsActive() || opMode.opModeInInit();
             }
+            comm.stop();
             DriveUtils.stop(mot);
         } catch (Exception e) {
 
