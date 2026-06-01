@@ -19,6 +19,10 @@ public class Logger {
     File f;
     long start;
 
+    /**
+     * Create a log file to store various events and their timestamp.
+     * @param file the file to write to.
+     */
     public Logger(File file) {
         f = file;
         start = System.currentTimeMillis();

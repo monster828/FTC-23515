@@ -16,6 +16,11 @@ public class ScoreBoard {
     File file;
     ArrayList<Byte> data = new ArrayList<>();
 
+    /**
+     * Create a scoreboard in a specific file.
+     * @param filePath where the file is located.
+     * @param reset if a scoreboard already exists should it be replaced?
+     */
     public ScoreBoard(String filePath, boolean reset) {
         file = new File(filePath);
         try {

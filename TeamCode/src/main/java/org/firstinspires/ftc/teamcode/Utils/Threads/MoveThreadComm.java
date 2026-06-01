@@ -48,5 +48,9 @@ public class MoveThreadComm {
         return ahead;
     }
     public void setDriveTime(long t) {driveTime = t;}
+
+    /**
+     * Returns how long the movement has been running for.
+     */
     public long getDriveTime() {return driveTime;}
 }

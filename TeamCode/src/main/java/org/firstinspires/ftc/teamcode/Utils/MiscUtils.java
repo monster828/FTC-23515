@@ -192,6 +192,11 @@ public class MiscUtils {
         return file.exists();
     }
 
+    /**
+     * Gets the distance between 2 angles
+     * @param a1 the first angle in degrees
+     * @param a2 the second angle in degrees
+     */
     public static float getAngleDifferenceDegrees(float a1, float a2) {
         float op1 = a2-a1;
         float op2 = 360-(a1-a2);

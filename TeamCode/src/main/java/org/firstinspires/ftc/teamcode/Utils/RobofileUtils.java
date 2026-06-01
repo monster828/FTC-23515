@@ -106,6 +106,11 @@ public class RobofileUtils {
         return out;
     }
 
+    /**
+     * Takes a number and outputs it in 10 bit binary
+     * @param num the number to convert to binary
+     * @return an array containing each bit.
+     */
     public static int[] tenBitNumSplit(int num) {
         int[] out = new int[10];
         boolean n = false;
@@ -138,6 +143,11 @@ public class RobofileUtils {
         return out;
     }
 
+    /**
+     * Takes a number and outputs it in 8 bit binary
+     * @param num the number to convert to binary
+     * @return an array containing each bit.
+     */
     public static int[] eightBitNumSplit(byte num) {
         int[] out = new int[8];
         int a = 0;
