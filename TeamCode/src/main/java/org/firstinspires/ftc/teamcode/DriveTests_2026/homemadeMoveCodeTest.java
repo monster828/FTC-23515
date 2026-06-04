@@ -38,7 +38,7 @@ public class homemadeMoveCodeTest extends LinearOpMode {
         PinpointPosGet posGet = new PinpointPosGet(pin);
         MoveThreadComm move = new MoveThreadComm();
         MoveThread m = new MoveThread(this,move,mot,
-                new File(MiscUtils.dataFolder+"/testpath2.robopath"),
+                new File(MiscUtils.dataFolder+"/testpath3.robopath"),
                 telemetry,
                 posGet
         );
