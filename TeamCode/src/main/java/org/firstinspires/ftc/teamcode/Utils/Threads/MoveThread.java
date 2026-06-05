@@ -52,7 +52,7 @@ public class MoveThread extends Thread {
     }
 
     float tolerance = 2f;
-    int lookAhead = 8;
+    int lookAhead = 20;
     float rT = 5;
     float antiJERK = 1.0f;
 
