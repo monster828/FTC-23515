@@ -4,7 +4,8 @@
       "WebFetch(domain:mymaven.bylazar.com)",
       "WebFetch(domain:pedropathing.com)",
       "WebFetch(domain:github.com)",
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:gm0.org)"
     ]
   }
 }
