@@ -61,7 +61,7 @@ public class Tester extends LinearOpMode {
             PinpointPosGet posGet = new PinpointPosGet(pin);
             MoveThreadComm move = new MoveThreadComm();
             MoveThread m = new MoveThread(this,move,mot,
-                    new File(MiscUtils.dataFolder+"/testpath2.robopath"),
+                    new File(MiscUtils.dataFolder+"/testpath4.robopath"),
                     telemetry,
                     posGet
             );
