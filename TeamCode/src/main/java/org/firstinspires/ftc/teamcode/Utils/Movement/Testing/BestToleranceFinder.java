@@ -24,8 +24,8 @@ public class BestToleranceFinder {
         Test = testAmount;
     }
 
-    public void CompletedTestResults(float time, float accuracy){
-        _timesTolerance.add(new Float[] {GetCurrentTolerance(), time, accuracy});
+    public void CompletedTestResults(float time, float accuracy, float rotationAccuracy){
+        _timesTolerance.add(new Float[] {GetCurrentTolerance(), time, accuracy, rotationAccuracy});
         UpdateTestResults();
 
         if (_timesTolerance.size() - 2 == Test){
@@ -86,8 +86,9 @@ public class BestToleranceFinder {
             // Previous test was best test
             Float[] previousTest = _timesTolerance.get(indexOfHighestScore);
             Float[] previousPreviousTest = _timesTolerance.get(indexOfHighestScore - 1);
-            float scorePrevious = previousTest[2] / previousTest[1];
-            float scorePreviousPrevious = previousPreviousTest[2] / previousPreviousTest[1];
+            // accuracy + rotation accuracy / time
+            float scorePrevious = (previousTest[2] + previousTest[3] / 5) / previousTest[1];
+            float scorePreviousPrevious = (previousPreviousTest[2] + previousPreviousTest[3] / 5)  / previousPreviousTest[1];
 
             _currentDirection = (previousTest[0] - previousPreviousTest[0]) * (scorePrevious - scorePreviousPrevious);
         }else{
@@ -117,6 +118,10 @@ public class BestToleranceFinder {
 
                 float accuracy = _timesTolerance.get(i)[2];
                 writer.write("Accuracy: " + accuracy);
+
+                writer.newLine();
+                float rotationAccuracy = _timesTolerance.get(i)[3];
+                writer.write("Rotation Accuracy: " + rotationAccuracy);
 
                 writer.newLine();
                 writer.newLine();

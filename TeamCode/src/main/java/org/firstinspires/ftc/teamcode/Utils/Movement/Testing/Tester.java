@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.Utils.Logger;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PinpointPosGet;
+import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
 import org.firstinspires.ftc.teamcode.Utils.Threads.MoveThread;
 import org.firstinspires.ftc.teamcode.Utils.Threads.MoveThreadComm;
 
@@ -80,13 +81,15 @@ public class Tester extends LinearOpMode {
             while(move.isRunning());
 
             float driveTime = move.getDriveTime();
-            float accuracy = 1;
+            Position[] positions = m.GetPositions();
+            float accuracy = AccuracyCalculator(positions[positions.length - 1], posGet);
+            float rotationAccuracy = RotationAccuracyCalculator(positions[positions.length - 1], posGet);
             telemetry.addData("Time", driveTime);
             telemetry.addData("Accuracy", accuracy);
             telemetry.addLine("Press B to continue...");
             telemetry.update();
 
-            bestToleranceFinder.CompletedTestResults(driveTime, accuracy);
+            bestToleranceFinder.CompletedTestResults(driveTime, accuracy, rotationAccuracy);
 
             while(!this.gamepad1.b){
                 // Wait to continue
@@ -99,5 +102,26 @@ public class Tester extends LinearOpMode {
         telemetry.update();
 
         while (!this.gamepad1.a){        }
+    }
+
+    private float AccuracyCalculator(Position position, PinpointPosGet pinpointPosGet)
+    {
+        Position currentPosition = pinpointPosGet.getPosi();
+
+        // Calculate differences
+        float deltaX = currentPosition.x() - position.x();
+        float deltaY = currentPosition.y() - position.y();
+
+        // Euclidean distance formula: sqrt(dX^2 + dY^2)
+        float spatialDistance = (float) Math.sqrt((double)(deltaX * deltaX) + (double)(deltaY * deltaY));
+
+        return spatialDistance;
+        // Perfect accuracy = 0. The further away, the higher the number.
+    }
+
+    private float RotationAccuracyCalculator(Position position, PinpointPosGet pinpointPosGet){
+        Position currentPosition = pinpointPosGet.getPosi();
+
+        return currentPosition.r() - position.r();
     }
 }
