@@ -96,7 +96,7 @@ public class MoveThread extends Thread {
                     boolean skip = false;
                     while(i <= lookAhead/skips) {
                         if(positions.length > posNum+i) {
-                            if(positions[posNum + i].getType() > 1) {
+                            if(positions[posNum + i].getType() > 0) {
                                 skip = true;
                                 break;
                             }
