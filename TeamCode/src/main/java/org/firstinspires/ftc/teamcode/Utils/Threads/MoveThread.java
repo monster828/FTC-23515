@@ -196,4 +196,8 @@ public class MoveThread extends Thread {
     public void setAntiJERK(float aJ) {
         antiJERK = aJ;
     }
+
+    public Position[] GetPositions(){
+        return positions;
+    }
 }
