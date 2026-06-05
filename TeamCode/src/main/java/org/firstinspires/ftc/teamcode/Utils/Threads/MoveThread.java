@@ -56,6 +56,9 @@ public class MoveThread extends Thread {
     float rT = 5;
     float antiJERK = 1.0f;
 
+    //1 means it'll check every point.
+    int skips = 3;
+
     @Override
     public void run() {
         try {
@@ -91,7 +94,7 @@ public class MoveThread extends Thread {
                     int i = 1;
                     float m = positions[posNum].getDistTo(p);
                     boolean skip = false;
-                    while(i <= lookAhead) {
+                    while(i <= lookAhead/skips) {
                         if(positions.length > posNum+i) {
                             if(positions[posNum + i].getType() > 1) {
                                 skip = true;
@@ -101,7 +104,7 @@ public class MoveThread extends Thread {
                                 break;
                             }
                         }
-                        i += 3;
+                        i += skips;
                     }
                     if(i < lookAhead && !skip) {
                         moveTime = positions[posNum+1].getTimeStamp();
@@ -111,7 +114,7 @@ public class MoveThread extends Thread {
 
                     //check if the robot is at the target point
                     if(positions[posNum].getDistTo(p) < tolerance && (MiscUtils.getAngleDifferenceDegrees(positions[posNum].r(),p.r()) < rT || positions[posNum].getType() == 0)) {
-                        if(posNum < positions.length-1) posNum += 1;
+                        if(posNum < positions.length-skips) posNum += skips;
                         tP = 1.0f;
                     }
 
