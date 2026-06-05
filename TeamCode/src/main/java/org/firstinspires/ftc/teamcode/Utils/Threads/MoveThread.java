@@ -54,10 +54,10 @@ public class MoveThread extends Thread {
     float tolerance = 2f;
     int lookAhead = 20;
     float rT = 5;
-    float antiJERK = 1.0f;
+    float antiJERK = 1.1f;
 
     //1 means it'll check every point.
-    int skips = 3;
+    int skips = 1;
 
     @Override
     public void run() {
@@ -96,9 +96,11 @@ public class MoveThread extends Thread {
                     boolean skip = false;
                     while(i <= lookAhead/skips) {
                         if(positions.length > posNum+i) {
-                            if(positions[posNum + i].getType() > 0) {
-                                skip = true;
-                                break;
+                            for(int i2 = i; i2 <= i+skips; i2++) {
+                                if (positions[posNum + i2].getType() > 0) {
+                                    skip = true;
+                                    break;
+                                }
                             }
                             if (positions[posNum + i].getDistTo(p) < m) {
                                 break;
