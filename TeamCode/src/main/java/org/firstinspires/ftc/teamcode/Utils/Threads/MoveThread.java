@@ -54,10 +54,10 @@ public class MoveThread extends Thread {
     float tolerance = 2f;
     int lookAhead = 20;
     float rT = 5;
-    float antiJERK = 1.1f;
+    float antiJERK = 1.0f;
 
     //1 means it'll check every point.
-    int skips = 1;
+    int skips = 3;
 
     @Override
     public void run() {
