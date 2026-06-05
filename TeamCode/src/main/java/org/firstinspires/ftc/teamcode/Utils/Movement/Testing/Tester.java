@@ -55,7 +55,7 @@ public class Tester extends LinearOpMode {
             }
             telemetry.update();
 
-            while (!this.gamepad1.a){
+            while (!this.gamepad1.a && opModeIsActive()){
                 // Wait for start
             }
 
@@ -82,7 +82,7 @@ public class Tester extends LinearOpMode {
 
             m.start();
             move.start();
-            while(move.isRunning());
+            while(move.isRunning() && opModeIsActive());
 
             float driveTime = move.getDriveTime();
             Position[] positions = m.GetPositions();
@@ -95,7 +95,7 @@ public class Tester extends LinearOpMode {
 
             bestToleranceFinder.CompletedTestResults(driveTime, accuracy, rotationAccuracy);
 
-            while(!this.gamepad1.b){
+            while(!this.gamepad1.b && opModeIsActive()){
                 // Wait to continue
             }
         }
@@ -105,7 +105,7 @@ public class Tester extends LinearOpMode {
         telemetry.addLine("Press A to finish...");
         telemetry.update();
 
-        while (!this.gamepad1.a){        }
+        while (!this.gamepad1.a && opModeIsActive()){        }
     }
 
     private float AccuracyCalculator(Position position, PinpointPosGet pinpointPosGet)

@@ -71,6 +71,9 @@ public class MoveThread extends Thread {
             float tP = 1.0f;
             long pauseTimeRemaining = 0;
             long logTime = System.currentTimeMillis();
+
+            float lastTelemtryUpdate = 0;
+
             while (System.currentTimeMillis() - delaystart < 30000 && opModeCheck && posNum < positions.length-1) {
                 Position p = posGet.getPosi();
                 float angle = 0;
@@ -145,11 +148,13 @@ public class MoveThread extends Thread {
                 comm.setAhead(moveTime-actualTime);
                 comm.setDriveTime(actualTime);
 
-                if(tem != null) {
+                if(tem != null && System.currentTimeMillis() - lastTelemtryUpdate > 50) {
                     tem.addData("Target Point", positions[posNum].toString());
                     tem.addData("Current Pos", posGet.getPosi().toString());
                     tem.addData("Angle to target", Math.toDegrees(angle));
                     tem.addData("Predicted time difference",moveTime-actualTime);
+                    tem.update();
+                    lastTelemtryUpdate = System.currentTimeMillis();
                 }
                 if(System.currentTimeMillis()-logTime > 50 && log != null) {
                     log.add("Target Point", new byte[] {(byte) positions[posNum].x(),(byte) positions[posNum].y(),(byte) positions[posNum].r()});
@@ -157,10 +162,12 @@ public class MoveThread extends Thread {
                     log.add("Angle to target",new byte[] {(byte) Math.toDegrees(angle)});
                     logTime = System.currentTimeMillis();
                 }
-                tem.update();
 
                 //check if the main OpMode is still running.
                 if(opMode != null)opModeCheck = opMode.opModeIsActive() || opMode.opModeInInit();
+
+                // Added by Alden
+                sleep(10);
             }
             comm.stop();
             DriveUtils.stop(mot);
