@@ -15,12 +15,14 @@ public class intakeTest1 extends OpMode {
     GoBildaPinpointDriver pinpoint;
 
     boolean intakeOn = false;
+    boolean intakeOnR = false;
     double intakeSpeed = 0.5;
     static final double SPEED_STEP = 0.1;
     static final double SPEED_MIN = 0.1;
     static final double SPEED_MAX = 1.0;
 
     boolean wasAPressed = false;
+    boolean wasBPressed = false;
     boolean wasDpadUpPressed = false;
     boolean wasDpadDownPressed = false;
 
@@ -41,6 +43,7 @@ public class intakeTest1 extends OpMode {
 
         intake = hardwareMap.get(DcMotor.class, "Intake");
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "POC");
         pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
@@ -51,11 +54,17 @@ public class intakeTest1 extends OpMode {
 
     @Override
     public void loop() {
-        // Toggle intake on A button press (rising edge)
         if (gamepad1.a && !wasAPressed) {
             intakeOn = !intakeOn;
+            if (intakeOn) intakeOnR = false;
         }
         wasAPressed = gamepad1.a;
+
+        /*if (gamepad1.b && !wasBPressed) {
+            intakeOnR = !intakeOnR;
+            if (intakeOnR) intakeOn = false;
+        }
+        wasBPressed = gamepad1.b;*/
 
         // Increase speed on dpad_up (rising edge)
         if (gamepad1.dpad_up && !wasDpadUpPressed) {
@@ -69,7 +78,15 @@ public class intakeTest1 extends OpMode {
         }
         wasDpadDownPressed = gamepad1.dpad_down;
 
-        intake.setPower(intakeOn ? intakeSpeed : 0);
+
+
+        if (intakeOn) {
+            intake.setPower(intakeSpeed);
+        } else if (intakeOnR) {
+            intake.setPower(-intakeSpeed);
+        } else {
+            intake.setPower(0);
+        }
 
         double y  = -gamepad1.left_stick_y * 0.5;       // forward/back (Y is inverted)
         double x  =  gamepad1.left_stick_x * 0.9; // strafe (1.1 counteracts imperfect strafing)
@@ -82,6 +99,7 @@ public class intakeTest1 extends OpMode {
         backRight.setPower((y + x - rx) / denominator);
 
         telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
+        //telemetry.addData("Intake Reversed", intakeOnR ? "ON" : "OFF");
         telemetry.addData("Intake Speed", String.format("%.1f", intakeSpeed));
         telemetry.update();
     }
