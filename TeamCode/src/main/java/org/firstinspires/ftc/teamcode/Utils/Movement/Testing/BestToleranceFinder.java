@@ -15,13 +15,36 @@ public class BestToleranceFinder {
 
     private float _currentDirection = 0;
 
-    public int Test = 10;
+    public int Test;
 
-    static String path = MiscUtils.dataFolder + "/tolerance.txt";
+    static String _path = MiscUtils.dataFolder + "/tolerance";
+    private Boolean _complete = false;
+
+    public BestToleranceFinder(int testAmount){
+        Test = testAmount;
+    }
 
     public void CompletedTestResults(float time, float accuracy){
         _timesTolerance.add(new Float[] {GetCurrentTolerance(), time, accuracy});
         UpdateTestResults();
+
+        if (_timesTolerance.size() - 2 == Test){
+            int i = 0;
+            while (MiscUtils.checkFile(_path + i + ".txt")){
+                i++;
+            }
+
+            SaveData(_path + i + ".txt");
+            _complete = true;
+        }
+    }
+
+    public Boolean IsTestComplete(){
+        return _complete;
+    }
+
+    public int AmountOfTest(){
+        return _timesTolerance.size() - 1;
     }
 
     public void NewTest(){
@@ -35,6 +58,7 @@ public class BestToleranceFinder {
         }else{
             // There have been at least three previous test
             // When time is greater go in the opposite direction
+            _currentTolerance += _currentDirection;
         }
     }
 
@@ -74,7 +98,7 @@ public class BestToleranceFinder {
         }
     }
 
-    public void SaveData(){
+    public void SaveData(String path){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             for (int i = 0; i < _timesTolerance.size(); i++){
                 writer.write("Test " + i + ":");
