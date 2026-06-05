@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.Utils.Movement.Testing;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Utils.Logger;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
@@ -16,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Utils.Threads.MoveThreadComm;
 
 import java.io.File;
 
+@TeleOp
 public class Tester extends LinearOpMode {
     @Override
     public void runOpMode() {
