@@ -51,10 +51,10 @@ public class BestToleranceFinder {
         int previousTest = _timesTolerance.size();
         if (previousTest == 0){
             // No previous test, try lower than initial tolerance
-            _currentTolerance = INITIAL_TOLERANCE - 1;
+            _currentTolerance = INITIAL_TOLERANCE;
         }else if (previousTest == 1) {
             // There have been one previous test, create new test with default current tolerance
-            _currentTolerance = INITIAL_TOLERANCE;
+            _currentTolerance = INITIAL_TOLERANCE - 1;
         }else{
             // There have been at least three previous test
             // When time is greater go in the opposite direction
