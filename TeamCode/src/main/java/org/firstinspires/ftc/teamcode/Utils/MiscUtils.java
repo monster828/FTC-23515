@@ -126,7 +126,7 @@ public class MiscUtils {
             return data;
         }  catch (IOException e) {
             tem.addData("woops",e.toString());
-            return new byte[] {0};
+            return new byte[0];
         }
     }
 
@@ -144,7 +144,7 @@ public class MiscUtils {
             in.close();
             return data;
         }  catch (IOException e) {
-            return new byte[] {0};
+            return new byte[0];
         }
     }
 
