@@ -14,7 +14,12 @@ public class HomemadeMoveCodeConfig extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         RoGUI gui = new RoGUI(telemetry);
         String path = MiscUtils.dataFolder;
-        gui.add(new RoFileSelector("Move: ",telemetry,path));
+        RoFileSelector fileSelect = new RoFileSelector("Move: ",telemetry,path);
+        String configPath = MiscUtils.dataFolder+"config2026.robocfg";
+        gui.add(fileSelect);
+        if(MiscUtils.checkFile(configPath)) {
+            gui.get(0).setOutput((int)(128+MiscUtils.readConfig(configPath, (byte) 0)));
+        }
         waitForStart();
         while(opModeIsActive()) {
             if(this.gamepad1.dpad_down) {
@@ -58,5 +63,6 @@ public class HomemadeMoveCodeConfig extends LinearOpMode {
                 }
             }
         }
+        MiscUtils.writeToConfig(configPath, (byte) 0, (byte) (fileSelect.gui.getSelected()-128));
     }
 }

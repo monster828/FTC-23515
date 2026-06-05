@@ -36,9 +36,12 @@ public class homemadeMoveCodeTest extends LinearOpMode {
         mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
         GoBildaPinpointDriver pin = hardwareMap.get(GoBildaPinpointDriver.class,"POC");
         PinpointPosGet posGet = new PinpointPosGet(pin);
+        String configPath = MiscUtils.dataFolder+"config2026.robocfg";
+        int i = MiscUtils.readConfig(configPath, (byte) 0);
+        File file = MiscUtils.getRobopathsIn(new File(MiscUtils.dataFolder))[i];
         MoveThreadComm move = new MoveThreadComm();
         MoveThread m = new MoveThread(this,move,mot,
-                new File(MiscUtils.dataFolder+"/testpath3.robopath"),
+                file,
                 telemetry,
                 posGet
         );

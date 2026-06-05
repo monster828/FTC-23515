@@ -207,6 +207,17 @@ public class MiscUtils {
         }
     }
 
+    public static File[] getRobopathsIn(File f) {
+        File[] files = new File[0];
+        if(f.exists()) {
+            if(f.isFile()) {
+                f = f.getParentFile();
+            }
+            if(f != null) files = f.listFiles(new RobopathFilter());
+        }
+        return files;
+    }
+
     public static void intake() {
 
     }
