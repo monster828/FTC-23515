@@ -95,7 +95,7 @@ public class BestToleranceFinder {
             Float[] previousTest = _timesTolerance.get(_timesTolerance.size() - 1);
             Float[] bestTest = _timesTolerance.get(indexOfHighestScore);
 
-            _currentDirection = (previousTest[0] - bestTest[0]) / 2;
+            _currentDirection = (previousTest[0] - bestTest[0]);
         }
     }
 
