@@ -65,6 +65,6 @@ public class HomemadeMoveCodeConfig extends LinearOpMode {
                 }
             }
         }
-        MiscUtils.writeToConfig(configPath, (byte) 0, (byte) (fileSelect.gui.getSelected()-128));
+        MiscUtils.writeToConfig(configPath, (byte) 0, (byte) (fileSelect.getSelectedI()-128));
     }
 }

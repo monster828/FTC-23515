@@ -31,4 +31,8 @@ public class RoFileSelector extends RoDropdown {
         return files[selected];
     }
 
+    public int getSelectedI() {
+        return selected;
+    }
+
 }

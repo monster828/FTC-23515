@@ -38,7 +38,7 @@ public class homemadeMoveCodeTest extends LinearOpMode {
         PinpointPosGet posGet = new PinpointPosGet(pin);
         String configPath = MiscUtils.dataFolder+"config2026.robocfg";
         int i = MiscUtils.readConfig(configPath, (byte) 0);
-        File file = MiscUtils.getRobopathsIn(new File(MiscUtils.dataFolder))[i];
+        File file = MiscUtils.getRobopathsIn(new File(MiscUtils.dataFolder))[i+128];
         MoveThreadComm move = new MoveThreadComm();
         MoveThread m = new MoveThread(this,move,mot,
                 file,
