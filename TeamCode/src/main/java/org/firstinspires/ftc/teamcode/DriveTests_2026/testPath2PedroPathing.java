@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
-@Autonomous(name = "testPath2PedroPathing", group = "Autonomous")
+@Autonomous(name = "testPath2PedroPathing")
 @Configurable // Panels
 public class testPath2PedroPathing extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
@@ -69,7 +69,7 @@ public class testPath2PedroPathing extends OpMode {
                 .addPath(
                         new BezierLine(
                                 new Pose(118.000, 58.500),
-                                new Pose(59.000, 70.500)
+                                new Pose(70.000, 70.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(270))
