@@ -20,6 +20,8 @@ public class HomemadeMoveCodeConfig extends LinearOpMode {
         if(MiscUtils.checkFile(configPath)) {
             gui.get(0).setOutput((int)(128+MiscUtils.readConfig(configPath, (byte) 0)));
         }
+        gui.render();
+        telemetry.update();
         waitForStart();
         while(opModeIsActive()) {
             if(this.gamepad1.dpad_down) {
