@@ -101,7 +101,7 @@ public class MoveThread extends Thread {
                                 break;
                             }
                         }
-                        i++;
+                        i += 3;
                     }
                     if(i < lookAhead && !skip) {
                         moveTime = positions[posNum+1].getTimeStamp();
