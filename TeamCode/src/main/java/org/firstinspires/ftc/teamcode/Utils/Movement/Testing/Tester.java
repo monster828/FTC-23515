@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Utils.Threads.MoveThreadComm;
 
 import java.io.File;
 
-@TeleOp
+@TeleOp(name = "FindBestTolerance")
 public class Tester extends LinearOpMode {
     @Override
     public void runOpMode() {
