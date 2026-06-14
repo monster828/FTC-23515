@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -216,6 +218,24 @@ public class MiscUtils {
             if(f != null) files = f.listFiles(new RobopathFilter());
         }
         return files;
+    }
+
+    /**
+     * Check if the battery is low
+     * @param h harwareMap.
+     * @return true if battery voltage is > 12, false if otherwise.
+     */
+    public boolean checkBattery(HardwareMap h) {
+        float out = 100;
+        for(VoltageSensor vs : h.voltageSensor) {
+            double t = vs.getVoltage();
+            if(t > 0 && t < out) out = (float) t;
+        }
+        if(out > 12) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static void intake() {
