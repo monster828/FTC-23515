@@ -222,7 +222,7 @@ public class MiscUtils {
 
     /**
      * Check if the battery is low
-     * @param h harwareMap.
+     * @param h hardwareMap.
      * @return true if battery voltage is > 12, false if otherwise.
      */
     public boolean checkBattery(HardwareMap h) {
