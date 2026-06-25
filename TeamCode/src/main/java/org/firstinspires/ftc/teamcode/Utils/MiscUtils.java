@@ -225,7 +225,7 @@ public class MiscUtils {
      * @param h hardwareMap.
      * @return true if battery voltage is > 12, false if otherwise.
      */
-    public boolean checkBattery(HardwareMap h) {
+    public static boolean checkBattery(HardwareMap h) {
         float out = 100;
         for(VoltageSensor vs : h.voltageSensor) {
             double t = vs.getVoltage();

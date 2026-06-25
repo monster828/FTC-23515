@@ -10,9 +10,9 @@ import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PinpointPosGet;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
 
 public abstract class LinearOpMode2026 extends LinearOpMode {
-    PositionGetter posGet;
-    DcMotor[] mot;
-    String configPath = MiscUtils.dataFolder+"config2026.robocfg";
+    public PositionGetter posGet;
+    public DcMotor[] mot;
+    public String configPath = MiscUtils.dataFolder+"config2026.robocfg";
 
     /**
      * Call this to configure motors and the position getter.
@@ -33,5 +33,10 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
         mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
         GoBildaPinpointDriver pin = hardwareMap.get(GoBildaPinpointDriver.class,"POC");
         posGet = new PinpointPosGet(pin);
+
+        if(MiscUtils.checkBattery(hardwareMap)) {
+            telemetry.addData("OH NO","THE BATTERY IS LOW ON JUICE!!!!!");
+            telemetry.update();
+        }
     }
 }

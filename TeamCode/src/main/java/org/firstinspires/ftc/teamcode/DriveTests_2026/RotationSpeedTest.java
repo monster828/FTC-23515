@@ -7,16 +7,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PinpointPosGet;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.SparkfunPosGet;
 
 @TeleOp
-public class RotationSpeedTest extends LinearOpMode {
+public class RotationSpeedTest extends LinearOpMode2026 {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        GoBildaPinpointDriver pin = hardwareMap.get(GoBildaPinpointDriver.class,"POC");
+        /*GoBildaPinpointDriver pin = hardwareMap.get(GoBildaPinpointDriver.class,"POC");
         PinpointPosGet posGet = new PinpointPosGet(pin);
         DcMotor[] mot = {
                 hardwareMap.get(DcMotorEx.class,"BL"), //back left
@@ -31,7 +32,7 @@ public class RotationSpeedTest extends LinearOpMode {
 
 
         mot[0].setDirection(DcMotorSimple.Direction.REVERSE);
-        mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
+        mot[2].setDirection(DcMotorSimple.Direction.REVERSE);*/
 
         long start = System.currentTimeMillis();
         DriveUtils.DriveThing(0,0,1,1,mot);
