@@ -58,6 +58,7 @@ public class homemadeMoveCodeTest extends LinearOpMode {
         m.start();
         move.start();
         while(move.isRunning());
+        DriveUtils.stop(mot);
         telemetry.addData("Move time",move.getDriveTime());
         telemetry.addData("Time difference",move.getAhead());
         telemetry.update();

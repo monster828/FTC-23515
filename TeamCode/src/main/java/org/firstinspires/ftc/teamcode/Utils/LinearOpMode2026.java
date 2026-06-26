@@ -9,10 +9,15 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PinpointPosGet;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
 
+import java.io.File;
+
 public abstract class LinearOpMode2026 extends LinearOpMode {
     public PositionGetter posGet;
     public DcMotor[] mot;
     public String configPath = MiscUtils.dataFolder+"config2026.robocfg";
+    public File loggerFile = new File(MiscUtils.dataFolder+"/log.robolog");
+    public Logger log = new Logger(loggerFile);
+
 
     /**
      * Call this to configure motors and the position getter.
