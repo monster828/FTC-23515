@@ -167,7 +167,10 @@ public class MoveThread extends Thread {
                 if(opMode != null)opModeCheck = opMode.opModeIsActive() || opMode.opModeInInit();
 
                 // Added by Alden
-                sleep(10);
+                //sleep(10);
+
+                //This should do the same as sleep but won't cause it to crash when stopped.
+                while(System.currentTimeMillis()-lastTime < 10 && opModeCheck);
             }
             comm.stop();
             DriveUtils.stop(mot);

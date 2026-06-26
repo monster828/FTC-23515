@@ -11,9 +11,11 @@ public class LogReader extends LinearOpMode2026 {
     @Override
     public void runOpMode() throws InterruptedException {
         Object[][] dat = log.read();
+        waitForStart();
         for(Object[] d : dat) {
             telemetry.addData((String)d[0], Arrays.toString((Byte[])d[1]));
         }
         telemetry.update();
+        while(opModeIsActive());
     }
 }
