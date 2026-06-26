@@ -34,9 +34,10 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
         GoBildaPinpointDriver pin = hardwareMap.get(GoBildaPinpointDriver.class,"POC");
         posGet = new PinpointPosGet(pin);
 
-        if(MiscUtils.checkBattery(hardwareMap)) {
+        if(!MiscUtils.checkBattery(hardwareMap)) {
             telemetry.addData("OH NO","THE BATTERY IS LOW ON JUICE!!!!!");
             telemetry.update();
+            telemetry.speak("The battery is low, please fix it!");
         }
     }
 }

@@ -34,12 +34,17 @@ public class RotationSpeedTest extends LinearOpMode2026 {
         mot[0].setDirection(DcMotorSimple.Direction.REVERSE);
         mot[2].setDirection(DcMotorSimple.Direction.REVERSE);*/
 
+        config();
+
+        waitForStart();
+
         long start = System.currentTimeMillis();
         DriveUtils.DriveThing(0,0,1,1,mot);
-        sleep(150);
-        while(posGet.getPosi().r() < 360);
-        telemetry.addData("360 time", System.currentTimeMillis()-start);
+        sleep(50);
+        while(!(posGet.getPosi().r() > -10 && posGet.getPosi().r() < 0));
+        telemetry.addData("350 speed", 350000/(System.currentTimeMillis()-start));
         telemetry.update();
+        DriveUtils.stop(mot);
 
         while(opModeIsActive());
     }

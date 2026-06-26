@@ -72,7 +72,7 @@ public class MoveThread extends Thread {
             long pauseTimeRemaining = 0;
             long logTime = System.currentTimeMillis();
 
-            float lastTelemtryUpdate = 0;
+            long lastTelemetryUpdate = 0;
 
             while (System.currentTimeMillis() - delaystart < 30000 && opModeCheck && posNum < positions.length-1) {
                 Position p = posGet.getPosi();
@@ -148,13 +148,13 @@ public class MoveThread extends Thread {
                 comm.setAhead(moveTime-actualTime);
                 comm.setDriveTime(actualTime);
 
-                if(tem != null && System.currentTimeMillis() - lastTelemtryUpdate > 50) {
+                if(tem != null && System.currentTimeMillis() - lastTelemetryUpdate > 50) {
                     tem.addData("Target Point", positions[posNum].toString());
                     tem.addData("Current Pos", posGet.getPosi().toString());
                     tem.addData("Angle to target", Math.toDegrees(angle));
                     tem.addData("Predicted time difference",moveTime-actualTime);
                     tem.update();
-                    lastTelemtryUpdate = System.currentTimeMillis();
+                    lastTelemetryUpdate = System.currentTimeMillis();
                 }
                 if(System.currentTimeMillis()-logTime > 50 && log != null) {
                     log.add("Target Point", new byte[] {(byte) positions[posNum].x(),(byte) positions[posNum].y(),(byte) positions[posNum].r()});
