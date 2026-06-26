@@ -51,7 +51,7 @@ public class MoveThread extends Thread {
         }
     }
 
-    float tolerance = 2f;
+    float tolerance = 3f;
     int lookAhead = 20;
     float rT = 5;
     float antiJERK = 1.0f;
