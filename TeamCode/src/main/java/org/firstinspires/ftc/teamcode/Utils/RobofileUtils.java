@@ -60,7 +60,7 @@ public class RobofileUtils {
                 out00 = new Byte[7];
                 split = new int[out00.length*8];
                 Arrays.fill(split,0,1,0);
-                Arrays.fill(split,2,3,1);
+                Arrays.fill(split,2,4,1);
             } else { //Basic
                 out00 = new Byte[5];
                 split = new int[out00.length*8];
@@ -94,8 +94,8 @@ public class RobofileUtils {
             } else if(type == 3) {
                 long idk = (long)p.getExtraData()[0];
                 out00[5] = (byte) Math.floor((double) idk /256);
-                out00[6] = (byte) ((byte)-128+(idk-out00[4]));
-                out00[5] = (byte) (-128+out00[4]);
+                out00[6] = (byte) ((byte)-128+(idk-out00[5]));
+                out00[5] = (byte) (-128+out00[5]);
             }
             Collections.addAll(out0, out00);
         }
@@ -106,11 +106,6 @@ public class RobofileUtils {
         return out;
     }
 
-    /**
-     * Takes a number and outputs it in 10 bit binary
-     * @param num the number to convert to binary
-     * @return an array containing each bit.
-     */
     public static int[] tenBitNumSplit(int num) {
         int[] out = new int[10];
         boolean n = false;
@@ -143,11 +138,6 @@ public class RobofileUtils {
         return out;
     }
 
-    /**
-     * Takes a number and outputs it in 8 bit binary
-     * @param num the number to convert to binary
-     * @return an array containing each bit.
-     */
     public static int[] eightBitNumSplit(byte num) {
         int[] out = new int[8];
         int a = 0;
@@ -166,7 +156,7 @@ public class RobofileUtils {
     }
 
     /**Loads a Robopath Version 1 file
-    @param in the bytes in the file
+     @param in the bytes in the file
      **/
     public static Position[] loadRobopathV1(byte[] in) {
         if(in[0] != 1) {
@@ -240,7 +230,7 @@ public class RobofileUtils {
             scan += 5;
 
             //THE FUN BIT
-            p.setType(type,null);
+            p.setType(type,new Object[0]);
             if(type == 1) {
                 p.setType(1,new Object[] {(float)in[scan]/4.0f,(float)in[scan+1]/4.0f});
             } else if(type == 3) {
@@ -253,3 +243,4 @@ public class RobofileUtils {
     }
 
 }
+
