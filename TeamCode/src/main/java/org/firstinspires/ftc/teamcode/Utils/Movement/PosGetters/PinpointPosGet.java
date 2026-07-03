@@ -30,9 +30,11 @@ public class PinpointPosGet extends PositionGetter {
     @Override
     public float[] getPos() {
         UpdatePinpoint();
+        //2025 robot: -Y,X,-R
+        //2026 test bot: Y,-X,-R
         return new float[] {
-                -(float) _pinpoint.getPosY(DistanceUnit.INCH),
-                (float) _pinpoint.getPosX(DistanceUnit.INCH),
+                (float) _pinpoint.getPosY(DistanceUnit.INCH),
+                -(float) _pinpoint.getPosX(DistanceUnit.INCH),
                 -(float) _pinpoint.getHeading(AngleUnit.DEGREES)
         };
     }
@@ -41,8 +43,8 @@ public class PinpointPosGet extends PositionGetter {
     public Position getPosi() {
         UpdatePinpoint();
         return new Position(
-                -(float) _pinpoint.getPosY(DistanceUnit.INCH),
-                (float) _pinpoint.getPosX(DistanceUnit.INCH),
+                (float) _pinpoint.getPosY(DistanceUnit.INCH),
+                -(float) _pinpoint.getPosX(DistanceUnit.INCH),
                 -(float) _pinpoint.getHeading(AngleUnit.DEGREES)
         );
     }
