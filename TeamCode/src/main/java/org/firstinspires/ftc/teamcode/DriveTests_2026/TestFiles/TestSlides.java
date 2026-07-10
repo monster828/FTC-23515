@@ -13,13 +13,14 @@ public class TestSlides extends OpMode {
 
     @Override
     public void init(){
-        slide = hardwareMap.get(DcMotor.class, "NAME");
-        slide2 = hardwareMap.get(DcMotor.class, "NAME");
+        slide = hardwareMap.get(DcMotor.class, "RS");
+        slide2 = hardwareMap.get(DcMotor.class, "LS");
     }
 
     @Override
     public void loop(){
-        slide.setPower(gamepad1.left_stick_y);
+        // Slider up -1, down 1
+        slide.setPower(-gamepad1.left_stick_y);
         slide2.setPower(gamepad1.right_stick_y);
     }
 }
