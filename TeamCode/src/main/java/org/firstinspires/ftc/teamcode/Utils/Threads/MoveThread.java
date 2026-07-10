@@ -125,10 +125,12 @@ public class MoveThread extends Thread {
 
                     if(positions[posNum].getType() == 3) {
                         comm.setPaused(true);
+                        DriveUtils.stop(mot);
                         pauseTimeRemaining = (long)positions[posNum].getExtraData()[0];
                     }
 
                     if(positions[posNum].getType() == 2) {
+                        DriveUtils.stop(mot);
                         comm.stop();
                     }
                 }

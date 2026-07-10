@@ -57,11 +57,11 @@ public class homemadeMoveCodeTest extends LinearOpMode {
         l.add("Opmode Started",new byte[0]);
         m.start();
         move.start();
-        while(move.isRunning());
+        /*while(move.isRunning());
         telemetry.addData("Robot has stopped","Giving permission to proceed");
         sleep(1000);
         move.start();
-        while(!move.isRunning());
+        while(!move.isRunning());*/
         while(move.isRunning());
         DriveUtils.stop(mot);
         telemetry.addData("Move time",move.getDriveTime());
