@@ -71,13 +71,13 @@ public class RobofileUtils {
             }
 
             int x0 = (int) (p.x()*4);
-            if(v2) x0 -= 16;
+            if(v2) x0 -= 128;
             int[] split2 = tenBitNumSplit(x0);
             for(int i = 0; i < 10; i++) {
                 split[i+4] = split2[i];
             }
             int y0 = (int) (p.y()*4);
-            if(v2) y0 -= 16;
+            if(v2) y0 -= 128;
             split2 = tenBitNumSplit(y0);
             for(int i = 0; i < 10; i++) {
                 split[i+14] = split2[i];
@@ -222,14 +222,14 @@ public class RobofileUtils {
             for(int i = 1; i < 10; i++) {
                 x += (float) (bytes[i] * Math.pow(2,7-i));
             }
-            if(v2) x += 16;
+            if(v2) x += 32;
             p.setX(x);
             System.out.println(x);
             float y = -128*bytes[10];
             for(int i = 1; i < 10; i++) {
                 y += (float) (bytes[i+10] * Math.pow(2,7-i));
             }
-            if(v2) y += 16;
+            if(v2) y += 32;
             p.setY(y);
             System.out.println(y);
             float r = in[scan+3]/0.7f;
