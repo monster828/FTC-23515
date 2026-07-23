@@ -9,7 +9,7 @@ import java.util.Collections;
 public class RobofileUtils {
 
     /** .ROBOPATH V1 format
-     * [VERSION 1 (8b/1B)][(No -B)START TIME (16b/2B)] 3B
+     * [VERSION 1/2 (8b/1B)][(No -B)START TIME (16b/2B)] 3B
      *
      * Points:
      * [POINT TYPE (4b)]
@@ -20,7 +20,7 @@ public class RobofileUtils {
      *
      */
     public static String v1doc = ".ROBOPATH V1 format\n" +
-            "[VERSION 1 (8b/1B)][(No -B)START TIME (16b/2B)] 3B\n" +
+            "[VERSION 1/2 (8b/1B)][(No -B)START TIME (16b/2B)] 3B\n" +
             "\n" +
             "Points:\n" +
             "[POINT TYPE (4b)]\n" +
@@ -36,7 +36,10 @@ public class RobofileUtils {
     public static byte[] writeRobopathV1(Position[] pos) {
         ArrayList<Byte> out0 = new ArrayList<>();
         long time = pos[0].getTimeStamp();
-        out0.add((byte) 1);
+        boolean v2 = true;
+        for (Position p : pos) if (p.x() < 0 || p.y() < 0) v2 = false;
+        if(v2) out0.add((byte) 2);
+        else out0.add((byte) 1);
         Byte time2 = (byte) (Math.floor((double) time /256));
         time -= time2;
         out0.add((byte) (-128+time2));
@@ -60,18 +63,22 @@ public class RobofileUtils {
                 out00 = new Byte[7];
                 split = new int[out00.length*8];
                 Arrays.fill(split,0,1,0);
-                Arrays.fill(split,2,3,1);
+                Arrays.fill(split,2,4,1);
             } else { //Basic
                 out00 = new Byte[5];
                 split = new int[out00.length*8];
                 Arrays.fill(split,0,3,0);
             }
 
-            int[] split2 = tenBitNumSplit((int) (p.x()*4));
+            int x0 = (int) (p.x()*4);
+            if(v2) x0 -= 128;
+            int[] split2 = tenBitNumSplit(x0);
             for(int i = 0; i < 10; i++) {
                 split[i+4] = split2[i];
             }
-            split2 = tenBitNumSplit((int) (p.y()*4));
+            int y0 = (int) (p.y()*4);
+            if(v2) y0 -= 128;
+            split2 = tenBitNumSplit(y0);
             for(int i = 0; i < 10; i++) {
                 split[i+14] = split2[i];
             }
@@ -94,8 +101,8 @@ public class RobofileUtils {
             } else if(type == 3) {
                 long idk = (long)p.getExtraData()[0];
                 out00[5] = (byte) Math.floor((double) idk /256);
-                out00[6] = (byte) ((byte)-128+(idk-out00[4]));
-                out00[5] = (byte) (-128+out00[4]);
+                out00[6] = (byte) ((byte)-128+(idk-out00[5]));
+                out00[5] = (byte) (-128+out00[5]);
             }
             Collections.addAll(out0, out00);
         }
@@ -106,11 +113,6 @@ public class RobofileUtils {
         return out;
     }
 
-    /**
-     * Takes a number and outputs it in 10 bit binary
-     * @param num the number to convert to binary
-     * @return an array containing each bit.
-     */
     public static int[] tenBitNumSplit(int num) {
         int[] out = new int[10];
         boolean n = false;
@@ -143,11 +145,6 @@ public class RobofileUtils {
         return out;
     }
 
-    /**
-     * Takes a number and outputs it in 8 bit binary
-     * @param num the number to convert to binary
-     * @return an array containing each bit.
-     */
     public static int[] eightBitNumSplit(byte num) {
         int[] out = new int[8];
         int a = 0;
@@ -166,14 +163,16 @@ public class RobofileUtils {
     }
 
     /**Loads a Robopath Version 1 file
-    @param in the bytes in the file
+     @param in the bytes in the file
      **/
     public static Position[] loadRobopathV1(byte[] in) {
-        if(in[0] != 1) {
-            return null;
+        if(!(in[0] == 1 || in[0] == 2)) {
+            throw new IncorrectVersionException("Robopath should be v1");
         }
+        boolean v2 = in[0] == 2;
         long time = (in[2]+128)+((in[1]+128)*257);
         System.out.println("Start time: "+time);
+        System.out.println("SubVersion: "+in[0]);
         ArrayList<Position> pos = new ArrayList<>();
         int scan = 3;
         while(scan < in.length) {
@@ -184,7 +183,7 @@ public class RobofileUtils {
             } else {
                 type = temp+8;
             }
-            //System.out.println(type);
+            System.out.println(type);
             Position p = new Position(0,0,0);
             /*int[] bitList = new int[10];
             byte idk;
@@ -218,29 +217,31 @@ public class RobofileUtils {
             for(int i = 0; i < 8; i++) {
                 bytes[i+12] = b8[i];
             }
-            //System.out.println(Arrays.toString(bytes));
+            System.out.println(Arrays.toString(bytes));
             float x = -128*bytes[0];
             for(int i = 1; i < 10; i++) {
                 x += (float) (bytes[i] * Math.pow(2,7-i));
             }
+            if(v2) x += 32;
             p.setX(x);
-            //System.out.println(x);
+            System.out.println(x);
             float y = -128*bytes[10];
             for(int i = 1; i < 10; i++) {
                 y += (float) (bytes[i+10] * Math.pow(2,7-i));
             }
+            if(v2) y += 32;
             p.setY(y);
-            //System.out.println(y);
+            System.out.println(y);
             float r = in[scan+3]/0.7f;
             p.setR(r);
-            //System.out.println(r);
+            System.out.println(r);
             int timeDiff = 128+in[scan+4];
             time += timeDiff;
             p.setTimeStamp(time);
             scan += 5;
 
             //THE FUN BIT
-            p.setType(type,null);
+            p.setType(type,new Object[0]);
             if(type == 1) {
                 p.setType(1,new Object[] {(float)in[scan]/4.0f,(float)in[scan+1]/4.0f});
             } else if(type == 3) {

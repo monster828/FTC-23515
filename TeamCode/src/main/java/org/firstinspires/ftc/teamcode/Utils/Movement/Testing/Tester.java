@@ -26,6 +26,10 @@ public class Tester extends LinearOpMode {
                 hardwareMap.get(DcMotorEx.class,"FL"), //front left
                 hardwareMap.get(DcMotorEx.class,"FR") //front right
         };
+        mot[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mot[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mot[2].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mot[3].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         mot[0].setDirection(DcMotorSimple.Direction.REVERSE);
         mot[2].setDirection(DcMotorSimple.Direction.REVERSE);

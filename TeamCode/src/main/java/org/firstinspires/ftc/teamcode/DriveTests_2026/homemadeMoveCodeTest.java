@@ -31,14 +31,23 @@ public class homemadeMoveCodeTest extends LinearOpMode {
                 hardwareMap.get(DcMotorEx.class,"FL"), //front left
                 hardwareMap.get(DcMotorEx.class,"FR") //front right
         };
+        mot[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mot[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mot[2].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mot[3].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         mot[0].setDirection(DcMotorSimple.Direction.REVERSE);
         mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
         GoBildaPinpointDriver pin = hardwareMap.get(GoBildaPinpointDriver.class,"POC");
         PinpointPosGet posGet = new PinpointPosGet(pin);
+        posGet.setOffset(135,9);
+        String configPath = MiscUtils.dataFolder+"config2026.robocfg";
+        int i = MiscUtils.readConfig(configPath, (byte) 0);
+        File file = MiscUtils.getRobopathsIn(new File(MiscUtils.dataFolder))[i+128];
         MoveThreadComm move = new MoveThreadComm();
         MoveThread m = new MoveThread(this,move,mot,
-                new File(MiscUtils.dataFolder+"/testpath2.robopath"),
+                file,
                 telemetry,
                 posGet
         );
@@ -49,7 +58,13 @@ public class homemadeMoveCodeTest extends LinearOpMode {
         l.add("Opmode Started",new byte[0]);
         m.start();
         move.start();
+        /*while(move.isRunning());
+        telemetry.addData("Robot has stopped","Giving permission to proceed");
+        sleep(1000);
+        move.start();
+        while(!move.isRunning());*/
         while(move.isRunning());
+        DriveUtils.stop(mot);
         telemetry.addData("Move time",move.getDriveTime());
         telemetry.addData("Time difference",move.getAhead());
         telemetry.update();

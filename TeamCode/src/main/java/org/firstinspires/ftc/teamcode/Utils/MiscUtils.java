@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -126,7 +128,7 @@ public class MiscUtils {
             return data;
         }  catch (IOException e) {
             tem.addData("woops",e.toString());
-            return new byte[] {0};
+            return new byte[0];
         }
     }
 
@@ -144,7 +146,7 @@ public class MiscUtils {
             in.close();
             return data;
         }  catch (IOException e) {
-            return new byte[] {0};
+            return new byte[0];
         }
     }
 
@@ -204,6 +206,35 @@ public class MiscUtils {
             return op1;
         } else {
             return op2;
+        }
+    }
+
+    public static File[] getRobopathsIn(File f) {
+        File[] files = new File[0];
+        if(f.exists()) {
+            if(f.isFile()) {
+                f = f.getParentFile();
+            }
+            if(f != null) files = f.listFiles(new RobopathFilter());
+        }
+        return files;
+    }
+
+    /**
+     * Check if the battery is low
+     * @param h hardwareMap.
+     * @return true if battery voltage is > 12, false if otherwise.
+     */
+    public static boolean checkBattery(HardwareMap h) {
+        float out = 100;
+        for(VoltageSensor vs : h.voltageSensor) {
+            double t = vs.getVoltage();
+            if(t > 0 && t < out) out = (float) t;
+        }
+        if(out > 12) {
+            return true;
+        } else {
+            return false;
         }
     }
 

@@ -5,9 +5,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class RoTab extends RoGraphic {
 
-    private boolean open = false;
-    private Telemetry tem;
-    private String label;
+    public boolean open = false;
+    public Telemetry tem;
+    public String label;
     public RoGUI gui;
 
     public RoTab(String label, Telemetry telemetry) {

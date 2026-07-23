@@ -122,6 +122,13 @@ public class RoGUI {
     }
 
     /**
+     * get the ID of the selected element
+     */
+    public int getSelected() {
+        return selected;
+    }
+
+    /**
      * Add a UI element to the UI
      * @param g
      */

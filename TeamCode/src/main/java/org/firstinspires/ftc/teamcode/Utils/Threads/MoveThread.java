@@ -51,10 +51,13 @@ public class MoveThread extends Thread {
         }
     }
 
-    float tolerance = 2f;
-    int lookAhead = 40;
+    float tolerance = 3f;
+    int lookAhead = 20;
     float rT = 5;
     float antiJERK = 1.0f;
+
+    //1 means it'll check every point.
+    int skips = 3;
 
     @Override
     public void run() {
@@ -69,7 +72,7 @@ public class MoveThread extends Thread {
             long pauseTimeRemaining = 0;
             long logTime = System.currentTimeMillis();
 
-            float lastTelemtryUpdate = 0;
+            long lastTelemetryUpdate = 0;
 
             while (System.currentTimeMillis() - delaystart < 30000 && opModeCheck && posNum < positions.length-1) {
                 Position p = posGet.getPosi();
@@ -94,17 +97,19 @@ public class MoveThread extends Thread {
                     int i = 1;
                     float m = positions[posNum].getDistTo(p);
                     boolean skip = false;
-                    while(i <= lookAhead) {
+                    while(i <= lookAhead/skips) {
                         if(positions.length > posNum+i) {
-                            if(positions[posNum + i].getType() > 1) {
-                                skip = true;
-                                break;
+                            for(int i2 = i; i2 <= i+skips; i2++) {
+                                if (positions[posNum + i2].getType() > 0) {
+                                    skip = true;
+                                    break;
+                                }
                             }
                             if (positions[posNum + i].getDistTo(p) < m) {
                                 break;
                             }
                         }
-                        i++;
+                        i += skips;
                     }
                     if(i < lookAhead && !skip) {
                         moveTime = positions[posNum+1].getTimeStamp();
@@ -114,16 +119,18 @@ public class MoveThread extends Thread {
 
                     //check if the robot is at the target point
                     if(positions[posNum].getDistTo(p) < tolerance && (MiscUtils.getAngleDifferenceDegrees(positions[posNum].r(),p.r()) < rT || positions[posNum].getType() == 0)) {
-                        if(posNum < positions.length-1) posNum += 1;
+                        if(posNum < positions.length-skips) posNum += skips;
                         tP = 1.0f;
                     }
 
                     if(positions[posNum].getType() == 3) {
                         comm.setPaused(true);
+                        DriveUtils.stop(mot);
                         pauseTimeRemaining = (long)positions[posNum].getExtraData()[0];
                     }
 
                     if(positions[posNum].getType() == 2) {
+                        DriveUtils.stop(mot);
                         comm.stop();
                     }
                 }
@@ -143,13 +150,13 @@ public class MoveThread extends Thread {
                 comm.setAhead(moveTime-actualTime);
                 comm.setDriveTime(actualTime);
 
-                if(tem != null && System.currentTimeMillis() - lastTelemtryUpdate > 50) {
+                if(tem != null && System.currentTimeMillis() - lastTelemetryUpdate > 50) {
                     tem.addData("Target Point", positions[posNum].toString());
                     tem.addData("Current Pos", posGet.getPosi().toString());
                     tem.addData("Angle to target", Math.toDegrees(angle));
                     tem.addData("Predicted time difference",moveTime-actualTime);
                     tem.update();
-                    lastTelemtryUpdate = System.currentTimeMillis();
+                    lastTelemetryUpdate = System.currentTimeMillis();
                 }
                 if(System.currentTimeMillis()-logTime > 50 && log != null) {
                     log.add("Target Point", new byte[] {(byte) positions[posNum].x(),(byte) positions[posNum].y(),(byte) positions[posNum].r()});
@@ -162,7 +169,10 @@ public class MoveThread extends Thread {
                 if(opMode != null)opModeCheck = opMode.opModeIsActive() || opMode.opModeInInit();
 
                 // Added by Alden
-                sleep(10);
+                //sleep(10);
+
+                //This should do the same as sleep but won't cause it to crash when stopped.
+                while(System.currentTimeMillis()-lastTime < 10 && opModeCheck);
             }
             comm.stop();
             DriveUtils.stop(mot);
