@@ -69,6 +69,7 @@ public class PinpointPosGet extends PositionGetter {
     }
 
     public void setOffset(float x, float y) {
-
+        xOffset = x;
+        yOffset = y;
     }
 }

@@ -209,6 +209,11 @@ public class MiscUtils {
         }
     }
 
+    /**
+     * Outputs all robopath files in a certain folder.
+     * @param f the folder to look in.
+     * @return robopath files.
+     */
     public static File[] getRobopathsIn(File f) {
         File[] files = new File[0];
         if(f.exists()) {
@@ -238,11 +243,23 @@ public class MiscUtils {
         }
     }
 
-    public static void intake() {
-
+    /**
+     * Convert degrees to servo values
+     * @param servo input 300 for a 300 deg servo, 5 for a 5 turn.
+     * @param deg angle in degrees.
+     * @return servo value.
+     */
+    public static float servoConvert(int servo, float deg) {
+        if (servo == 300) {
+            return deg/300;
+        } else {
+            return deg/1800;
+        }
     }
 
     //Season specific
+
+
     public static float CannonGreenVperP(float P) {
         return (float) (((78.4f*Math.pow(P,2))+(247.6f*P)+0.03f)*1f)*1.21f;
     }
