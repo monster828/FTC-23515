@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+
 @TeleOp(name = "fullPrototype1")
 public class fullPrototype1 extends OpMode {
 
@@ -49,6 +51,7 @@ public class fullPrototype1 extends OpMode {
         servoLT.setDirection(Servo.Direction.REVERSE);
         //Servo LT Reversed
         //Servo RT Normal
+        //Servo LB Reversed, 0 is dumping
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -130,19 +133,24 @@ public class fullPrototype1 extends OpMode {
             slideL.setPower(0);
             slideR.setPower(0);
         } else {
-                if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90) {
-                    slideL.setPower(0.001 * (extend_Position - slideL.getCurrentPosition()));
-                    slideR.setPower(0.001 * (extend_Position - slideR.getCurrentPosition()));
-                } else {
-                    slideL.setPower(0.0025 * (extend_Position - slideL.getCurrentPosition()));
-                    slideR.setPower(0.0025 * (extend_Position - slideR.getCurrentPosition()));
-                }
+            if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90) {
+                slideL.setPower(0.001 * (extend_Position - slideL.getCurrentPosition()));
+                slideR.setPower(0.001 * (extend_Position - slideR.getCurrentPosition()));
+            } else {
+                slideL.setPower(0.0025 * (extend_Position - slideL.getCurrentPosition()));
+                slideR.setPower(0.0025 * (extend_Position - slideR.getCurrentPosition()));
+            }
 
+            if (gamepad1.dpad_down) {
+                servoLT.setPosition(MiscUtils.servoConvert(300,0));
+                servoRT.setPosition(MiscUtils.servoConvert(300,0));
+                servoLB.setPosition(MiscUtils.servoConvert(5, 230));
+            }
 
-
-        telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
-        telemetry.addData("Intake Reversed", intakeOnR ? "ON" : "OFF");
-        telemetry.addData("Intake Speed", String.format("%.1f", intakeSpeed));
-        telemetry.update();
+            telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
+            telemetry.addData("Intake Reversed", intakeOnR ? "ON" : "OFF");
+            telemetry.addData("Intake Speed", String.format("%.1f", intakeSpeed));
+            telemetry.update();
+        }
     }
 }
