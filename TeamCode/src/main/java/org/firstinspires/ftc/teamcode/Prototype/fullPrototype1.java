@@ -6,13 +6,16 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "intakeTest1")
-public class intakeTest1 extends OpMode {
+@TeleOp(name = "fullPrototype1")
+public class fullPrototype1 extends OpMode {
 
     DcMotor frontLeft, backLeft, frontRight, backRight;
-    DcMotor intake;
+    DcMotor intake, slideR, slideL;
     GoBildaPinpointDriver pinpoint;
+
+    Servo servoRT, servoRB, servoLT, servoLB;
 
     boolean intakeOn = false;
     boolean intakeOnR = false;
@@ -26,15 +29,26 @@ public class intakeTest1 extends OpMode {
     boolean wasDpadUpPressed = false;
     boolean wasDpadDownPressed = false;
 
+    int extend_Position = 0;
+
     @Override
     public void init() {
         frontLeft  = hardwareMap.get(DcMotorEx.class, "FL");
         backLeft   = hardwareMap.get(DcMotorEx.class, "BL");
         frontRight = hardwareMap.get(DcMotorEx.class, "FR");
         backRight  = hardwareMap.get(DcMotorEx.class, "BR");
+        slideR = hardwareMap.get(DcMotor.class, "RS");
+        slideL = hardwareMap.get(DcMotor.class, "LS");
+        servoLT = hardwareMap.get(Servo.class, "LT");
+        servoLB = hardwareMap.get(Servo.class, "LB");
+        servoRT = hardwareMap.get(Servo.class, "RT");
+        servoRB = hardwareMap.get(Servo.class, "RB");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        servoLT.setDirection(Servo.Direction.REVERSE);
+        //Servo LT Reversed
+        //Servo RT Normal
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -44,6 +58,9 @@ public class intakeTest1 extends OpMode {
         intake = hardwareMap.get(DcMotor.class, "Intake");
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "POC");
         pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
@@ -78,8 +95,6 @@ public class intakeTest1 extends OpMode {
         }
         wasDpadDownPressed = gamepad1.dpad_down;
 
-
-
         if (intakeOn) {
             intake.setPower(intakeSpeed);
         } else if (intakeOnR) {
@@ -97,6 +112,33 @@ public class intakeTest1 extends OpMode {
         backLeft.setPower((y - x + rx) / denominator);
         frontRight.setPower((y - x - rx) / denominator);
         backRight.setPower((y + x - rx) / denominator);
+
+        //2670 ticks for full extension
+        if (gamepad1.right_trigger > 0) {
+            extend_Position += -300 * gamepad1.right_trigger;
+            if (extend_Position > 2670) {
+                extend_Position = 2670;
+            }
+        } else if (gamepad1.left_trigger > 0) {
+            extend_Position += 300 * gamepad1.left_trigger;
+            if (extend_Position < 20) {
+                extend_Position = 20;
+            }
+        }
+
+        if (Math.abs(extend_Position - slideR.getCurrentPosition()) < -1) {
+            slideL.setPower(0);
+            slideR.setPower(0);
+        } else {
+                if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90) {
+                    slideL.setPower(0.001 * (extend_Position - slideL.getCurrentPosition()));
+                    slideR.setPower(0.001 * (extend_Position - slideR.getCurrentPosition()));
+                } else {
+                    slideL.setPower(0.0025 * (extend_Position - slideL.getCurrentPosition()));
+                    slideR.setPower(0.0025 * (extend_Position - slideR.getCurrentPosition()));
+                }
+
+
 
         telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
         telemetry.addData("Intake Reversed", intakeOnR ? "ON" : "OFF");
