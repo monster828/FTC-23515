@@ -249,12 +249,19 @@ public class MiscUtils {
      * @param deg angle in degrees.
      * @return servo value.
      */
-    public static float servoConvert(int servo, float deg) {
-        if (servo == 300) {
+    public static float servoConvert(ServoType servo, float deg) {
+        if (servo == ServoType.ThreeHundredDegrees) {
             return deg/300;
-        } else {
+        } else if (servo == ServoType.FiveTurn) {
             return deg/1800;
         }
+
+        return 0;
+    }
+
+    public enum ServoType{
+        ThreeHundredDegrees,
+        FiveTurn
     }
 
     //Season specific

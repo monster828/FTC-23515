@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
@@ -32,6 +33,11 @@ public class fullPrototype1 extends OpMode {
     boolean wasDpadDownPressed = false;
 
     int extend_Position = 0;
+    boolean isDumping = false;
+
+    float dumpingTime = 0;
+
+    long lastTime = System.nanoTime();
 
     @Override
     public void init() {
@@ -41,6 +47,8 @@ public class fullPrototype1 extends OpMode {
         backRight  = hardwareMap.get(DcMotorEx.class, "BR");
         slideR = hardwareMap.get(DcMotor.class, "RS");
         slideL = hardwareMap.get(DcMotor.class, "LS");
+
+        // ServoLT = Servo Left top, ect.
         servoLT = hardwareMap.get(Servo.class, "LT");
         servoLB = hardwareMap.get(Servo.class, "LB");
         servoRT = hardwareMap.get(Servo.class, "RT");
@@ -74,6 +82,14 @@ public class fullPrototype1 extends OpMode {
 
     @Override
     public void loop() {
+        long currentTime = System.nanoTime();
+
+        // Calculate elapsed nanoseconds, then convert to seconds
+        double deltaTime = (currentTime - lastTime) / 1_000_000_000.0;
+
+        // Update lastTime for the next frame iteration
+        lastTime = currentTime;
+
         if (gamepad1.a && !wasAPressed) {
             intakeOn = !intakeOn;
             if (intakeOn) intakeOnR = false;
@@ -117,15 +133,16 @@ public class fullPrototype1 extends OpMode {
         backRight.setPower((y + x - rx) / denominator);
 
         //2670 ticks for full extension
+        // VERY EASY TO MAKE AUTOMATED
         if (gamepad1.right_trigger > 0) {
             extend_Position += -300 * gamepad1.right_trigger;
-            if (extend_Position > 2670) {
-                extend_Position = 2670;
+            if (extend_Position < 20) {
+                extend_Position = 20;
             }
         } else if (gamepad1.left_trigger > 0) {
             extend_Position += 300 * gamepad1.left_trigger;
-            if (extend_Position < 20) {
-                extend_Position = 20;
+            if (extend_Position > 2670) {
+                extend_Position = 2670;
             }
         }
 
@@ -141,16 +158,37 @@ public class fullPrototype1 extends OpMode {
                 slideR.setPower(0.0025 * (extend_Position - slideR.getCurrentPosition()));
             }
 
-            if (gamepad1.dpad_down) {
-                servoLT.setPosition(MiscUtils.servoConvert(300,0));
-                servoRT.setPosition(MiscUtils.servoConvert(300,0));
-                servoLB.setPosition(MiscUtils.servoConvert(5, 230));
+            if (gamepad1.xWasPressed()) {
+                servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,0));
+                servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,0));
+                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 230));
             }
 
             telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
             telemetry.addData("Intake Reversed", intakeOnR ? "ON" : "OFF");
             telemetry.addData("Intake Speed", String.format("%.1f", intakeSpeed));
             telemetry.update();
+        }
+
+        if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90){
+
+            if (isDumping){
+                if (dumpingTime > 0){
+                    dumpingTime -= deltaTime;
+
+                    if (dumpingTime <= 0){
+                        isDumping = false;
+                    }
+                }else{
+                    servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 0));
+
+                    dumpingTime = 1;
+                }
+            }
+        }
+
+        if (gamepad1.rightBumperWasPressed()){
+            isDumping = true;
         }
     }
 }
