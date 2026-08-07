@@ -136,6 +136,14 @@ public class fullPrototype1 extends OpMode {
 
         //2670 ticks for full extension
         // VERY EASY TO MAKE AUTOMATED
+
+        // ==> Button clicked <==
+        // => Rotate servos while extending <=
+        // => When reached top bucket dump <=
+        // => After dumping rotate bucket out of the way and then pull down the slides <=
+        // => Reset servos while pulling down <=
+
+
         if (gamepad1.right_trigger > 0) {
             extend_Position += -300 * gamepad1.right_trigger;
             if (extend_Position < 20) {
@@ -190,7 +198,7 @@ public class fullPrototype1 extends OpMode {
                 }else{
                     servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 45));
 
-                    dumpingTime = 1;
+                    dumpingTime = 1.5f;
                 }
             }
         }
