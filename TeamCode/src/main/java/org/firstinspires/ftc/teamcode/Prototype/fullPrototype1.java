@@ -35,7 +35,7 @@ public class fullPrototype1 extends OpMode {
     int extend_Position = 0;
     boolean isDumping = false;
 
-    float dumpingTime = 0;
+    double dumpingTime = 0;
 
     long lastTime = System.nanoTime();
 
@@ -178,6 +178,7 @@ public class fullPrototype1 extends OpMode {
 
                     if (dumpingTime <= 0){
                         isDumping = false;
+                        servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 230));
                     }
                 }else{
                     servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 0));
