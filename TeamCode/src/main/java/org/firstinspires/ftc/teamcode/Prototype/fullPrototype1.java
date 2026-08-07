@@ -61,7 +61,7 @@ public class fullPrototype1 extends OpMode {
         servoLT.setDirection(Servo.Direction.REVERSE);
         //Servo LT Reversed
         //Servo RT Normal
-        //Servo LB Reversed, 0 is dumping
+        //Servo LB Reversed, 900 is dumping
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -140,7 +140,9 @@ public class fullPrototype1 extends OpMode {
         // ==> Button clicked <==
         // => Rotate servos while extending <=
         // => When reached top bucket dump <=
-        // => After dumping rotate bucket out of the way and then pull down the slides <=
+        // => Button click to dump <=
+        // => Button click to retract <=
+        // => After dumping rotate bucket out of the way (vertical) and then pull down the slides <=
         // => Reset servos while pulling down <=
 
 
