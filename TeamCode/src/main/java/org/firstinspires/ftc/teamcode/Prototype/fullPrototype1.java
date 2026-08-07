@@ -182,6 +182,10 @@ public class fullPrototype1 extends OpMode {
             telemetry.update();
         }
 
+        DumpingAndFerrisWheel(deltaTime);
+    }
+
+    public void DumpingAndFerrisWheel(double deltaTime){
         if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90){
 
             if (isFerrisWheel) {
