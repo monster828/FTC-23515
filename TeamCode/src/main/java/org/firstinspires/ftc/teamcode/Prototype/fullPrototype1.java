@@ -50,11 +50,16 @@ public class fullPrototype1 extends OpMode {
         slideR = hardwareMap.get(DcMotor.class, "RS");
         slideL = hardwareMap.get(DcMotor.class, "LS");
 
+        slideL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slideR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slideL.setDirection(DcMotorSimple.Direction.REVERSE);
+
         // ServoLT = Servo Left top, ect.
         servoLT = hardwareMap.get(Servo.class, "LT");
         servoLB = hardwareMap.get(Servo.class, "LB");
         servoRT = hardwareMap.get(Servo.class, "RT");
 
+        extend_Position = 0;
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         servoLT.setDirection(Servo.Direction.REVERSE);
@@ -70,9 +75,6 @@ public class fullPrototype1 extends OpMode {
         intake = hardwareMap.get(DcMotor.class, "Intake");
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "POC");
         pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
