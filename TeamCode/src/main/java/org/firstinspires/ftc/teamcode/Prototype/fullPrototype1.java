@@ -35,7 +35,9 @@ public class fullPrototype1 extends OpMode {
     int extend_Position = 0;
     boolean isDumping = false;
 
-    double dumpingTime = 0;
+    boolean isFerrisWheel = false;
+
+    float dumpingTime = 0;
 
     long lastTime = System.nanoTime();
 
@@ -161,7 +163,7 @@ public class fullPrototype1 extends OpMode {
             if (gamepad1.xWasPressed()) {
                 servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,0));
                 servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,0));
-                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 230));
+                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 0));
             }
 
             telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
@@ -172,16 +174,21 @@ public class fullPrototype1 extends OpMode {
 
         if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90){
 
+            if (isFerrisWheel) {
+                servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
+                servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
+                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 180));
+            }
+
             if (isDumping){
                 if (dumpingTime > 0){
                     dumpingTime -= deltaTime;
 
                     if (dumpingTime <= 0){
                         isDumping = false;
-                        servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 230));
                     }
                 }else{
-                    servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 0));
+                    servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 45));
 
                     dumpingTime = 1;
                 }
@@ -190,6 +197,9 @@ public class fullPrototype1 extends OpMode {
 
         if (gamepad1.rightBumperWasPressed()){
             isDumping = true;
+        }
+        if (gamepad1.leftBumperWasPressed()){
+            isFerrisWheel = true;
         }
     }
 }
