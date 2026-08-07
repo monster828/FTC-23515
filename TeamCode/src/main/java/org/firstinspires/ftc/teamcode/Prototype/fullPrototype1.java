@@ -148,12 +148,12 @@ public class fullPrototype1 extends OpMode {
 
 
         if (gamepad1.right_trigger > 0) {
-            extend_Position += 150 * gamepad1.right_trigger;
+            extend_Position += 25 * gamepad1.right_trigger;
             if (extend_Position < 20) {
                 extend_Position = 20;
             }
         } else if (gamepad1.left_trigger > 0) {
-            extend_Position += -150 * gamepad1.left_trigger;
+            extend_Position += -25 * gamepad1.left_trigger;
             if (extend_Position > 2670) {
                 extend_Position = 2670;
             }
