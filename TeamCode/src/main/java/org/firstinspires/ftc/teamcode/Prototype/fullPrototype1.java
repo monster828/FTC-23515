@@ -165,8 +165,8 @@ public class fullPrototype1 extends OpMode {
 
         if (gamepad1.right_trigger > 0.05) {
             extend_Position += 25 * gamepad1.right_trigger;
-            if (extend_Position > 2670) {
-                extend_Position = 2670;
+            if (extend_Position > 2800) {
+                extend_Position = 2800;
             }
             //2670 Max?
         } else if (gamepad1.left_trigger > 0.05) {
@@ -202,6 +202,7 @@ public class fullPrototype1 extends OpMode {
         telemetry.addData("Dump", isDumping ? "ON" : "OFF");
         telemetry.addData("Slide Complete", Math.abs(extend_Position - slideR.getCurrentPosition()) < 90 ? "TRUE" : "FALSE");
         telemetry.addData("SlideR Position", slideR.getCurrentPosition());
+        telemetry.addData("Extend Slider Position", extend_Position);
         telemetry.update();
     }
 
