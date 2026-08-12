@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+import org.firstinspires.ftc.teamcode.Utils.Timeout.FrameRateCounter;
 import org.firstinspires.ftc.teamcode.Utils.Timeout.Timeout;
 import org.firstinspires.ftc.teamcode.Utils.Timeout.TypeOfTimeout;
 
@@ -48,6 +49,7 @@ public class fullPrototype1 extends OpMode {
     long lastTime = System.nanoTime();
 
     Timeout dumpTime = new Timeout(1500, TypeOfTimeout.ContinueWhileWaiting);
+    FrameRateCounter frameRateCounter = new FrameRateCounter();
 
     @Override
     public void init() {
@@ -176,23 +178,26 @@ public class fullPrototype1 extends OpMode {
             slideR.setPower(0);
         } else {
             if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90) {
+                double slideRPower = 0.001 * (extend_Position - slideR.getCurrentPosition());
                 slideL.setPower(0.001 * (extend_Position - slideL.getCurrentPosition()));
-                slideR.setPower(0.001 * (extend_Position - slideR.getCurrentPosition()));
+                slideR.setPower(slideRPower);
             } else {
+                double slideRPower = 0.0025 * (extend_Position - slideR.getCurrentPosition());
                 slideL.setPower(0.0025 * (extend_Position - slideL.getCurrentPosition()));
-                slideR.setPower(0.0025 * (extend_Position - slideR.getCurrentPosition()));
+                slideR.setPower(slideRPower);
             }
-
-            telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
-            telemetry.addData("Intake Reversed", intakeOnR ? "ON" : "OFF");
-            telemetry.addData("Intake Speed", String.format("%.1f", intakeSpeed));
-            telemetry.addData("FerrisWheel", isFerrisWheel ? "ON" : "OFF");
-            telemetry.addData("Dump", isDumping ? "ON" : "OFF");
-            telemetry.addData("SlideR Position", slideR.getCurrentPosition());
-            telemetry.update();
         }
 
         DumpingAndFerrisWheel();
+
+        telemetry.addData("Cycle Time", frameRateCounter.Frame());
+        telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
+        telemetry.addData("Intake Reversed", intakeOnR ? "ON" : "OFF");
+        telemetry.addData("Intake Speed", String.format("%.1f", intakeSpeed));
+        telemetry.addData("FerrisWheel", isFerrisWheel ? "ON" : "OFF");
+        telemetry.addData("Dump", isDumping ? "ON" : "OFF");
+        telemetry.addData("SlideR Position", slideR.getCurrentPosition());
+        telemetry.update();
     }
 
     public void DumpingAndFerrisWheel(){
@@ -203,7 +208,7 @@ public class fullPrototype1 extends OpMode {
                 servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
                 runtime.reset();
 
-                Timeout timeout = new Timeout(250, TypeOfTimeout.WaitUntil);
+                Timeout timeout = new Timeout(450, TypeOfTimeout.WaitUntil);
                 timeout.Start();
 
                 servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));

@@ -354,4 +354,18 @@ public class MiscUtils {
         turret.setTargetPosition(0);
     }
 
+
+    public static double getAverage(double[] array) {
+        if (array == null || array.length == 0) {
+            return 0.0; // Returns 0.0 if the list is empty or null
+        }
+
+        double total = 0;
+
+        for(int i = 0; i < array.length; i++){
+            total += array[i];
+        }
+
+        return total / array.length;
+    }
 }
