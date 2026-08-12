@@ -49,11 +49,13 @@ public class fullPrototype1 extends OpMode {
     long lastTime = System.nanoTime();
 
     Timeout dumpTime = new Timeout(1500, TypeOfTimeout.ContinueWhileWaiting);
-    Timeout bucketDelay = new Timeout(200, TypeOfTimeout.WaitUntil);
+    Timeout bucketDelay;
     FrameRateCounter frameRateCounter = new FrameRateCounter();
 
     @Override
     public void init() {
+        bucketDelay = new Timeout(200, TypeOfTimeout.WaitUntil, frameRateCounter);
+
         frontLeft  = hardwareMap.get(DcMotorEx.class, "FL");
         backLeft   = hardwareMap.get(DcMotorEx.class, "BL");
         frontRight = hardwareMap.get(DcMotorEx.class, "FR");
