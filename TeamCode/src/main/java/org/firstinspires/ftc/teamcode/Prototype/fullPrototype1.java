@@ -13,6 +13,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+import org.firstinspires.ftc.teamcode.Utils.Timeout.Timeout;
+import org.firstinspires.ftc.teamcode.Utils.Timeout.TypeOfTimeout;
 
 @TeleOp(name = "fullPrototype1")
 public class fullPrototype1 extends OpMode {
@@ -42,9 +44,9 @@ public class fullPrototype1 extends OpMode {
 
     boolean isFerrisWheel = false;
 
-    float dumpingTime = 0;
-
     long lastTime = System.nanoTime();
+
+    Timeout dumpTime = new Timeout(1500, TypeOfTimeout.ContinueWhileWaiting);
 
     @Override
     public void init() {
@@ -203,29 +205,25 @@ public class fullPrototype1 extends OpMode {
                 servoLT.setPosition(0.6); //(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
                 servoRT.setPosition(0.6); //(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
                 runtime.reset();
-                while (runtime.milliseconds() < 250 ) {
 
-                }
+                Timeout timeout = new Timeout(250, TypeOfTimeout.WaitUntil);
+                timeout.Start();
+
                 servoLB.setPosition(0.7);//(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));
             }
 
             if (isDumping){
-                if (dumpingTime > 0){
-                    dumpingTime -= deltaTime;
-
-                    if (dumpingTime <= 0){
-                        isDumping = false;
-                    }
-                }else{
-                    servoLB.setPosition(0.725);//(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1305));
-
-                    dumpingTime = 1.5f;
+                if (dumpTime.IsComplete()){
+                    isDumping = false;
+                    servoLB.setPosition(0.725);
+                    dumpTime.Reset();
                 }
             }
         }
 
         if (gamepad1.rightBumperWasPressed()){
             isDumping = true;
+            dumpTime.Start();
         }
         if (gamepad1.leftBumperWasPressed()){
             isFerrisWheel = true;
