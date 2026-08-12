@@ -52,11 +52,11 @@ public class fullPrototype1 extends OpMode {
     Timeout bucketDelay;
     FrameRateCounter frameRateCounter = new FrameRateCounter();
 
-    Timeout ferrisWheelDelay = new Timeout(1000, TypeOfTimeout.ContinueWhileWaiting);
+    Timeout ferrisWheelDelay = new Timeout(1, TypeOfTimeout.ContinueWhileWaiting);
 
     @Override
     public void init() {
-        bucketDelay = new Timeout(200, TypeOfTimeout.WaitUntil, frameRateCounter);
+        bucketDelay = new Timeout(500, TypeOfTimeout.WaitUntil, frameRateCounter);
 
         frontLeft  = hardwareMap.get(DcMotorEx.class, "FL");
         backLeft   = hardwareMap.get(DcMotorEx.class, "BL");
@@ -167,15 +167,15 @@ public class fullPrototype1 extends OpMode {
 
         if (gamepad1.right_trigger > 0.05) {
             extend_Position += 25 * gamepad1.right_trigger;
-            if (extend_Position > 2790) {
-                extend_Position = 2790;
-            }
             //2670 Max?
         } else if (gamepad1.left_trigger > 0.05) {
             extend_Position += -25 * gamepad1.left_trigger;
-            if (extend_Position < 0) {
-                extend_Position = 0;
-            }
+        }
+        if (extend_Position > 2790) {
+            extend_Position = 2790;
+        }
+        if (extend_Position < 0) {
+            extend_Position = 0;
         }
 
         if (Math.abs(extend_Position - slideR.getCurrentPosition()) < -1) {
@@ -209,19 +209,23 @@ public class fullPrototype1 extends OpMode {
     }
 
     public void DumpingAndFerrisWheel(){
+        if (isFerrisWheel && !isDumping && ferrisWheelDelay.IsComplete() && slideR.getCurrentPosition() > 1500) {
+            servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
+            servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
+
+            bucketDelay.Start();
+
+            servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));
+            ferrisWheelDelay.Reset();
+        }
+
+        if (!isFerrisWheel && !isDumping) {
+            servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
+            servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
+            servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1135));
+        }
+
         if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90){
-
-            if (isFerrisWheel && !isDumping && ferrisWheelDelay.IsComplete()) {
-                servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
-                servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
-
-                bucketDelay.Start();
-
-                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));
-
-                ferrisWheelDelay.Reset();
-            }
-
             if (isDumping){
                 servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1350));
                 if (dumpTime.IsComplete()){
@@ -230,13 +234,6 @@ public class fullPrototype1 extends OpMode {
                     dumpTime.Reset();
                 }
             }
-
-            if (!isFerrisWheel && !isDumping) {
-                servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
-                servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
-                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1135));
-            }
-
         }
 
         if (gamepad1.right_bumper && !wasRBPressed){
@@ -247,6 +244,7 @@ public class fullPrototype1 extends OpMode {
 
         if (gamepad1.left_bumper && !wasLBPressed){
             isFerrisWheel = !isFerrisWheel;
+            ferrisWheelDelay.Start();
         }
         wasLBPressed = gamepad1.left_bumper;
 
@@ -268,5 +266,6 @@ public class fullPrototype1 extends OpMode {
     public void BringBasketDown(){
         extend_Position = 0;
         isFerrisWheel = false;
+        ferrisWheelDelay.Reset();
     }
 }
