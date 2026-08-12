@@ -34,7 +34,7 @@ public class Timeout {
         _startTime = System.nanoTime();
 
         if (typeOfTimeout == TypeOfTimeout.WaitUntil){
-            while (IsComplete()){
+            while (!IsComplete()){
                 if (frameRateCounter != null){
                     frameRateCounter.Frame();
                 }

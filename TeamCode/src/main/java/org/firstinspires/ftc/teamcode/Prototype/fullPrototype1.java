@@ -49,7 +49,7 @@ public class fullPrototype1 extends OpMode {
     long lastTime = System.nanoTime();
 
     Timeout dumpTime = new Timeout(1500, TypeOfTimeout.ContinueWhileWaiting);
-    Timeout bucketDelay = new Timeout(600, TypeOfTimeout.WaitUntil);
+    Timeout bucketDelay = new Timeout(200, TypeOfTimeout.WaitUntil);
     FrameRateCounter frameRateCounter = new FrameRateCounter();
 
     @Override
