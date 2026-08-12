@@ -182,12 +182,6 @@ public class fullPrototype1 extends OpMode {
                 slideR.setPower(0.0025 * (extend_Position - slideR.getCurrentPosition()));
             }
 
-            if (gamepad1.xWasPressed()) {
-                servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
-                servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
-                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1125));
-            }
-
             telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
             telemetry.addData("Intake Reversed", intakeOnR ? "ON" : "OFF");
             telemetry.addData("Intake Speed", String.format("%.1f", intakeSpeed));
@@ -210,6 +204,7 @@ public class fullPrototype1 extends OpMode {
                 timeout.Start();
 
                 servoLB.setPosition(0.7);//(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));
+
             }
 
             if (isDumping){
@@ -219,6 +214,13 @@ public class fullPrototype1 extends OpMode {
                     dumpTime.Reset();
                 }
             }
+
+            if (!isFerrisWheel && !isDumping) {
+                servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
+                servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
+                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1125));
+            }
+
         }
 
         if (gamepad1.rightBumperWasPressed()){
