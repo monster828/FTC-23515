@@ -15,18 +15,20 @@ public class Timeout {
         this(waitTime, TypeOfTimeout.ContinueWhileWaiting);
     }
 
-
-    public boolean IsComplete(){
-        if (_startTime - System.nanoTime() >= millisecondsWaitTime) return true;
-        return false;
+    // This returns if it has completed it's wait time
+    public boolean IsComplete() {
+        if (_startTime == 0) return false;
+        long elapsedMillis = (System.nanoTime() - _startTime) / 1_000_000;
+        return elapsedMillis >= millisecondsWaitTime;
     }
+
 
     public void Start(){
         _startTime = System.nanoTime();
 
         if (typeOfTimeout == TypeOfTimeout.WaitUntil){
-            while (_startTime - System.nanoTime() < millisecondsWaitTime){
-
+            while (IsComplete()){
+                Thread.yield();
             }
         }
     }
