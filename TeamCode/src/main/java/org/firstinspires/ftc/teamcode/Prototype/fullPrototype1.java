@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Prototype;
 
+import static java.lang.Thread.sleep;
+
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -8,11 +10,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 @TeleOp(name = "fullPrototype1")
 public class fullPrototype1 extends OpMode {
+
+    private final ElapsedTime runtime = new ElapsedTime();
 
     DcMotor frontLeft, backLeft, frontRight, backRight;
     DcMotor intake, slideR, slideL;
@@ -50,9 +55,12 @@ public class fullPrototype1 extends OpMode {
         slideR = hardwareMap.get(DcMotor.class, "RS");
         slideL = hardwareMap.get(DcMotor.class, "LS");
 
+        slideL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slideR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slideL.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         // ServoLT = Servo Left top, ect.
         servoLT = hardwareMap.get(Servo.class, "LT");
@@ -147,15 +155,16 @@ public class fullPrototype1 extends OpMode {
         // => Reset servos while pulling down <=
 
 
-        if (gamepad1.right_trigger > 0) {
+        if (gamepad1.right_trigger > 0.05) {
             extend_Position += 25 * gamepad1.right_trigger;
-            if (extend_Position < 20) {
-                extend_Position = 20;
-            }
-        } else if (gamepad1.left_trigger > 0) {
-            extend_Position += -25 * gamepad1.left_trigger;
             if (extend_Position > 2670) {
                 extend_Position = 2670;
+            }
+            //2670 Max?
+        } else if (gamepad1.left_trigger > 0.05) {
+            extend_Position += -25 * gamepad1.left_trigger;
+            if (extend_Position < 0) {
+                extend_Position = 0;
             }
         }
 
@@ -172,14 +181,15 @@ public class fullPrototype1 extends OpMode {
             }
 
             if (gamepad1.xWasPressed()) {
-                servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,0));
-                servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,0));
-                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 0));
+                servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
+                servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
+                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1125));
             }
 
             telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
             telemetry.addData("Intake Reversed", intakeOnR ? "ON" : "OFF");
             telemetry.addData("Intake Speed", String.format("%.1f", intakeSpeed));
+            telemetry.addData("SlideR Position", slideR.getCurrentPosition());
             telemetry.update();
         }
 
@@ -189,10 +199,14 @@ public class fullPrototype1 extends OpMode {
     public void DumpingAndFerrisWheel(double deltaTime){
         if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90){
 
-            if (isFerrisWheel) {
-                servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
-                servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
-                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 180));
+            if (isFerrisWheel && !isDumping) {
+                servoLT.setPosition(0.6); //(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
+                servoRT.setPosition(0.6); //(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
+                runtime.reset();
+                while (runtime.milliseconds() < 250 ) {
+
+                }
+                servoLB.setPosition(0.7);//(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));
             }
 
             if (isDumping){
@@ -203,7 +217,7 @@ public class fullPrototype1 extends OpMode {
                         isDumping = false;
                     }
                 }else{
-                    servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 45));
+                    servoLB.setPosition(0.725);//(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1305));
 
                     dumpingTime = 1.5f;
                 }
