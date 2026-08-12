@@ -5,14 +5,21 @@ public class Timeout {
     private long _startTime = 0;
     public int millisecondsWaitTime;
 
+    private FrameRateCounter frameRateCounter;
 
-    public Timeout(int waitTime, TypeOfTimeout typeOfTimeout) {
+
+    public Timeout(int waitTime, TypeOfTimeout typeOfTimeout, FrameRateCounter frameRateCounter) {
         this.typeOfTimeout = typeOfTimeout;
         millisecondsWaitTime = waitTime;
+        this.frameRateCounter = frameRateCounter;
     }
 
     public Timeout(int waitTime) {
-        this(waitTime, TypeOfTimeout.ContinueWhileWaiting);
+        this(waitTime, TypeOfTimeout.ContinueWhileWaiting, null);
+    }
+
+    public Timeout(int waitTime, TypeOfTimeout typeOfTimeout) {
+        this(waitTime, typeOfTimeout, null);
     }
 
     // This returns if it has completed it's wait time
@@ -28,6 +35,10 @@ public class Timeout {
 
         if (typeOfTimeout == TypeOfTimeout.WaitUntil){
             while (IsComplete()){
+                if (frameRateCounter != null){
+                    frameRateCounter.Frame();
+                }
+
                 Thread.yield();
             }
         }
