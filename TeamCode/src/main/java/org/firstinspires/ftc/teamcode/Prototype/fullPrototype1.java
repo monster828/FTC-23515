@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -38,6 +37,8 @@ public class fullPrototype1 extends OpMode {
     boolean wasBPressed = false;
     boolean wasDpadUpPressed = false;
     boolean wasDpadDownPressed = false;
+    boolean wasRBPressed= false;
+    boolean wasLBPressed = false;
 
     int extend_Position = 0;
     boolean isDumping = false;
@@ -223,12 +224,15 @@ public class fullPrototype1 extends OpMode {
 
         }
 
-        if (gamepad1.rightBumperWasPressed()){
-            isDumping = true;
+        if (gamepad1.right_bumper && !wasRBPressed){
+            isDumping = !isDumping;
             dumpTime.Start();
         }
-        if (gamepad1.leftBumperWasPressed()){
-            isFerrisWheel = true;
+        wasRBPressed = gamepad1.right_bumper;
+
+        if (gamepad1.left_bumper && !wasLBPressed){
+            isFerrisWheel = !isFerrisWheel;
         }
+        wasLBPressed = gamepad1.left_bumper;
     }
 }
