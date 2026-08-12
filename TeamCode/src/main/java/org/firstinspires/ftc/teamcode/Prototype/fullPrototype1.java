@@ -52,6 +52,8 @@ public class fullPrototype1 extends OpMode {
     Timeout bucketDelay;
     FrameRateCounter frameRateCounter = new FrameRateCounter();
 
+    Timeout ferrisWheelDelay = new Timeout(1000, TypeOfTimeout.ContinueWhileWaiting);
+
     @Override
     public void init() {
         bucketDelay = new Timeout(200, TypeOfTimeout.WaitUntil, frameRateCounter);
@@ -209,7 +211,7 @@ public class fullPrototype1 extends OpMode {
     public void DumpingAndFerrisWheel(){
         if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90){
 
-            if (isFerrisWheel && !isDumping) {
+            if (isFerrisWheel && !isDumping && ferrisWheelDelay.IsComplete()) {
                 servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
                 servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
 
@@ -217,6 +219,7 @@ public class fullPrototype1 extends OpMode {
 
                 servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));
 
+                ferrisWheelDelay.Reset();
             }
 
             if (isDumping){
@@ -231,7 +234,7 @@ public class fullPrototype1 extends OpMode {
             if (!isFerrisWheel && !isDumping) {
                 servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
                 servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
-                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1125));
+                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1135));
             }
 
         }
@@ -246,5 +249,24 @@ public class fullPrototype1 extends OpMode {
             isFerrisWheel = !isFerrisWheel;
         }
         wasLBPressed = gamepad1.left_bumper;
+
+        if (gamepad1.yWasPressed()){
+            BringBasketUp();
+        }
+
+        if (gamepad1.xWasPressed() && !isDumping){
+            BringBasketDown();
+        }
+    }
+
+    public void BringBasketUp(){
+        extend_Position = 10000;
+        isFerrisWheel = true;
+        ferrisWheelDelay.Start();
+    }
+
+    public void BringBasketDown(){
+        extend_Position = 0;
+        isFerrisWheel = false;
     }
 }
