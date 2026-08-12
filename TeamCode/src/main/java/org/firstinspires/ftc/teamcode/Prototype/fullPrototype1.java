@@ -197,21 +197,21 @@ public class fullPrototype1 extends OpMode {
         if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90){
 
             if (isFerrisWheel && !isDumping) {
-                servoLT.setPosition(0.6); //(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
-                servoRT.setPosition(0.6); //(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
+                servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
+                servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
                 runtime.reset();
 
                 Timeout timeout = new Timeout(250, TypeOfTimeout.WaitUntil);
                 timeout.Start();
 
-                servoLB.setPosition(0.7);//(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));
+                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));
 
             }
 
             if (isDumping){
                 if (dumpTime.IsComplete()){
                     isDumping = false;
-                    servoLB.setPosition(0.725);
+                    servoLB.setPosition(0.725); //(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1305));
                     dumpTime.Reset();
                 }
             }
