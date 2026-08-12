@@ -216,9 +216,10 @@ public class fullPrototype1 extends OpMode {
             }
 
             if (isDumping){
+                servoLB.setPosition(0.725); //(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1305));
                 if (dumpTime.IsComplete()){
                     isDumping = false;
-                    servoLB.setPosition(0.725); //(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1305));
+                    servoLB.setPosition(0.7); //(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));
                     dumpTime.Reset();
                 }
             }
