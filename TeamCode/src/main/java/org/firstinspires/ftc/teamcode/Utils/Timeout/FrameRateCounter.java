@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class FrameRateCounter {
     private long _lastTime;
+    private int frameCountingAmount = 10; // Can adjust this value to make a longer adverage
 
     ArrayList<Integer> _lastTenFrames = new ArrayList<>();
 
@@ -18,7 +19,7 @@ public class FrameRateCounter {
         Integer frameLength = Math.round((System.nanoTime() - _lastTime) / 1_000_000);
         _lastTenFrames.add(frameLength);
 
-        if (_lastTenFrames.size() > 10){
+        if (_lastTenFrames.size() > frameCountingAmount){
             _lastTenFrames.remove(0);
         }
 

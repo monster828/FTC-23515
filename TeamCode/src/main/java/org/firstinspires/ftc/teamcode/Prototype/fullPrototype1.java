@@ -49,6 +49,7 @@ public class fullPrototype1 extends OpMode {
     long lastTime = System.nanoTime();
 
     Timeout dumpTime = new Timeout(1500, TypeOfTimeout.ContinueWhileWaiting);
+    Timeout bucketDelay = new Timeout(450, TypeOfTimeout.WaitUntil);
     FrameRateCounter frameRateCounter = new FrameRateCounter();
 
     @Override
@@ -177,12 +178,13 @@ public class fullPrototype1 extends OpMode {
             slideL.setPower(0);
             slideR.setPower(0);
         } else {
+            double slideRPower;
             if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90) {
-                double slideRPower = 0.001 * (extend_Position - slideR.getCurrentPosition());
+                slideRPower = 0.001 * (extend_Position - slideR.getCurrentPosition());
                 slideL.setPower(0.001 * (extend_Position - slideL.getCurrentPosition()));
                 slideR.setPower(slideRPower);
             } else {
-                double slideRPower = 0.0025 * (extend_Position - slideR.getCurrentPosition());
+                slideRPower = 0.0025 * (extend_Position - slideR.getCurrentPosition());
                 slideL.setPower(0.0025 * (extend_Position - slideL.getCurrentPosition()));
                 slideR.setPower(slideRPower);
             }
@@ -206,10 +208,8 @@ public class fullPrototype1 extends OpMode {
             if (isFerrisWheel && !isDumping) {
                 servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
                 servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
-                runtime.reset();
 
-                Timeout timeout = new Timeout(450, TypeOfTimeout.WaitUntil);
-                timeout.Start();
+                bucketDelay.Start();
 
                 servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));
 
