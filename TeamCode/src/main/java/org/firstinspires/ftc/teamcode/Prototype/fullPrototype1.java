@@ -49,7 +49,7 @@ public class fullPrototype1 extends OpMode {
     long lastTime = System.nanoTime();
 
     Timeout dumpTime = new Timeout(1500, TypeOfTimeout.ContinueWhileWaiting);
-    Timeout bucketDelay = new Timeout(450, TypeOfTimeout.WaitUntil);
+    Timeout bucketDelay = new Timeout(525, TypeOfTimeout.WaitUntil);
     FrameRateCounter frameRateCounter = new FrameRateCounter();
 
     @Override
@@ -217,10 +217,10 @@ public class fullPrototype1 extends OpMode {
             }
 
             if (isDumping){
-                servoLB.setPosition(0.725); //(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1305));
+                servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1325));
                 if (dumpTime.IsComplete()){
                     isDumping = false;
-                    servoLB.setPosition(0.7); //(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));
+                    servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1260));
                     dumpTime.Reset();
                 }
             }
