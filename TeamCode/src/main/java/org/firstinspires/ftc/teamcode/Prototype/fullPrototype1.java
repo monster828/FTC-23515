@@ -186,6 +186,8 @@ public class fullPrototype1 extends OpMode {
             telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
             telemetry.addData("Intake Reversed", intakeOnR ? "ON" : "OFF");
             telemetry.addData("Intake Speed", String.format("%.1f", intakeSpeed));
+            telemetry.addData("FerrisWheel", isFerrisWheel ? "ON" : "OFF");
+            telemetry.addData("Dump", isDumping ? "ON" : "OFF");
             telemetry.addData("SlideR Position", slideR.getCurrentPosition());
             telemetry.update();
         }
