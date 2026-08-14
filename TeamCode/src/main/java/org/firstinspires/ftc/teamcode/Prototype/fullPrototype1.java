@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Prototype;
 
-import static java.lang.Thread.sleep;
-
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -211,7 +209,7 @@ public class fullPrototype1 extends OpMode {
     public void DumpingAndFerrisWheel(){
         if (isFerrisWheel && !isDumping && ferrisWheelDelay.IsComplete() && slideR.getCurrentPosition() > 1500) {
             servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
-            servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,180));
+            servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn,180));
 
             bucketDelay.Start();
 
@@ -220,9 +218,9 @@ public class fullPrototype1 extends OpMode {
         }
 
         if (!isFerrisWheel && !isDumping) {
-            servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
-            servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,20));
-            servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1135));
+            servoLT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.ThreeHundredDegrees,10));
+            servoRT.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn,10));
+            servoLB.setPosition(MiscUtils.servoConvert(MiscUtils.ServoType.FiveTurn, 1125));
         }
 
         if (Math.abs(extend_Position - slideR.getCurrentPosition()) < 90){
