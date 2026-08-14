@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.DriveTests_2026;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,7 +11,8 @@ import org.firstinspires.ftc.teamcode.Utils.Logger;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PinpointPosGet;
-import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.SparkfunPosGet;
+import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
+import org.firstinspires.ftc.teamcode.Utils.RobofileUtils;
 import org.firstinspires.ftc.teamcode.Utils.Threads.MoveThread;
 import org.firstinspires.ftc.teamcode.Utils.Threads.MoveThreadComm;
 
@@ -41,10 +41,13 @@ public class homemadeMoveCodeTest extends LinearOpMode {
         mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
         GoBildaPinpointDriver pin = hardwareMap.get(GoBildaPinpointDriver.class,"POC");
         PinpointPosGet posGet = new PinpointPosGet(pin);
-        posGet.setOffset(135,9);
         String configPath = MiscUtils.dataFolder+"config2026.robocfg";
         int i = MiscUtils.readConfig(configPath, (byte) 0);
         File file = MiscUtils.getRobopathsIn(new File(MiscUtils.dataFolder))[i+128];
+        if(file.exists()) {
+            Position start = RobofileUtils.loadRobopathV1(MiscUtils.readFile(file.getPath()))[0];
+            posGet.setOffset(start.x(),start.y());
+        }
         MoveThreadComm move = new MoveThreadComm();
         MoveThread m = new MoveThread(this,move,mot,
                 file,

@@ -245,7 +245,7 @@ public class MiscUtils {
 
     /**
      * Convert degrees to servo values
-     * @param servo input 300 for a 300 deg servo, 5 for a 5 turn.
+     * @param servo a {@link ServoType} that represents the type of servo.
      * @param deg angle in degrees.
      * @return servo value.
      */

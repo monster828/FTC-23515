@@ -45,7 +45,8 @@ public class ServoPair implements Servo {
 
     @Override
     public void scaleRange(double min, double max) {
-
+        s1.scaleRange(min,max);
+        s2.scaleRange(min,max);
     }
 
     @Override
