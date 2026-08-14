@@ -52,7 +52,7 @@ public class MoveThread extends Thread {
     }
 
     float tolerance = 3f;
-    int lookAhead = 20;
+    int lookAhead = 3;
     float rT = 5;
     float antiJERK = 1.0f;
 
@@ -121,6 +121,10 @@ public class MoveThread extends Thread {
                     if(positions[posNum].getDistTo(p) < tolerance && (MiscUtils.getAngleDifferenceDegrees(positions[posNum].r(),p.r()) < rT || positions[posNum].getType() == 0)) {
                         if(posNum < positions.length-skips) posNum += skips;
                         tP = 1.0f;
+                        if(positions[posNum].getType() == 1) {
+                            DriveUtils.stop(mot);
+                            sleep(10);
+                        }
                     }
 
                     if(positions[posNum].getType() == 3) {
@@ -133,6 +137,7 @@ public class MoveThread extends Thread {
                         DriveUtils.stop(mot);
                         comm.stop();
                     }
+
                 }
                 if(comm.isRunning()) {
                     //progress time

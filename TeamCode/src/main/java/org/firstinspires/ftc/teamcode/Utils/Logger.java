@@ -28,7 +28,7 @@ public class Logger {
         start = System.currentTimeMillis();
         try {
             f.delete();
-            f.createNewFile();
+            if(!f.exists())f.createNewFile();
         } catch(Exception e) {
             e.printStackTrace();
         }
