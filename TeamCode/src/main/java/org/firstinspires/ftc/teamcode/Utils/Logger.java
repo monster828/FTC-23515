@@ -39,7 +39,7 @@ public class Logger {
      * @param name label for the data
      * @param data the data
      */
-    public void add(String name, byte[] data) {
+    public synchronized void add(String name, byte[] data) {
         byte[] in;
         if(f.exists()) {
             in = new byte[Math.toIntExact(f.length())];
@@ -66,6 +66,7 @@ public class Logger {
         }
         out[i] = (byte) -128;i++;
         for (byte b : data) {
+            if(b == -128) b = -127;
             out[i] = b;i++;
         }
         out[i] = (byte) -128;i++;

@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PinpointPosGet;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
 import org.firstinspires.ftc.teamcode.Utils.RobofileUtils;
+import org.firstinspires.ftc.teamcode.Utils.Threads.LogThread;
 import org.firstinspires.ftc.teamcode.Utils.Threads.MoveThread;
 import org.firstinspires.ftc.teamcode.Utils.Threads.MoveThreadComm;
 
@@ -20,7 +21,6 @@ import java.io.File;
 
 @Autonomous
 public class homemadeMoveCodeTest extends LinearOpMode {
-
 
 
     @Override
@@ -56,9 +56,11 @@ public class homemadeMoveCodeTest extends LinearOpMode {
         );
         File loggerFile = new File(MiscUtils.dataFolder+"/log.robolog");
         Logger l = new Logger(loggerFile);
+        LogThread lt = new LogThread(this,l,10,hardwareMap,posGet);
         m.addLog(l);
         waitForStart();
         l.add("Opmode Started",new byte[0]);
+        lt.start();
         m.start();
         move.start();
         /*while(move.isRunning());

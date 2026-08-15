@@ -13,7 +13,7 @@ public class LogReader extends LinearOpMode2026 {
         Object[][] dat = log.read();
         waitForStart();
         for(Object[] d : dat) {
-            telemetry.addData((String)d[0], Arrays.toString((Byte[])d[1]));
+            telemetry.addData((String)d[0], Arrays.toString((Byte[])d[1])+" "+(long)d[2]+"ms");
         }
         telemetry.update();
         while(opModeIsActive());
