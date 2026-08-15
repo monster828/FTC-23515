@@ -88,9 +88,9 @@ public class intakeTest1 extends OpMode {
             intake.setPower(0);
         }
 
-        double y  = -gamepad1.left_stick_y * 0.5;       // forward/back (Y is inverted)
-        double x  =  gamepad1.left_stick_x * 0.9; // strafe
-        double rx =  gamepad1.right_stick_x * 0.6;       // rotate
+        double y  = -gamepad1.left_stick_y * 0.8;       // forward/back (Y is inverted)
+        double x  =  gamepad1.left_stick_x * 0.9;       // strafe
+        double rx =  gamepad1.right_stick_x * 0.6;      // rotate
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         frontLeft.setPower((y + x + rx) / denominator);
