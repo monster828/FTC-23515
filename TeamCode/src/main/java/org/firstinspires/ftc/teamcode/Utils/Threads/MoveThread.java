@@ -54,7 +54,7 @@ public class MoveThread extends Thread {
     float tolerance = 3f;
     int lookAhead = 3;
     float rT = 5;
-    float antiJERK = 1.0f;
+    float antiJERK = 0.9f;
 
     //1 means it'll check every point.
     int skips = 3;
@@ -81,16 +81,23 @@ public class MoveThread extends Thread {
                 if(comm.isRunning() && !comm.isPaused()) {
 
                     //TEMPORARY TEST MOVE CODE BIT THING IDK SYSTEM DEVICE
+
+                    //Rotation
                     angle = (float) Math.atan2(positions[posNum].x()-p.x(),positions[posNum].y()-p.y());
                     float rP = 0.0f;
                     if (Math.abs(positions[posNum].r() - p.r()) > rT) {
                          rP = MiscUtils.Clamp(((positions[posNum].r() - p.r()) / 15),-1.0f,1.0f);
                     }
+
+                    //Translation
                     float transP = 0;
                     if(positions[posNum].getDistTo(p) > tolerance) {
                         transP = tP;
                     }
-                    float p2 = MiscUtils.Clamp((transP/antiJERK)*positions[posNum].getDistTo(p),0.2f,1.0f);
+
+                    float antiJ = positions[posNum].getType() > 0 ? antiJERK : 0;
+
+                    float p2 = MiscUtils.Clamp((transP/antiJ)*positions[posNum].getDistTo(p),0.2f,1.0f);
                     DriveUtils.FieldDriveThing((float)Math.sin(angle),(float)Math.cos(angle),rP,p2, (float) Math.toRadians(p.r()),mot);
 
                     //check if the robot has passed the target point
