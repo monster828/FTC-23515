@@ -94,7 +94,7 @@ public class MoveThread extends Thread {
                     if(positions[posNum].getDistTo(p) > tolerance) {
                         transP = tP*(
                                 (positions[posNum].getDistTo(positions[posNum-1])/
-                                        (positions[posNum].getTimeStamp()-positions[posNum-1].getTimeStamp()))/MiscUtils.v(Math.toDegrees(angle))
+                                        (positions[posNum].getTimeStamp()-positions[posNum-1].getTimeStamp()))/MiscUtils.v((float) Math.toDegrees(angle))
                         );
                     }
 
