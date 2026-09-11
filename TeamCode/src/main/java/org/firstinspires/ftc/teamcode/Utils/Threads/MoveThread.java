@@ -52,12 +52,12 @@ public class MoveThread extends Thread {
     }
 
     float tolerance = 3f;
-    int lookAhead = 3;
+    int lookAhead = 10;
     float rT = 5;
-    float antiJERK = 0.9f;
+    float antiJERK = 3f;
 
     //1 means it'll check every point.
-    int skips = 3;
+    int skips = 5;
 
     @Override
     public void run() {
@@ -86,7 +86,7 @@ public class MoveThread extends Thread {
                     angle = (float) Math.atan2(positions[posNum].x()-p.x(),positions[posNum].y()-p.y());
                     float rP = 0.0f;
                     if (Math.abs(positions[posNum].r() - p.r()) > rT) {
-                         rP = MiscUtils.Clamp(((positions[posNum].r() - p.r()) / 15),-1.0f,1.0f);
+                         rP = MiscUtils.Clamp(((positions[posNum].r() - p.r()) / 10),-1.0f,1.0f);
                     }
 
                     //Translation
@@ -98,7 +98,7 @@ public class MoveThread extends Thread {
                     float antiJ = positions[posNum].getType() > 0 ? antiJERK : 0;
 
                     float p2 = MiscUtils.Clamp((transP/antiJ)*positions[posNum].getDistTo(p),0.2f,1.0f);
-                    DriveUtils.FieldDriveThing((float)Math.sin(angle),(float)Math.cos(angle),rP,p2, (float) Math.toRadians(p.r()),mot);
+                    DriveUtils.FieldDriveThing((float)Math.sin(angle)*p2,(float)Math.cos(angle)*p2,rP,tP, (float) Math.toRadians(p.r()),mot);
 
                     //check if the robot has passed the target point
                     int i = 1;
@@ -127,6 +127,7 @@ public class MoveThread extends Thread {
                     //check if the robot is at the target point
                     if(positions[posNum].getDistTo(p) < tolerance && (MiscUtils.getAngleDifferenceDegrees(positions[posNum].r(),p.r()) < rT || positions[posNum].getType() == 0)) {
                         if(posNum < positions.length-skips) posNum += skips;
+                        else {posNum = positions.length-1;}
                         tP = 1.0f;
                         if(positions[posNum].getType() == 1) {
                             DriveUtils.stop(mot);
