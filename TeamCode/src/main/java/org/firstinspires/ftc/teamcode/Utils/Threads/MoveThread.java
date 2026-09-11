@@ -51,7 +51,7 @@ public class MoveThread extends Thread {
         }
     }
 
-    float tolerance = 3f;
+    float tolerance = 5f;
     int lookAhead = 3;
     float rT = 5;
     float antiJERK = 0.9f;
@@ -92,7 +92,10 @@ public class MoveThread extends Thread {
                     //Translation
                     float transP = 0;
                     if(positions[posNum].getDistTo(p) > tolerance) {
-                        transP = tP;
+                        transP = tP*(
+                                (positions[posNum].getDistTo(positions[posNum-1])/
+                                        (positions[posNum].getTimeStamp()-positions[posNum-1].getTimeStamp()))/MiscUtils.v(Math.toDegrees(angle))
+                        );
                     }
 
                     float antiJ = positions[posNum].getType() > 0 ? antiJERK : 0;

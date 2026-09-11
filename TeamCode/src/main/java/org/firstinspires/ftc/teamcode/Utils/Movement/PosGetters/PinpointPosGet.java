@@ -60,7 +60,10 @@ public class PinpointPosGet extends PositionGetter {
 
     @Override
     public float[] getVxVy() {
-        return new float[0];
+        return new float[] {
+                -(float) _pinpoint.getVelX(DistanceUnit.INCH),
+                (float) _pinpoint.getVelY(DistanceUnit.INCH)
+        };
     }
 
     @Override
