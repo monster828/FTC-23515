@@ -3,9 +3,12 @@ package org.firstinspires.ftc.teamcode.pedroPathing;
 import com.pedropathing.algorithm.Algorithm;
 import com.pedropathing.algorithm.Foresight;
 import com.pedropathing.algorithm.ForesightConfig;
+import com.pedropathing.controllers.Controller;
 import com.pedropathing.drivetrain.Drivetrain;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Localizer;
+import com.pedropathing.math.Matrix;
+import com.pedropathing.math.Vector2D;
 import com.pedropathing.revhub.drivetrains.Mecanum;
 import com.pedropathing.revhub.drivetrains.MecanumConfig;
 import com.pedropathing.revhub.localizers.PinpointConfig;
@@ -33,8 +36,8 @@ public class Constants {
     // axis/sign conventions are not guaranteed to match the old FollowerConstants 1:1.
     public static PinpointConfig pinpointConfig = new PinpointConfig(c -> {
         c.name.set("POC");
-        c.xPodOffset.set(-6.078);
-        c.yPodOffset.set(-5.222);
+        c.xPodOffset.set(5.9019067719226745);
+        c.yPodOffset.set(-6.673296230045829);
         c.offsetUnits.set(DistanceUnit.INCH);
         c.globalDistanceUnit.set(DistanceUnit.INCH);
         c.podType.set(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
@@ -47,10 +50,27 @@ public class Constants {
     // coefficients, heading PID, etc. - has no v2 equivalent and MUST be filled in by
     // running the Foresight Tuner (AutoTune) on the robot before this is used in a match.
     public static ForesightConfig foresightConfig = new ForesightConfig(c -> {
-        c.maxAchievableForwardVelocity.set(65.5);
-        c.maxAchievableStrafeVelocity.set(52.39);
-        c.naturalForwardDeceleration.set(39.107);
-        c.naturalStrafeDeceleration.set(58.84);
+        Controller primaryTranslationalForward = Controller.proportional(0.28798671276586635);
+        Controller secondaryTranslationalForward = Controller.proportional(0.10640339522029899);
+        Controller primaryTranslationalLateral = Controller.proportional(0.43426538582288027);
+        Controller secondaryTranslationalLateral = Controller.proportional(0.1604494562767351);
+
+        c.forwardTranslational.set(Controller.piecewise(secondaryTranslationalForward).put(2.5, primaryTranslationalForward));
+        c.strafeTranslational.set(Controller.piecewise(secondaryTranslationalLateral).put(2.5, primaryTranslationalLateral));
+
+        c.coast.set(Controller.proportionalFeedforward(0.016573449182176143));
+        c.brake.set(Controller.proportionalFeedforward(0.01408743180484972));
+
+        c.headingFeedback.set(Controller.proportional(5.165971605158433));
+        c.headingBrakeCoefficients.set(Vector2D.cartesian(0.049982865096007516, 0.00543194867400201));
+
+        c.linearBrakeCoefficients.set(Matrix.diag(0.09196465507892648, 0.06187442160397041));
+        c.quadraticBrakeCoefficients.set(Matrix.diag(8.446463888852603E-4, 0.0014219030404775122));
+
+        c.maxAchievableForwardVelocity.set(62.51359819493623);
+        c.maxAchievableStrafeVelocity.set(49.271228681464436);
+        c.naturalForwardDeceleration.set(32.273723212837346);
+        c.naturalStrafeDeceleration.set(73.08765219721323);
     });
 
     public static Drivetrain drivetrain(HardwareMap hardwareMap) {
