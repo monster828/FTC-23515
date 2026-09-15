@@ -16,13 +16,13 @@ public class PinpointPosGet extends PositionGetter {
 
     public PinpointPosGet(GoBildaPinpointDriver _pinpoint) {
         this._pinpoint = _pinpoint;
-        _pinpoint.setEncoderResolution(Constants.pinpointConstants.encoderResolution);
-        _pinpoint.setEncoderDirections(Constants.pinpointConstants.forwardEncoderDirection,
-                Constants.pinpointConstants.strafeEncoderDirection);
+        _pinpoint.setEncoderResolution(Constants.pinpointConfig.podType.get());
+        _pinpoint.setEncoderDirections(Constants.pinpointConfig.xPodDirection.get(),
+                Constants.pinpointConfig.yPodDirection.get());
 
-        _pinpoint.setOffsets(Constants.pinpointConstants.strafePodX,
-                Constants.pinpointConstants.forwardPodY,
-                Constants.pinpointConstants.distanceUnit);
+        _pinpoint.setOffsets(Constants.pinpointConfig.yPodOffset.get(),
+                Constants.pinpointConfig.xPodOffset.get(),
+                Constants.pinpointConfig.offsetUnits.get());
 
         _pinpoint.resetPosAndIMU();
 
