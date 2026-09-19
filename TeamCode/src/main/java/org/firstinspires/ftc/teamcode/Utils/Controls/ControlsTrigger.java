@@ -8,7 +8,9 @@ public class ControlsTrigger {
     /**
      * Creates an instance of the trigger
     **/
-    public ControlsTrigger(Boolean _pressed){
+    public ControlsTrigger(){  }
+
+    public void UpdateTrigger(Boolean _pressed){
         if (_pressed && !_buttonPressed){
             _triggered = true;
         }
