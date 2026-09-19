@@ -21,6 +21,10 @@ public class BestToleranceFinder {
         this.maxTests = testAmount;
     }
 
+    /**Run this when a test has been complete
+     * @param time the amount of time it took
+     * @param accuracy the movement accuracy of the robot
+     * @param rotationAccuracy the rotation accuracy of the robot**/
     public void CompletedTestResults(float time, float accuracy, float rotationAccuracy){
         // Store: [Tolerance, Time, Accuracy, RotationAccuracy]
         _timesTolerance.add(new Float[] {GetCurrentTolerance(), time, accuracy, rotationAccuracy});
@@ -46,6 +50,7 @@ public class BestToleranceFinder {
         return _timesTolerance.size();
     }
 
+    /**Run this when you are ready to start the test**/
     public void NewTest(){
         int completedTests = _timesTolerance.size();
 
@@ -69,6 +74,7 @@ public class BestToleranceFinder {
         return _currentTolerance;
     }
 
+    // This will update the test results to get a better tolerance
     private void UpdateTestResults(){
         if (_timesTolerance.size() < 2){
             return;
@@ -110,6 +116,7 @@ public class BestToleranceFinder {
         }
     }
 
+    /**This will save the data it has found**/
     public void SaveData(String path){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             for (int i = 0; i < _timesTolerance.size(); i++){
