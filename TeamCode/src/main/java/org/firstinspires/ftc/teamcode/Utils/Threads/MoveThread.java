@@ -86,7 +86,7 @@ public class MoveThread extends Thread {
                     angle = (float) Math.atan2(positions[posNum].x()-p.x(),positions[posNum].y()-p.y());
                     float rP = 0.0f;
                     if (Math.abs(positions[posNum].r() - p.r()) > rT) {
-                         rP = MiscUtils.Clamp(((positions[posNum].r() - p.r()) / 15),-1.0f,1.0f);
+                         rP = MiscUtils.Clamp((MiscUtils.getAngleDifferenceDegrees(p.r(),positions[posNum].r()) / 15),-1.0f,1.0f);
                     }
 
                     //Translation
@@ -94,7 +94,8 @@ public class MoveThread extends Thread {
                     if(positions[posNum].getDistTo(p) > tolerance) {
                         transP = tP*(
                                 (positions[posNum].getDistTo(positions[posNum-1])/
-                                        (positions[posNum].getTimeStamp()-positions[posNum-1].getTimeStamp()))/MiscUtils.v((float) Math.toDegrees(angle))
+                                        (positions[posNum].getTimeStamp()-positions[posNum-1].getTimeStamp()))/
+                                        MiscUtils.v(MiscUtils.getAngleDifferenceDegrees(p.r(),(float) Math.toDegrees(angle)))
                         );
                     }
 

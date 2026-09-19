@@ -195,7 +195,7 @@ public class MiscUtils {
     }
 
     /**
-     * Gets the distance between 2 angles
+     * Gets the distance between 2 angles (from a1 to a2)
      * @param a1 the first angle in degrees
      * @param a2 the second angle in degrees
      */
