@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BioBuzz;
+/*package org.firstinspires.ftc.teamcode.BioBuzz;
 
 import static com.pedropathing.api.Paths.*;
 
@@ -85,5 +85,5 @@ public class BioBuzz_Auto_Outline extends LinearOpMode {
     public Path path3() {
         return curve(point7Start, point7Control1, point7).linear(point7Start, point7);
     }
-}
+}*/
 

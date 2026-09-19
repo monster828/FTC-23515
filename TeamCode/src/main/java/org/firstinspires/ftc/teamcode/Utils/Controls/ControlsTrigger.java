@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Utils.Controls;
 
-import org.firstinspires.ftc.teamcode.Utils.GamepadButton;
-
 public class ControlsTrigger {
     private Boolean _triggered = false;
 
@@ -40,6 +38,7 @@ public class ControlsTrigger {
      * This function will return true once before it returns false
      * **/
     public Boolean IsTriggered(){
+        if(button != null) UpdateTrigger();
         Boolean _returnTrigger = _triggered;
         _triggered = false;
         return _returnTrigger;
