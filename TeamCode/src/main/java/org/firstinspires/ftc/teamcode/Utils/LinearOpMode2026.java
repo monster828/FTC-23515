@@ -25,7 +25,11 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
      * Call this to configure motors and the position getter.
      */
     public void config() {
-        //telemetry.speak("We're no strangers to looove, you know the rules and so do i. A full commitment is what I'm thinking of, you won't get this far from any other guy, I, just want to tell you how I'm feeling. Just wanna make you understand, never gunna give you up, never gunna let you down, never gunna run around and desert you, never gunna make you cry, never gunna say goodbye! never gunna tell a lie and hurt you!");
+        String[] dailyMessage = {"We're no strangers to looove, you know the rules and so do i. A full commitment is what I'm thinking of, you won't get this far from any other guy, I, just want to tell you how I'm feeling. Just wanna make you understand, never gunna give you up, never gunna let you down, never gunna run around and desert you, never gunna make you cry, never gunna say goodbye! never gunna tell a lie and hurt you!",
+                                "Hello?"};
+
+
+        telemetry.speak("We're no strangers to looove, you know the rules and so do i. A full commitment is what I'm thinking of, you won't get this far from any other guy, I, just want to tell you how I'm feeling. Just wanna make you understand, never gunna give you up, never gunna let you down, never gunna run around and desert you, never gunna make you cry, never gunna say goodbye! never gunna tell a lie and hurt you!");
         try {
             limelight = hardwareMap.get(Limelight3A.class, "Limelight");
         } catch (Exception e) {
