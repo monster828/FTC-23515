@@ -195,6 +195,22 @@ public class MiscUtils {
     }
 
     /**
+     * Gets memory usage in KB
+     * @return memory usage in KB
+     */
+    public static float getMemoryUsage() {
+        return (float) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) /1024;
+    }
+
+    /**
+     * Gets memory usage in percent
+     * @return memory usage in percent
+     */
+    public static float getMemoryUsageP() {
+        return (float)Runtime.getRuntime().totalMemory()/Runtime.getRuntime().freeMemory();
+    }
+
+    /**
      * Gets the distance between 2 angles (from a1 to a2)
      * @param a1 the first angle in degrees
      * @param a2 the second angle in degrees

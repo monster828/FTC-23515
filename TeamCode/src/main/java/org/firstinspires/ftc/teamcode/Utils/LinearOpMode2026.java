@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Utils;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -17,12 +18,14 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
     public String configPath = MiscUtils.dataFolder+"config2026.robocfg";
     public File loggerFile = new File(MiscUtils.dataFolder+"/log.robolog");
     public Logger log = new Logger(loggerFile);
+    public Limelight3A limelight;
 
 
     /**
      * Call this to configure motors and the position getter.
      */
     public void config() {
+        limelight = hardwareMap.get(Limelight3A.class,"Limelight");
         mot = new DcMotor[]{
                 hardwareMap.get(DcMotorEx.class, "BL"), //back left
                 hardwareMap.get(DcMotorEx.class, "BR"), //back right
