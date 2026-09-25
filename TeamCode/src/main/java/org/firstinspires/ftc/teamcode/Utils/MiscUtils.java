@@ -410,4 +410,14 @@ public class MiscUtils {
 
         return total / array.length;
     }
+
+    public static double dotProduct(double[] a, double[] b){
+        double sum = 0;
+
+        for (int i = 0; i < a.length; i++){
+            sum += a[i] * b[i];
+        }
+
+        return sum;
+    }
 }

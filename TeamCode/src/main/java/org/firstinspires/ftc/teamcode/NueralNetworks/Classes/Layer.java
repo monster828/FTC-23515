@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.NueralNetworks.Classes;
 
+import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+
 import java.util.Random;
 
 public class Layer {
@@ -7,9 +9,6 @@ public class Layer {
     private double[][] weights;
     private double[][] biases;
     private ActivationFunctionNueralNetwork _activationFunctionNueralNetwork;
-
-
-
 
 
     public Layer(int inputSize, int outputSize, ActivationFunctionNueralNetwork activationFunctionNueralNetwork){
@@ -28,6 +27,21 @@ public class Layer {
         this.biases = new double[outputSize][1];
     }
 
+    public float ReLu(float x){
+        return Math.max(0, x);
+    }
+
+    public float ReLuDerivative(float x){
+        return x > 0 ? 1 : 0;
+    }
+
+    public int Forward(double[] inputs){
+        MiscUtils.dotProduct();
+    }
+
+    public void Backward(){
+
+    }
 
     public enum ActivationFunctionNueralNetwork{
         RELU,
