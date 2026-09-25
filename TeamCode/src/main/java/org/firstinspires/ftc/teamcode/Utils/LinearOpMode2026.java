@@ -27,7 +27,9 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
      */
     public void config() {
         String[] dailyMessage = {"We're no strangers to looove, you know the rules and so do i. A full commitment is what I'm thinking of, you won't get this far from any other guy, I, just want to tell you how I'm feeling. Just wanna make you understand, never gunna give you up, never gunna let you down, never gunna run around and desert you, never gunna make you cry, never gunna say goodbye! never gunna tell a lie and hurt you!",
-                                "Hello?"};
+                                "Hello?",
+                                "I've been alone with you inside my mind, And in my dreams, I've kissed your lips a thousand times, I sometimes see you pass outside my door, Hello, is it me you're looking for? I can see it in your eyes, I can see it in your smile, You're all I've ever wanted, And my arms are open wide, 'Cause you know just what to say, And you know just what to do, And I want to tell you so much, I love you... I long to see the sunlight in your hair, And tell you time and time again how much I care, Sometimes, I feel my heart will overflow... Hello, I've just got to let you know, 'Cause I wonder where you are, And I wonder what you do, Are you somewhere feeling lonely? Or is someone loving you? Tell me how to win your heart, For I haven't got a clue, But let me start by saying, I love you... Hello, is it me you're looking for? 'Cause I wonder where you are, And I wonder what you do, Are you somewhere feeling lonely? Or is someone loving you, Tell me how to win your heart, For I haven't got a clue, But let me start by saying, I love you..."
+        };
 
         Random random = new Random();
         boolean doMessage = random.nextFloat() > 0.75;
