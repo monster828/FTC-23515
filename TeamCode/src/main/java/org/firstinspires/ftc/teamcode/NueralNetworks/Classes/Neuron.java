@@ -12,7 +12,13 @@ public class Neuron {
     public Neuron(int inputSize){
         weights = new double[inputSize];
         for (int i = 0; i < weights.length; i++){
-
+            weights[i] = random.nextGaussian() * 0.5;
         }
+
+        bias = random.nextGaussian() * 0.5;
+    }
+
+    public double activate(double[] input){
+
     }
 }
