@@ -38,19 +38,4 @@ public class Network {
 
         return output;
     }
-
-    public static void main(String[] args) {
-        Network network = new Network(3, 2, 20, 10);
-
-        double[] inputs = {0.5, 5, 2};
-
-        double[] outputs = network.predict(inputs);
-
-        System.out.println(outputs.toString());
-
-        int predictedAction = MiscUtils.getIndexOfMax(outputs);
-
-        System.out.println("Predicted: " + predictedAction + "  Confidence: " + outputs[predictedAction]);
-    }
-
 }
