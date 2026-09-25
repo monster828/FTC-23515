@@ -44,6 +44,25 @@ public class MiscUtils {
         return number;
     }
 
+    /**
+     * Clamps a number between 2 values
+     * @param number Number to clamp
+     * @param clampLow the lower bound
+     * @param clampHigh the higher bound
+     * @return the clamped number
+     * **/
+    public static double Clamp(double number, double clampLow, double clampHigh){
+        //Clamping for stuff!
+        if(number < clampHigh){
+            if(number < clampLow){
+                return clampLow;
+            }
+        }else{
+            return clampHigh;
+        }
+        return number;
+    }
+
     public static final String dataFolder = Environment.getExternalStorageDirectory().getPath()+"/FIRST/data";
 
     /**
@@ -419,5 +438,21 @@ public class MiscUtils {
         }
 
         return sum;
+    }
+
+    public static int getIndexOfMax(double[] array) {
+        if (array == null || array.length == 0) {
+            return -1; // Handle empty or null array
+        }
+
+        int maxIndex = 0; // Start assuming the first element is the largest
+
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] > array[maxIndex]) {
+                maxIndex = i; // Update index of the highest value
+            }
+        }
+
+        return maxIndex;
     }
 }
