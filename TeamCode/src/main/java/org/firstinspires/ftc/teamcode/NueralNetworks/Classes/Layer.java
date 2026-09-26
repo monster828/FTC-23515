@@ -24,9 +24,9 @@ public class Layer {
     }
 
     public double[] activate(double[] inputs){
-        double[] outputs = new double[size];
+        double[] outputs = new double[neurons.length];
 
-        for (int i = 0; i < size; i++){
+        for (int i = 0; i < outputs.length; i++){
             outputs[i] = neurons[i].activate(inputs);
         }
 
