@@ -18,6 +18,11 @@ public class Layer {
         }
     }
 
+    public Layer(int inputSize, Neuron[] neurons){
+        this.size = inputSize;
+        this.neurons = neurons;
+    }
+
     public double[] activate(double[] inputs){
         double[] outputs = new double[size];
 
