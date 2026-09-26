@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.NueralNetworks.Classes;
 
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Layer {
@@ -39,5 +40,9 @@ public class Layer {
 
     public int GetSize(){
         return size;
+    }
+
+    public String toString() {
+        return Arrays.toString(neurons);
     }
 }

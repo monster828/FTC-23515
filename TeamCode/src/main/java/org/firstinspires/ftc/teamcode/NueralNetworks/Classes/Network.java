@@ -50,4 +50,8 @@ public class Network {
     }
 
     public Layer[] getLayers() {return layers.toArray(new Layer[0]);}
+
+    public String toString() {
+        return layers.toString();
+    }
 }

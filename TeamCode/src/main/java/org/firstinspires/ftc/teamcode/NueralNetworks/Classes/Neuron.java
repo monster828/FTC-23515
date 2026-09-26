@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.NueralNetworks.Classes;
 
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Neuron {
@@ -95,5 +97,9 @@ public class Neuron {
         Linear,
         RELU,
         Sigmoid
+    }
+
+    public String toString() {
+        return "B: "+bias+", W: "+ Arrays.toString(weights);
     }
 }
