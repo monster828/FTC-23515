@@ -30,7 +30,7 @@ public class Network {
         }
 
         // OUTPUT
-        layers.add(new Layer(hiddenLayersSize, actionLayerSize, Neuron.ActivationFunctionNueralNetwork.Linear));
+        layers.add(new Layer(actionLayerSize, hiddenLayersSize, Neuron.ActivationFunctionNueralNetwork.Linear));
     }
 
     public double[] predict(double[] inputs, Telemetry telemetry){
