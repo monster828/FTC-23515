@@ -75,6 +75,7 @@ public class Network {
             telemetry.addLine("Episode: " + i + ", Adverage Cost: " + total_cost / (i + 1));
             telemetry.addLine("It took " + start_time + "m to run this episode.");
             telemetry.addLine("Estimated time remaining: " + (total_time / (i + 1)) * (episodes - i + 1));
+            telemetry.update();
         }
     }
 

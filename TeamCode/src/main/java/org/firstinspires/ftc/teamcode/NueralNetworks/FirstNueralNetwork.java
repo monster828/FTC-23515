@@ -32,11 +32,11 @@ public class FirstNueralNetwork extends LinearOpMode2026 {
 
         telemetry.update();
 
-        sleep(1000);
+        sleep(2000);
 
-        network.train(0.001, 100, telemetry);
+        network.train(0.001, 1000, telemetry);
 
-        sleep(1000);
+        sleep(2000);
 
         l = System.currentTimeMillis();
         outputs = network.predict(inputs);
@@ -54,5 +54,7 @@ public class FirstNueralNetwork extends LinearOpMode2026 {
         }
 
         telemetry.update();
+
+        sleep(100000);
     }
 }
