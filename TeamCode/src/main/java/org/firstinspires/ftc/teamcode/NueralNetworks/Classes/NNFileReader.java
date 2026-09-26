@@ -6,7 +6,11 @@ import java.io.FileInputStream;
 public class NNFileReader {
 
     public static double threeByteToDouble(byte[] b) {
-        return b[0]+128+((b[1]+128)*256)+((b[2]+128)*65536);
+        return ((b[0]+128+((b[1]+128)*256)+((b[2]+128)*65536))/838860.75)-10;
+    }
+
+    public static int twoByteToInt(byte[] b) {
+        return b[0]+128+((b[1]+128)*256);
     }
 
     public static Network read(File f) {
@@ -23,15 +27,31 @@ public class NNFileReader {
                 default: activation = Neuron.ActivationFunctionNueralNetwork.Linear;
             }
             Layer[] layers = new Layer[data[1]];
-            int nL = 0;
-            int i;
-            for(i = 0; i < data[1]; i++) {
-                nL += data[3+i];
+            int[] lS = new int[data[1]];
+            for(int i = 0; i < data[1]*2; i+=2) {
+                lS[i/2] = twoByteToInt(new byte[] {data[2+i],data[3+i]});
             }
-            Neuron[] neurons = new Neuron[nL];
-            for(i = i; i < data.length; i++) {
-
+            int read = (data[1]*2)+2;
+            for(int i = 0; i < lS.length; i++) {
+                Neuron[] neurons = new Neuron[lS[i]];
+                for(int a = 0; a < lS[i]; a++) {
+                    byte[] temp = new byte[3];
+                    System.arraycopy(data,read,temp,0,3);
+                    double bias = threeByteToDouble(temp);
+                    read += 3;
+                    int s = i+1<lS.length ? lS[i+1] : 0;
+                    double[] weights = new double[s];
+                    for(int b = 0; b < weights.length; b++) {
+                        System.arraycopy(data,read,temp,0,3);
+                        weights[b] = threeByteToDouble(temp);
+                        read += 3;
+                    }
+                    neurons[a] = new Neuron(weights,bias,activation);
+                }
+                int s = i==0 ? neurons.length : lS[i-1];
+                layers[i] = new Layer(s,neurons);
             }
+            return new Network(layers);
         }catch(Exception ignored) {}
         return new Network(0,0,0,0);
     }
