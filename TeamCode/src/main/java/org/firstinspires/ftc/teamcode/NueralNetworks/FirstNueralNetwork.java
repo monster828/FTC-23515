@@ -11,11 +11,11 @@ public class FirstNueralNetwork extends LinearOpMode2026 {
 
     public void runOpMode(){
         config();
-        Network network = new Network(3, 2, 20, 10);
+        Network network = new Network(3, 2, 256, 1);
 
         double[] inputs = {0.5, 5, 2};
 
-        double[] outputs = network.predict(inputs, telemetry);
+        double[] outputs = network.predict(inputs);
 
         int predictedAction = MiscUtils.getIndexOfMax(outputs);
 

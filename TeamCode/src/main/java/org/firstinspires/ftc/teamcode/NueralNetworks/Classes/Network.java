@@ -33,15 +33,10 @@ public class Network {
         layers.add(new Layer(actionLayerSize, hiddenLayersSize, Neuron.ActivationFunctionNueralNetwork.Linear));
     }
 
-    public double[] predict(double[] inputs, Telemetry telemetry){
+    public double[] predict(double[] inputs){
         double[] output = inputs;
 
         for (Layer layer : layers){
-            telemetry.addLine("Activating Layer " + layers.indexOf(layer));
-            telemetry.update();
-
-            sleep(100);
-
             output = layer.activate(output);
         }
 
