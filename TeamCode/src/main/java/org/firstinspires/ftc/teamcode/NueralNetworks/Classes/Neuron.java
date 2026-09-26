@@ -41,6 +41,11 @@ public class Neuron {
         return output;
     }
 
+    public double backwards(double[] ouputs){
+        
+        return 0;
+    }
+
     public double GetOutput(){
         return output;
     }

@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.NueralNetworks.Classes;
 
+
+import static android.os.SystemClock.sleep;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 import java.util.ArrayList;
@@ -29,10 +33,15 @@ public class Network {
         layers.add(new Layer(hiddenLayersSize, actionLayerSize, Neuron.ActivationFunctionNueralNetwork.Linear));
     }
 
-    public double[] predict(double[] inputs){
+    public double[] predict(double[] inputs, Telemetry telemetry){
         double[] output = inputs;
 
         for (Layer layer : layers){
+            telemetry.addLine("Activating Layer " + layers.indexOf(layer));
+            telemetry.update();
+
+            sleep(100);
+
             output = layer.activate(output);
         }
 
