@@ -28,6 +28,7 @@ public class Pathfinder {
     }
 
     public static void pathFrom(int x, int y) {
+        field = new float[141][141];
         field[x][y] = -0.0001f;
         ArrayList<int[]> queue = new ArrayList<>();
         queue.add(new int[] {x,y});

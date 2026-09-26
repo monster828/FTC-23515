@@ -17,8 +17,13 @@ public class Neuron {
         for (int i = 0; i < weights.length; i++){
             weights[i] = random.nextGaussian() * 0.5;
         }
-
+        this.activationFunctionNueralNetwork = activationFunctionNueralNetwork;
         bias = random.nextGaussian() * 0.5;
+    }
+    public Neuron(double[] weights, double bias, ActivationFunctionNueralNetwork a) {
+        this.weights = weights;
+        this.bias = bias;
+        this.activationFunctionNueralNetwork = a;
     }
 
     public double activate(double[] input){
