@@ -32,12 +32,4 @@ public class FirstNueralNetwork extends LinearOpMode2026 {
 
         sleep(100000);
     }
-
-    void Train(){
-
-    }
-
-    void Predict(){
-
-    }
 }

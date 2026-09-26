@@ -20,7 +20,7 @@ public class Network {
 
         layers = new ArrayList<>();
         // HIDDEN
-        layers.add(new Layer(initialDimentionSize, hiddenLayersSize, Neuron.ActivationFunctionNueralNetwork.RELU));
+        layers.add(new Layer(hiddenLayersSize, initialDimentionSize, Neuron.ActivationFunctionNueralNetwork.RELU));
         for (int i = 0; i < hiddenLayers - 1; i++){
             layers.add(new Layer(hiddenLayersSize, hiddenLayersSize, Neuron.ActivationFunctionNueralNetwork.RELU));
         }
