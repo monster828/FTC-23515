@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Network {
     private int _initialDimentionSize;
@@ -31,6 +32,11 @@ public class Network {
 
         // OUTPUT
         layers.add(new Layer(actionLayerSize, hiddenLayersSize, Neuron.ActivationFunctionNueralNetwork.Linear));
+    }
+
+    public Network(Layer[] layers) {
+        this.layers.clear();
+        this.layers.addAll(Arrays.asList(layers));
     }
 
     public double[] predict(double[] inputs){
@@ -70,5 +76,11 @@ public class Network {
             telemetry.addLine("It took " + start_time + "m to run this episode.");
             telemetry.addLine("Estimated time remaining: " + (total_time / (i + 1)) * (episodes - i + 1));
         }
+    }
+
+    public Layer[] getLayers() {return layers.toArray(new Layer[0]);}
+
+    public String toString() {
+        return layers.toString();
     }
 }
