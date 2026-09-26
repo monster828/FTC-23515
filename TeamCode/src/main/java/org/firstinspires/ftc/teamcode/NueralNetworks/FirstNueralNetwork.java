@@ -15,7 +15,9 @@ public class FirstNueralNetwork extends LinearOpMode2026 {
 
         double[] inputs = {0.5, 5, 2};
 
+        long l = System.currentTimeMillis();
         double[] outputs = network.predict(inputs, telemetry);
+        telemetry.addData("Time",(System.currentTimeMillis()-l)+"ms");
 
         int predictedAction = MiscUtils.getIndexOfMax(outputs);
 
