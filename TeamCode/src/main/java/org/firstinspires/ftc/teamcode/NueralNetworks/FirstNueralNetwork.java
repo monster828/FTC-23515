@@ -32,6 +32,27 @@ public class FirstNueralNetwork extends LinearOpMode2026 {
 
         telemetry.update();
 
-        sleep(100000);
+        sleep(1000);
+
+        network.train(0.001, 100, telemetry);
+
+        sleep(1000);
+
+        l = System.currentTimeMillis();
+        outputs = network.predict(inputs);
+        telemetry.addData("Time",(System.currentTimeMillis()-l)+"ms");
+
+        predictedAction = MiscUtils.getIndexOfMax(outputs);
+
+        telemetry.addLine("Predicted: " + predictedAction + "  Confidence: " + outputs[predictedAction]);
+        telemetry.addLine();
+
+        telemetry.addLine("Outputs");
+
+        for (int i = 0; i < outputs.length; i++){
+            telemetry.addData(String.valueOf(i), outputs[i]);
+        }
+
+        telemetry.update();
     }
 }

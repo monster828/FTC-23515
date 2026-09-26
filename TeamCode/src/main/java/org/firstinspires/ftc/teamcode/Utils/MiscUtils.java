@@ -455,4 +455,34 @@ public class MiscUtils {
 
         return maxIndex;
     }
+
+    public static double[] mutiplyDouble(double[] doubles, double mutliplied){
+        for (int i = 0; i < doubles.length; i++){
+            doubles[i] *= mutliplied;
+        }
+
+        return doubles;
+    }
+
+    public static double[] addDoubles(double[] double_one, double[] double_two, boolean addition){
+        for (int i = 0; i<double_one.length; i++){
+            if (addition){
+                double_one[i] += double_two[i];
+            }else{
+                double_one[i] -= double_two[i];
+            }
+        }
+
+        return double_one;
+    }
+
+    public static double totalAddedNumber(double[] double_one){
+        double total = 0;
+
+        for (double number : double_one){
+            total += number;
+        }
+
+        return total;
+    }
 }

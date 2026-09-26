@@ -33,6 +33,24 @@ public class Layer {
         return outputs;
     }
 
+    public double[] backwards(double[] gradient, double learningRate){
+        double[] gradientForPreviousLayer = new double[size];
+
+        for (int i = 0; i < neurons.length; i++){
+            Neuron neuron = neurons[i];
+
+            double singleNeuronGradient = gradient[i];
+
+            double[] neuronInputGradient = neuron.backwards(singleNeuronGradient, learningRate);
+
+            for (int j = 0; j < neuronInputGradient.length; j++){
+                gradientForPreviousLayer[j] += neuronInputGradient[j];
+            }
+        }
+
+        return gradientForPreviousLayer;
+    }
+
     public Neuron[] GetNeurons(){
         return  neurons;
     }

@@ -7,6 +7,7 @@ import java.util.Random;
 public class Neuron {
     public ActivationFunctionNueralNetwork activationFunctionNueralNetwork;
     public double[] weights;
+    public double[] inputs;
     public double bias;
     public double output;
     public double delta;
@@ -38,12 +39,29 @@ public class Neuron {
             output = Sigmoid(sum);
         }
 
+        this.inputs = input;
+
         return output;
     }
 
-    public double backwards(double[] ouputs){
-        
-        return 0;
+    public double[] backwards(double outputGradient, double learningRate){
+        double dz;
+        if (activationFunctionNueralNetwork == ActivationFunctionNueralNetwork.Linear){
+            dz = outputGradient;
+        }else if (activationFunctionNueralNetwork == ActivationFunctionNueralNetwork.Sigmoid){
+            dz = outputGradient * SigmoidDerivative(output);
+        }else{
+            dz = outputGradient * ReLuDerivative(output);
+        }
+
+        double[] dw = MiscUtils.mutiplyDouble(this.inputs, dz);
+
+        double[] inputGradient = MiscUtils.mutiplyDouble(this.weights, dz);
+
+        this.weights = MiscUtils.addDoubles(weights, MiscUtils.mutiplyDouble(dw, learningRate), false);
+        this.bias -= learningRate * dz;
+
+        return inputGradient;
     }
 
     public double GetOutput(){

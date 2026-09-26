@@ -42,4 +42,33 @@ public class Network {
 
         return output;
     }
+
+    public void train(double learningRate, int episodes, Telemetry telemetry){
+        double total_cost = 0;
+        long total_time = 0;
+
+        for (int i = 0; i < episodes; i++){
+            long start_time = System.currentTimeMillis();
+            // Currently just a input that will need to be changed to something for real
+            double[] output = {0.5, 5, 2};
+            for (Layer layer : layers){
+                output = layer.activate(output);
+            }
+
+            double[] y_true = {1};
+
+            double[] doubles = MiscUtils.addDoubles(output, y_true, false);
+            double[] gradient = MiscUtils.mutiplyDouble(doubles, 2);
+            total_cost += MiscUtils.totalAddedNumber(doubles);
+
+            for (int j = layers.size() - 1; j > -1; j--){
+                gradient = layers.get(j).backwards(gradient, learningRate);
+            }
+
+            total_time = System.currentTimeMillis() - start_time;
+            telemetry.addLine("Episode: " + i + ", Adverage Cost: " + total_cost / (i + 1));
+            telemetry.addLine("It took " + start_time + "m to run this episode.");
+            telemetry.addLine("Estimated time remaining: " + (total_time / (i + 1)) * (episodes - i + 1));
+        }
+    }
 }
