@@ -72,6 +72,7 @@ public class Network {
             }
 
             total_time += System.currentTimeMillis() - start_time;
+            telemetry.addLine("Total Cost: " + total_cost + "   i: " + i);
             telemetry.addLine("Episode: " + i + ", Adverage Cost: " + (total_cost / (i + 1)));
             telemetry.addLine("It took " + (System.currentTimeMillis() - start_time) + "m to run this episode.");
             telemetry.addLine("Estimated time remaining: " + ((total_time / (i + 1)) * (episodes - i + 1)));
