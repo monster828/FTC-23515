@@ -26,6 +26,20 @@ public class NNFileTest extends LinearOpMode2026 {
         Neuron[][] load = new Neuron[n.getLayers().length][];
         for(int i = 0; i < load.length; i++) load[i] = n.getLayers()[i].GetNeurons();
         telemetry.addData("Same: ",Arrays.deepEquals(load,og));
+
+        telemetry.addLine("-- TESTING --");
+        telemetry.addLine("Layers: " + n2.getLayers().length);
+        telemetry.addLine("Layer Sizes: " );
+
+        for (Layer l : n2.getLayers()){
+            telemetry.addLine("  - " + l.size);
+        }
+
+//        telemetry.addLine("-- TESTING --");
+//        telemetry.addLine("-- TESTING --");
+//        telemetry.addLine("-- TESTING --");
+
+
         //for(Layer l : n2.getLayers()) telemetry.addData(l.toString(),"");
         telemetry.update();
         sleep(10000);
