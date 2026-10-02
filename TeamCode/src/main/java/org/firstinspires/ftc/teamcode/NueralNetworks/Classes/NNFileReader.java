@@ -84,9 +84,9 @@ public class NNFileReader {
     public static byte[] writeB(Network n) {
         ArrayList<Byte> out = new ArrayList<>();
         switch (n.getLayers()[0].GetNeurons()[0].activationFunctionNueralNetwork){
-            case Linear: out.add((byte) 0);
-            case RELU: out.add((byte) 2);
-            case Sigmoid: out.add((byte) 4);
+            case Linear: out.add((byte) 0); break;
+            case RELU: out.add((byte) 2); break;
+            case Sigmoid: out.add((byte) 4); break;
         }
         out.add((byte) n.getLayers().length);
         for(int i = 0; i < n.getLayers().length; i++) {
