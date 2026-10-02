@@ -56,6 +56,8 @@ public class Neuron {
             dz = outputGradient * ReLuDerivative(output);
         }
 
+        dz = Math.max(-5.0, Math.min(5.0, dz));
+
         double[] dw = MiscUtils.mutiplyDouble(this.inputs, dz);
 
         double[] inputGradient = MiscUtils.mutiplyDouble(this.weights, dz);
