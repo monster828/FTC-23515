@@ -36,7 +36,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
         NNFileReader.telemetry = telemetry;
 
         Random random = new Random();
-        boolean doMessage = random.nextFloat() > 0.85;
+        boolean doMessage = random.nextFloat() > 0.9;
 
         if (doMessage){
             telemetry.speak(dailyMessage[random.nextInt(dailyMessage.length)]);

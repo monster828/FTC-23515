@@ -14,10 +14,12 @@ public class NNFileTest extends LinearOpMode2026 {
     @Override
     public void runOpMode() throws InterruptedException {
         config();
-        Network n = new Network(3,2,16,1);
+        Network n = new Network(16,2,16,1);
         File f = new File(MiscUtils.dataFolder+"/Test.nn");
         NNFileReader.write(n,f);
+        sleep(1500);
         Network n2 = NNFileReader.read(f);
+        sleep(5000);
         telemetry.addData("OG", Arrays.toString(n.predict(new double[] {0,0,0}, telemetry)));
         for(Layer l : n.getLayers()) telemetry.addData(l.toString(),"");
         telemetry.addData("Read",Arrays.toString(n2.predict(new double[] {0,0,0}, telemetry)));

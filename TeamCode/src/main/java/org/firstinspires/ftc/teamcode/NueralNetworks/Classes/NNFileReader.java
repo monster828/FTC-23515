@@ -38,9 +38,9 @@ public class NNFileReader {
             boolean back = data[0]/2 == data[0]/2.0f;
             Neuron.ActivationFunctionNueralNetwork activation;
             switch(data[0]/2) {
-                case(0): activation = Neuron.ActivationFunctionNueralNetwork.Linear;
-                case(1): activation = Neuron.ActivationFunctionNueralNetwork.RELU;
-                case(2): activation = Neuron.ActivationFunctionNueralNetwork.Sigmoid;
+                case(0): activation = Neuron.ActivationFunctionNueralNetwork.Linear; break;
+                case(1): activation = Neuron.ActivationFunctionNueralNetwork.RELU; break;
+                case(2): activation = Neuron.ActivationFunctionNueralNetwork.Sigmoid; break;
                 default: activation = Neuron.ActivationFunctionNueralNetwork.Linear;
             }
             layers = new Layer[data[1]];
@@ -48,7 +48,7 @@ public class NNFileReader {
             for(int i = 0; i < data[1]*2; i+=2) {
                 lS[i/2] = twoByteToInt(new byte[] {data[2+i],data[3+i]});
             }
-            int read = (data[1]*2)+2;
+            int read = (data[1]*2)+1;
             for(int i = 0; i < lS.length; i++) {
                 Neuron[] neurons = new Neuron[lS[i]];
                 for(int a = 0; a < lS[i]; a++) {
@@ -72,6 +72,8 @@ public class NNFileReader {
         }catch(Exception e) {
             if(telemetry != null) {
                 telemetry.addData("Error",e.toString());
+                StackTraceElement[] St = e.getStackTrace();
+                for(int i = 0; i < St.length; i++) telemetry.addLine(St[i].toString());
                 telemetry.addData("Layers",Arrays.toString(layers));
                 telemetry.update();
             }
@@ -89,9 +91,11 @@ public class NNFileReader {
         out.add((byte) n.getLayers().length);
         for(int i = 0; i < n.getLayers().length; i++) {
             int l = n.getLayers()[i].GetNeurons().length;
+            if(telemetry != null) telemetry.addLine(String.valueOf(l));
             out.add((byte) ((l%256)-128));
             out.add((byte) ((l/256)-128));
         }
+        if(telemetry != null) telemetry.update();
         for(int i = 0; i < n.getLayers().length; i++) {
             int l = n.getLayers()[i].GetNeurons().length;
             for(int a = 0; a < l; a++) {
