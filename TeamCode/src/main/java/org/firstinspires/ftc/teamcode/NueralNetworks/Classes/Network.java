@@ -89,7 +89,7 @@ public class Network {
             telemetry.addLine("Estimated time remaining: " + ((total_time / (i + 1)) * (episodes - i + 1)));
             telemetry.update();
 
-            sleep(5000);
+            sleep(100);
         }
     }
 
