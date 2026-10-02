@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.NueralNetworks.Classes;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -7,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class NNFileReader {
+
+    public static Telemetry telemetry;
 
     public static double threeByteToDouble(byte[] b) {
         return ((b[0]+128+((b[1]+128)*256)+((b[2]+128)*65536))/838860.75)-10;
@@ -26,6 +30,7 @@ public class NNFileReader {
     }
 
     public static Network read(File f) {
+        Layer[] layers = new Layer[0];
         try {
             FileInputStream fI = new FileInputStream(f);
             byte[] data = new byte[Math.toIntExact(f.length())];
@@ -38,7 +43,7 @@ public class NNFileReader {
                 case(2): activation = Neuron.ActivationFunctionNueralNetwork.Sigmoid;
                 default: activation = Neuron.ActivationFunctionNueralNetwork.Linear;
             }
-            Layer[] layers = new Layer[data[1]];
+            layers = new Layer[data[1]];
             int[] lS = new int[data[1]];
             for(int i = 0; i < data[1]*2; i+=2) {
                 lS[i/2] = twoByteToInt(new byte[] {data[2+i],data[3+i]});
@@ -64,7 +69,13 @@ public class NNFileReader {
                 layers[i] = new Layer(s,neurons);
             }
             return new Network(layers);
-        }catch(Exception ignored) {}
+        }catch(Exception e) {
+            if(telemetry != null) {
+                telemetry.addData("Error",e.toString());
+                telemetry.addData("Layers",Arrays.toString(layers));
+                telemetry.update();
+            }
+        }
         return new Network(0,0,0,0);
     }
 
@@ -98,6 +109,7 @@ public class NNFileReader {
     public static void write(Network n, File f) {
         byte[] b = writeB(n);
         try {
+            if(f.exists()) f.delete();
             if (f.createNewFile()) {
                 FileOutputStream fO = new FileOutputStream(f);
                 fO.write(b);
