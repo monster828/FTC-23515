@@ -72,6 +72,9 @@ public class Network {
             double[] gradient = MiscUtils.mutiplyDouble(doubles, 2);
             total_cost += MiscUtils.totalAddedNumber(doubles);
 
+            telemetry.addLine("NAN   Gradient: " + MiscUtils.hasNan(gradient) + "Doubles: " + MiscUtils.hasNan(doubles));
+            telemetry.addLine("Gradient: " +gradient.toString());
+
             for (int j = layers.size() - 1; j > -1; j--){
                 gradient = layers.get(j).backwards(gradient, learningRate);
             }
