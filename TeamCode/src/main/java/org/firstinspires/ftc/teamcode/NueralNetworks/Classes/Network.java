@@ -43,7 +43,7 @@ public class Network {
         double[] output = inputs;
 
         for (Layer layer : layers){
-            telemetry.addLine("Output Length: " + output.length + "  Has Nan: " + MiscUtils.hasNan(output));
+            telemetry.addLine("Output Length: " + output.length + "  Has Nan: " + MiscUtils.hasNan(output) + " Layer: " + layers.indexOf(layer));
             telemetry.update();
             sleep(1000);
             output = layer.activate(output);
