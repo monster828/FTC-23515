@@ -18,9 +18,9 @@ public class NNFileTest extends LinearOpMode2026 {
         File f = new File(MiscUtils.dataFolder+"/Test.nn");
         NNFileReader.write(n,f);
         Network n2 = NNFileReader.read(f);
-        telemetry.addData("OG", Arrays.toString(n.predict(new double[] {0,0,0})));
+        telemetry.addData("OG", Arrays.toString(n.predict(new double[] {0,0,0}, telemetry)));
         for(Layer l : n.getLayers()) telemetry.addData(l.toString(),"");
-        telemetry.addData("Read",Arrays.toString(n2.predict(new double[] {0,0,0})));
+        telemetry.addData("Read",Arrays.toString(n2.predict(new double[] {0,0,0}, telemetry)));
         Neuron[][] og = new Neuron[n.getLayers().length][];
         for(int i = 0; i < og.length; i++) og[i] = n.getLayers()[i].GetNeurons();
         Neuron[][] load = new Neuron[n.getLayers().length][];

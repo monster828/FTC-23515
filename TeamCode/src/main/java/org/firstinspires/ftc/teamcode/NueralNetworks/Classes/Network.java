@@ -39,13 +39,17 @@ public class Network {
         this.layers.addAll(Arrays.asList(layers));
     }
 
-    public double[] predict(double[] inputs){
+    public double[] predict(double[] inputs, Telemetry telemetry){
         double[] output = inputs;
 
         for (Layer layer : layers){
+            telemetry.addLine("Output Length: " + output.length + "  Has Nan: " + MiscUtils.hasNan(output));
+            telemetry.update();
+            sleep(1000);
             output = layer.activate(output);
         }
 
+        sleep(1000);
         return output;
     }
 
