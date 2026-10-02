@@ -485,4 +485,14 @@ public class MiscUtils {
 
         return total;
     }
+
+    public static boolean hasNan(double[] array){
+        for (double number : array){
+            if (Double.isNaN(number)){
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

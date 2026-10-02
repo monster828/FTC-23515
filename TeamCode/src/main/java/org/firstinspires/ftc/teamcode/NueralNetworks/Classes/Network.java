@@ -63,6 +63,7 @@ public class Network {
 
             double[] y_true = {1};
 
+            telemetry.addLine("NAN   Output: " + MiscUtils.hasNan(output) + "  Y_True: " + MiscUtils.hasNan(y_true));
             double[] doubles = MiscUtils.addDoubles(output, y_true, false);
             double[] gradient = MiscUtils.mutiplyDouble(doubles, 2);
             total_cost += MiscUtils.totalAddedNumber(doubles);
