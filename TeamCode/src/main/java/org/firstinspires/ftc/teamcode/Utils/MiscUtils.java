@@ -456,24 +456,24 @@ public class MiscUtils {
         return maxIndex;
     }
 
-    public static double[] mutiplyDouble(double[] doubles, double mutliplied){
+    public static double[] mutiplyDouble(double[] doubles, double multiplied){
+        double[] result = new double[doubles.length];
         for (int i = 0; i < doubles.length; i++){
-            doubles[i] *= mutliplied;
+            result[i] = doubles[i] * multiplied;
         }
-
-        return doubles;
+        return result;
     }
 
     public static double[] addDoubles(double[] double_one, double[] double_two, boolean addition){
-        for (int i = 0; i<double_one.length; i++){
+        double[] result = new double[double_one.length];
+        for (int i = 0; i < double_one.length; i++){
             if (addition){
-                double_one[i] += double_two[i];
+                result[i] = double_one[i] + double_two[i];
             }else{
-                double_one[i] -= double_two[i];
+                result[i] = double_one[i] - double_two[i];
             }
         }
-
-        return double_one;
+        return result;
     }
 
     public static double totalAddedNumber(double[] double_one){
