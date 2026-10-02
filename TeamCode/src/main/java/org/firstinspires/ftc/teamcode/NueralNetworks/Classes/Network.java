@@ -65,7 +65,7 @@ public class Network {
                 output = layer.activate(output);
             }
 
-            double[] y_true = {1};
+            double[] y_true = {1, 0};
 
             telemetry.addLine("NAN   Output: " + MiscUtils.hasNan(output) + "  Y_True: " + MiscUtils.hasNan(y_true));
             double[] doubles = MiscUtils.addDoubles(output, y_true, false);
