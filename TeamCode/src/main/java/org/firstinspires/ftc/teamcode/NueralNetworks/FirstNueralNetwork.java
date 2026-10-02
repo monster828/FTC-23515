@@ -11,7 +11,7 @@ public class FirstNueralNetwork extends LinearOpMode2026 {
 
     public void runOpMode(){
         config();
-        Network network = new Network(3, 2, 4, 1);
+        Network network = new Network(3, 2, 4, 2);
 
         double[] inputs = {0.5, 5, 2};
 
