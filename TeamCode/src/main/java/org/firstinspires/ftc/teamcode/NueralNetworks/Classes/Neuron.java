@@ -120,6 +120,9 @@ public class Neuron {
     }
 
     public String toString() {
-        return "B: "+bias+", W: "+ Arrays.toString(weights);
+        float[] rweight = new float[weights.length];
+        for(int i = 0; i < rweight.length; i++) rweight[i] = Math.round(weights[i]*1000000)/1000000f;
+        float rbias = Math.round(bias*1000000)/1000000f;
+        return "B: "+rbias+", W: "+ Arrays.toString(rweight);
     }
 }
