@@ -34,7 +34,7 @@ public class FirstNueralNetwork extends LinearOpMode2026 {
 
         sleep(2000);
 
-        network.train(0.001, 1000, telemetry);
+        network.train(0.001, 100, telemetry);
 
         sleep(2000);
 

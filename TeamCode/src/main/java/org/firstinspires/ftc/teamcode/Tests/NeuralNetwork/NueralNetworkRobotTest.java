@@ -48,7 +48,7 @@ public class NueralNetworkRobotTest extends LinearOpMode2026 {
             if (clickedPredict){
 
             }
-            output = network.predict(new double[] {positionX, positionY, robotBallCount}, telemetry);
+            output = network.predict(new double[] {positionX, positionY, robotBallCount});
             positionX = output[0];
             positionY = output[1];
 

@@ -45,11 +45,11 @@ public class Network {
         for (Layer layer : layers){
             telemetry.addLine("Output Length: " + output.length + "  Has Nan: " + MiscUtils.hasNan(output) + " Layer: " + layers.indexOf(layer));
             telemetry.update();
-            sleep(1000);
+            sleep(200);
             output = layer.activate(output);
         }
 
-        sleep(1000);
+        sleep(200);
         return output;
     }
 
