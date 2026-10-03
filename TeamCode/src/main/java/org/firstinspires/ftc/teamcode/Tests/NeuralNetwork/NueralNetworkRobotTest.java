@@ -3,6 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.Network;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
+import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 @TeleOp
 public class NueralNetworkRobotTest extends LinearOpMode2026 {
@@ -49,8 +50,14 @@ public class NueralNetworkRobotTest extends LinearOpMode2026 {
 
             }
             output = network.predict(new double[] {positionX, positionY, robotBallCount});
-            positionX = output[0];
-            positionY = output[1];
+            positionX = MiscUtils.Clamp(output[0], 0, 1);
+            positionY = MiscUtils.Clamp(output[1], 0, 1);
+
+            if (output[2] > 0.5){
+                if (robotBallCount > 0){
+                    robotBallCount -= 1;
+                }
+            }
 
 
             if (isStopRequested()){
@@ -62,6 +69,8 @@ public class NueralNetworkRobotTest extends LinearOpMode2026 {
             telemetry.addLine("Robot Position  X: " + String.format("%.2f", positionXDisplayed) + "  Y: " + String.format("%.2f", positionYDisplayed));
             telemetry.addLine("Balls in robot: " + robotBallCount);
             telemetry.update();
+
+            sleep(500);
         }
     }
 }
