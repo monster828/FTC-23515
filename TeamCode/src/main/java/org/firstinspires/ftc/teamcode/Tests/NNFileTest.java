@@ -18,19 +18,20 @@ public class NNFileTest extends LinearOpMode2026 {
         File f = new File(MiscUtils.dataFolder+"/Test.nn");
         NNFileReader.write(n,f);
         Network n2 = NNFileReader.read(f);
+        waitForStart();
         telemetry.addData("OG", Arrays.toString(n.predict(new double[] {0,0,0})));
-        for(Layer l : n.getLayers()) telemetry.addData(l.toString(),"");
+        //for(Layer l : n.getLayers()) telemetry.addData(l.toString(),"");
         telemetry.addData("Read",Arrays.toString(n2.predict(new double[] {0,0,0})));
         Neuron[][] og = new Neuron[n.getLayers().length][];
         for(int i = 0; i < og.length; i++) og[i] = n.getLayers()[i].GetNeurons();
-        Neuron[][] load = new Neuron[n.getLayers().length][];
-        for(int i = 0; i < load.length; i++) load[i] = n.getLayers()[i].GetNeurons();
+        Neuron[][] load = new Neuron[n2.getLayers().length][];
+        for(int i = 0; i < load.length; i++) load[i] = n2.getLayers()[i].GetNeurons();
         telemetry.addData("Same: ",Arrays.deepEquals(load,og));
 
-        for(int i = 0; i < og.length; i++) {
-            telemetry.addData("OG "+i,Arrays.toString(og[i]));
-            telemetry.addData("Load "+i,Arrays.toString(load[i]));
-        }
+//        for(int i = 0; i < og.length; i++) {
+//            telemetry.addData("OG "+i,Arrays.toString(og[i]));
+//            telemetry.addData("Load "+i,Arrays.toString(load[i]));
+//        }
 
 //        telemetry.addLine("-- TESTING --");
 //        telemetry.addLine("Layers: " + n2.getLayers().length);
@@ -47,6 +48,6 @@ public class NNFileTest extends LinearOpMode2026 {
 
         //for(Layer l : n2.getLayers()) telemetry.addData(l.toString(),"");
         telemetry.update();
-        sleep(10000);
+        sleep(100000);
     }
 }

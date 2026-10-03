@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.NueralNetworks.Classes;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,6 +31,7 @@ public class NNFileReader {
     }
 
     public static Network read(File f) {
+        int ins = 0;
         Layer[] layers = new Layer[0];
         try {
             FileInputStream fI = new FileInputStream(f);
@@ -43,15 +45,16 @@ public class NNFileReader {
                 case(2): activation = Neuron.ActivationFunctionNueralNetwork.Sigmoid; break;
                 default: activation = Neuron.ActivationFunctionNueralNetwork.Linear;
             }
-            layers = new Layer[data[1]];
-            int[] lS = new int[data[1]];
-            for(int i = 0; i < data[1]*2; i+=2) {
-                lS[i/2] = twoByteToInt(new byte[] {data[2+i],data[3+i]});
+            ins = twoByteToInt(new byte[]{data[1],data[2]});
+            layers = new Layer[data[3]];
+            int[] lS = new int[data[3]];
+            for(int i = 0; i < data[3]*2; i+=2) {
+                lS[i/2] = twoByteToInt(new byte[] {data[4+i],data[5+i]});
             }
-            int read = (data[1]*2)+1;
+            int read = (data[3]*2)+4;
             for(int i = 0; i < lS.length; i++) {
                 Neuron[] neurons = new Neuron[lS[i]];
-                int s = i==0 ? 3 : lS[i-1]; //CHANGE 3 TO INPUT AMOUNT
+                int s = i==0 ? ins : lS[i-1];
                 for(int a = 0; a < lS[i]; a++) {
                     byte[] temp = new byte[3];
                     System.arraycopy(data,read,temp,0,3);
@@ -75,6 +78,7 @@ public class NNFileReader {
                 StackTraceElement[] St = e.getStackTrace();
                 for(int i = 0; i < St.length; i++) telemetry.addLine(St[i].toString());
                 telemetry.addData("Layers",Arrays.toString(layers));
+                telemetry.addData("Inputs",ins);
                 telemetry.update();
             }
         }
@@ -88,6 +92,9 @@ public class NNFileReader {
             case RELU: out.add((byte) 2); break;
             case Sigmoid: out.add((byte) 4); break;
         }
+        int iS = n.getLayers()[0].GetNeurons()[0].GetWeights().length;
+        out.add((byte) ((iS%256)-128));
+        out.add((byte) ((iS/256)-128));
         out.add((byte) n.getLayers().length);
         for(int i = 0; i < n.getLayers().length; i++) {
             int l = n.getLayers()[i].GetNeurons().length;
@@ -120,6 +127,30 @@ public class NNFileReader {
                 fO.close();
             }
         } catch (Exception ignored) {}
+    }
+
+    /**
+     * Saves a NN to the data folder
+     * @param n the network to save
+     * @param name name of the network
+     */
+    public static void writeC(Network n, String name) {
+        String name2 = name;
+        if(!name.contains(".")) name2 = name2 + ".nn";
+        File f = new File(MiscUtils.dataFolder+"/"+name2);
+        write(n,f);
+    }
+
+    /**
+     * Reads NN from the data folder
+     * @param name name of the network
+     * @return the network
+     */
+    public static Network readC(String name) {
+        String name2 = name;
+        if(!name.contains(".")) name2 = name2 + ".nn";
+        File f = new File(MiscUtils.dataFolder+"/"+name2);
+        return read(f);
     }
 
 }
