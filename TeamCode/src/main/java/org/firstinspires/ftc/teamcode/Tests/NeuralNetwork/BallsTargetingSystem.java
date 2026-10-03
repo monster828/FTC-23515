@@ -66,15 +66,6 @@ public class BallsTargetingSystem {
     public void train(){
 //        double[] simulatedInputs = generateRandomBallStates(); // e.g., 16 inputs
 //        double[] y_true = calculateOptimalScoresFromHeuristic(simulatedInputs); // e.g., 4 target scores
-//
-//        // Then feed these into your existing gradient calculation logic
-//        double[] output = predict(simulatedInputs);
-//        double[] errors = MiscUtils.addDoubles(output, y_true, false);
-//        double[] gradient = MiscUtils.mutiplyDouble(errors, 2);
-//
-//        for (int j = layers.size() - 1; j > -1; j--){
-//            gradient = layers.get(j).backwards(gradient, learningRate);
-//        }
     }
 
     public class Ball{
