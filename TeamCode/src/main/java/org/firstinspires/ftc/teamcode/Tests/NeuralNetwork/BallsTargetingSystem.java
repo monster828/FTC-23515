@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.Tests.NeuralNetwork;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.NNFileReader;
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.Network;
+import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 public class BallsTargetingSystem {
     Network network;
@@ -25,8 +27,12 @@ public class BallsTargetingSystem {
         network = new Network(inputSize, hiddenLayers, hiddenLayersSize, actionLayerSize);
     }
 
-    public void predict(double[] inputs){
-        double[] outpus = network.predict(inputs);
+    public void predict(double[] inputs, Telemetry telemetry){
+        double[] outputs = network.predict(inputs);
+
+        int predictedBall = MiscUtils.getIndexOfMax(outputs);
+
+        telemetry.addLine("PREDICTED BALL: " + predictedBall);
     }
 
     public double[] getInputs(Ball[] balls){
