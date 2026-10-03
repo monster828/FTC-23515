@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NueralNetworks;
+package org.firstinspires.ftc.teamcode.Tests.NeuralNetwork;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
