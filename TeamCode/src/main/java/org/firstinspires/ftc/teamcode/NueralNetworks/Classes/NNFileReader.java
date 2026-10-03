@@ -51,12 +51,13 @@ public class NNFileReader {
             int read = (data[1]*2)+1;
             for(int i = 0; i < lS.length; i++) {
                 Neuron[] neurons = new Neuron[lS[i]];
+                int s = i==0 ? 3 : lS[i-1]; //CHANGE 3 TO INPUT AMOUNT
                 for(int a = 0; a < lS[i]; a++) {
                     byte[] temp = new byte[3];
                     System.arraycopy(data,read,temp,0,3);
                     double bias = threeByteToDouble(temp);
                     read += 3;
-                    int s = i+1<lS.length ? lS[i+1] : 0;
+                    //int s = i+1<lS.length ? lS[i+1] : 0;
                     double[] weights = new double[s];
                     for(int b = 0; b < weights.length; b++) {
                         System.arraycopy(data,read,temp,0,3);
@@ -65,7 +66,6 @@ public class NNFileReader {
                     }
                     neurons[a] = new Neuron(weights,bias,activation);
                 }
-                int s = i==0 ? neurons.length : lS[i-1];
                 layers[i] = new Layer(s,neurons);
             }
             return new Network(layers);

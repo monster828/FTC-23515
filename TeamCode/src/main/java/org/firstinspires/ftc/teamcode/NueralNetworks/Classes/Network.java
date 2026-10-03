@@ -35,7 +35,7 @@ public class Network {
     }
 
     public Network(Layer[] layers) {
-        this.layers.clear();
+        this.layers = new ArrayList<>();
         this.layers.addAll(Arrays.asList(layers));
     }
 
@@ -50,6 +50,16 @@ public class Network {
         }
 
         sleep(1000);
+        return output;
+    }
+
+    public double[] predict(double[] inputs){
+        double[] output = inputs;
+
+        for (Layer layer : layers){
+            output = layer.activate(output);
+        }
+
         return output;
     }
 
