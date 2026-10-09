@@ -13,6 +13,9 @@ public class NNFileReader {
 
     public static Telemetry telemetry;
 
+    public static String aldensPath = "C:\\Users\\alden\\Documents\\FTC_NeuralNetworkSave";
+    public static int mode = 0;
+
     public static double threeByteToDouble(byte[] b) {
         return ((b[0]+128+((b[1]+128)*256)+((b[2]+128)*65536))/838860.75)-10;
     }
@@ -137,7 +140,12 @@ public class NNFileReader {
     public static void writeC(Network n, String name) {
         String name2 = name;
         if(!name.contains(".")) name2 = name2 + ".nn";
-        File f = new File(MiscUtils.dataFolder+"/"+name2);
+        File f;
+        switch(mode) {
+            case(1): f = new File(aldensPath + "/" + name2); break;
+            default: f = new File(MiscUtils.dataFolder + "/" + name2); break;
+        }
+
         write(n,f);
     }
 
@@ -149,8 +157,14 @@ public class NNFileReader {
     public static Network readC(String name) {
         String name2 = name;
         if(!name.contains(".")) name2 = name2 + ".nn";
-        File f = new File(MiscUtils.dataFolder+"/"+name2);
+        File f;
+        switch(mode) {
+            case(1): f = new File(aldensPath + "/" + name2); break;
+            default: f = new File(MiscUtils.dataFolder + "/" + name2); break;
+        }
         return read(f);
     }
+
+    public static void Aldenify() {mode = 1;}
 
 }
