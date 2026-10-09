@@ -82,7 +82,7 @@ public class NNFileReader {
                 telemetry.update();
             }
         }
-        return new Network(0,0,0,0);
+        return null;
     }
 
     public static byte[] writeB(Network n) {

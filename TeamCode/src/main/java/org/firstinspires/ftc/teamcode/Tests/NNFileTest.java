@@ -14,7 +14,7 @@ public class NNFileTest extends LinearOpMode2026 {
     @Override
     public void runOpMode() throws InterruptedException {
         config();
-        Network n = new Network(3,2,2,1);
+        Network n = new Network(3,2,256,1);
         File f = new File(MiscUtils.dataFolder+"/Test.nn");
         NNFileReader.write(n,f);
         Network n2 = NNFileReader.read(f);
