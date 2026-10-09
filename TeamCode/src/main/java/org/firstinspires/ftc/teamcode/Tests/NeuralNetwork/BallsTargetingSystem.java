@@ -1,41 +1,53 @@
 package org.firstinspires.ftc.teamcode.Tests.NeuralNetwork;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.NNFileReader;
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.Network;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
-public class BallsTargetingSystem {
-    Network network;
+import java.nio.charset.StandardCharsets;
 
-    int maxBalls = 10;
-    int featuresPerBall = 4;
+public class BallsTargetingSystem {
+
+    static String filename = "MySpecialFile_BallTargetSystem";
+
+    static Network network;
+
+    static int maxBalls = 10;
+    static int featuresPerBall = 4;
     // X
     // Y
     // Type (0,1)
     // Is Used (0,1)
 
-    int predictedBallCount;
+    static int predictedBallCount;
 
-    public void runOpMode(){
-        int inputSize = maxBalls * featuresPerBall; // 40
+    public static void main(String[] args) {
+        NNFileReader.Aldenify();
+        train();
 
-        int hiddenLayers = 2;
-        int hiddenLayersSize = 52;
-        int actionLayerSize = maxBalls;
+        Ball[] simulatedInputs = {new Ball(0,2, false), new Ball(3,4,true), new Ball(2,9,true), new Ball(9,11, false)};// generateRandomBallStates();
 
-        network = new Network(inputSize, hiddenLayers, hiddenLayersSize, actionLayerSize);
+        double[] inputs = getInputs(simulatedInputs);
+        predict(inputs);
     }
 
-    public void predict(double[] inputs, Telemetry telemetry){
+//    public void runOpMode(){
+//
+//    }
+
+    public static void predict(double[] inputs){
         double[] outputs = network.predict(inputs);
 
         int predictedBall = MiscUtils.getIndexOfMax(outputs);
 
-        telemetry.addLine("PREDICTED BALL: " + predictedBall);
+        String predicted = "Predicted ball: " + predictedBall + "\n Ouputs: " + outputs.toString();
+
+        MiscUtils.writeFile(NNFileReader.aldensPath, predicted.getBytes(StandardCharsets.UTF_8));
+
+        // telemetry.addLine("PREDICTED BALL: " + predictedBall);
     }
 
-    public double[] getInputs(Ball[] balls){
+    public static double[] getInputs(Ball[] balls){
         double[] inputs = new double[maxBalls * featuresPerBall];
 
         predictedBallCount = balls.length;
@@ -55,22 +67,53 @@ public class BallsTargetingSystem {
         return inputs;
     }
 
-    public void Save(String fileName){
+    public static void Save(String fileName){
         NNFileReader.writeC(network, fileName);
     }
 
-    public void Load(String fileName){
+    public static void Load(String fileName){
         network = NNFileReader.readC(fileName);
     }
 
-    public void train(){
-//        double[] simulatedInputs = generateRandomBallStates(); // e.g., 16 inputs
-//        double[] y_true = calculateOptimalScoresFromHeuristic(simulatedInputs); // e.g., 4 target scores
+    public static void train(){
+        Load(filename);
+
+        if (network == null){
+            int inputSize = maxBalls * featuresPerBall; // 40
+
+            int hiddenLayers = 2;
+            int hiddenLayersSize = 52;
+            int actionLayerSize = maxBalls;
+
+            network = new Network(inputSize, hiddenLayers, hiddenLayersSize, actionLayerSize);
+        }
+
+
+        Ball[] simulatedInputs = {new Ball(0,2, false), new Ball(3,4,true), new Ball(2,9,true), new Ball(9,11, false)};// generateRandomBallStates();
+
+        double[] inputs = getInputs(simulatedInputs);
+
+        double[] y_true = {0.9, 0.09, 0, 0.01, 0,0,0,0,0,0};//calculateOptimalScoresFromHeuristic(simulatedInputs); // e.g., 10 target scores
+
+        network.train(0.001, 500, null);
+
+        Save(filename);
     }
 
-    public class Ball{
-        public float x;
-        public float y;
-        public int type;
+//    public Ball[] generateRandomBallStates(){
+//        Ball[] balls =
+//    }
+
+
+
+    public static class Ball{
+        public float x, y;
+        public int type; // Pollen 25   Nector 41
+
+        public Ball(float x, float y, boolean isPollen){
+            this.x = x;
+            this.y = y;
+            this.type = isPollen ? 25 : 41;
+        }
     }
 }
