@@ -1,5 +1,16 @@
 package org.firstinspires.ftc.teamcode.Utils.Movement;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.media.Image;
+import android.media.ImageWriter;
+
+import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class Pathfinder {
@@ -125,6 +136,41 @@ public class Pathfinder {
 
     public static float getRefAngle(float r) {
         return (float) (180*Math.abs((r/180.0f)-Math.floor((r/180.0f)+0.5)));
+    }
+
+    public static void saveI(int scale) {
+        Bitmap bit = Bitmap.createBitmap(141*scale,141*scale, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bit);
+        for(int x = 0; x < field.length; x++) {
+            for(int y = 0; y < field[0].length; y++) {
+                float b = 1;
+                if(lastPath != null) {
+                    for(int[] p : lastPath) {
+                        if(p[0] == x && p[1] == y) {
+                            b = 0.5f;
+                            break;
+                        }
+                    }
+                }
+                if(pathPoints != null) {
+                    for(int[] p : pathPoints) {
+                        if(p[0] == x && p[1] == y) {
+                            b = 0.1f;
+                            break;
+                        }
+                    }
+                }
+                Paint p = new Paint();
+                p.setColor(Color.HSVToColor(new float[] {field[x][y]/200,1,b})); //200 for field gradient, 8 for ripple
+                if(obstacle[x][y]) p.setColor(Color.BLACK);
+                c.drawRect(x*scale,y*scale,x*scale+scale,y*scale+scale,p);
+            }
+        }
+        try {
+            FileOutputStream fO = new FileOutputStream(MiscUtils.dataFolder+"/Pathfind.png");
+            bit.compress(Bitmap.CompressFormat.PNG,100,fO);
+            fO.flush(); fO.close();
+        } catch (Exception ignored) {}
     }
 
 }

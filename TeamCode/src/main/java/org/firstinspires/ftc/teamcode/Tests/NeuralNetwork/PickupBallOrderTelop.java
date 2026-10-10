@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.BallsTargetingSystem;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
+import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,16 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
         ArrayList<BallsTargetingSystem.Ball> ballsInOrder = BallsTargetingSystem.orderBallsByPickup(balls);
 
         // Pathfinding Setup
+        Pathfinder.compileCircleMoveT(3);
+
+        float robotX = 70;
+        float robotY = 70;
+        float robotRotation = 0;
+        Pathfinder.pathFrom((int) robotX, (int) robotY);
+        Pathfinder.getPathTo((int) ballsInOrder.get(0).toFieldCoords(robotX,robotY,robotRotation)[0], (int) ballsInOrder.get(0).toFieldCoords(robotX,robotY,robotRotation)[1]);
+        Pathfinder.generatePathPoints((int) robotRotation);
+        Pathfinder.pickRotations();
+        Pathfinder.saveI(4);
 
 
         waitForStart();
