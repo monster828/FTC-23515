@@ -138,7 +138,7 @@ public class Pathfinder {
         return (float) (180*Math.abs((r/180.0f)-Math.floor((r/180.0f)+0.5)));
     }
 
-    public static void saveI(int scale) {
+    public static void saveI(int scale, String name) {
         Bitmap bit = Bitmap.createBitmap(141*scale,141*scale, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bit);
         for(int x = 0; x < field.length; x++) {
@@ -167,7 +167,7 @@ public class Pathfinder {
             }
         }
         try {
-            FileOutputStream fO = new FileOutputStream(MiscUtils.dataFolder+"/Pathfind.png");
+            FileOutputStream fO = new FileOutputStream(MiscUtils.dataFolder+"/"+name+".png");
             bit.compress(Bitmap.CompressFormat.PNG,100,fO);
             fO.flush(); fO.close();
         } catch (Exception ignored) {}
