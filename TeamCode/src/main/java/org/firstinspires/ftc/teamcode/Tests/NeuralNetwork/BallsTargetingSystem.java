@@ -29,6 +29,7 @@ public class BallsTargetingSystem {
         String predictionsSave = "PREDICTIONS \n";
 
 
+        int correctPredictions = 0;
         for (int i = 0; i < predictions; i++) {
             Ball[] simulatedInputs = generateRandomBallStates();
 
@@ -42,8 +43,19 @@ public class BallsTargetingSystem {
             predictionsSave += predict(getInputs(simulatedInputs));
             // System.out.println(predictionsSave);
             predictionsSave += "\n";
+
+            int predictedBall = MiscUtils.getIndexOfMax(network.predict(getInputs(simulatedInputs)));
+            int assumedBall = MiscUtils.getIndexOfMax(calculateOptimalScoresFromHeuristic(simulatedInputs));
+            if (predictedBall == assumedBall) {
+                correctPredictions++;
+            }
         }
 
+        double accuracy = (double) correctPredictions / predictions;
+        // System.out.println("Accuracy: " + accuracy);
+
+
+        predictionsSave += "\nAccuracy: " + accuracy + "\n";
 
         MiscUtils.writeFile(NNFileReader.aldensPath + "\\output.txt", predictionsSave.getBytes(StandardCharsets.UTF_8));
     }
