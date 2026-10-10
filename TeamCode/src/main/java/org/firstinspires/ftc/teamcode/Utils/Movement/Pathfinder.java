@@ -16,6 +16,8 @@ public class Pathfinder {
             {5,4,3,4,5}
     };
     public static int[][] lastPath;
+    public static int[][] pathPoints;
+    public static int[] pointAngle;
 
     public static void compileCircleMoveT(int r) {
         moveT = new float[(r*2)+1][(r*2)+1];
@@ -73,6 +75,56 @@ public class Pathfinder {
         for(int i = 0; i < out.length; i++) out[i] = path.get(i);
         lastPath = out;
         return out;
+    }
+
+    public static int[][] generatePathPoints(int r) {
+        ArrayList<int[]> PP = new ArrayList<>();
+        int vX = 0;
+        int vY = 0;
+        for(int i = 0; i < lastPath.length-1; i++) {
+            if(lastPath[i+1][0]-lastPath[i][0] != vX || lastPath[i+1][1]-lastPath[i][1] != vY) {
+                vX = lastPath[i+1][0]-lastPath[i][0];
+                vY = lastPath[i+1][1]-lastPath[i][1];
+                PP.add(lastPath[i]);
+            }
+        }
+        PP.add(lastPath[lastPath.length-1]);
+        pathPoints = new int[PP.size()][2];
+        for(int i = 0; i < PP.size(); i++) {
+            pathPoints[i] = PP.get(PP.size()-1-i);
+        }
+        pointAngle = new int[PP.size()];
+        pointAngle[pointAngle.length-1] = (int) Math.toDegrees(Math.atan2(
+                pathPoints[pathPoints.length-1][0]-pathPoints[pathPoints.length-2][0],
+                pathPoints[pathPoints.length-1][1]-pathPoints[pathPoints.length-2][1]
+        ));
+        pointAngle[0] = r;
+        return pathPoints;
+    }
+
+    //dist to rotate is rotation/15, dist required to rotate is rotPoly if rot > 45, else 0
+    public static void pickRotations() {
+        for(int i = 0; i < pathPoints.length-1; i++) {
+            float distance = (float) Math.sqrt(((pathPoints[i][0]-pathPoints[i+1][0])*(pathPoints[i][0]-pathPoints[i+1][0]))+((pathPoints[i][1]-pathPoints[i+1][1])*(pathPoints[i][1]-pathPoints[i+1][1])));
+            if(i < pathPoints.length-2) {
+                System.out.println(rotPoly(getRefAngle((float) (pointAngle[i]-Math.toDegrees(Math.atan2(pathPoints[i+1][0]-pathPoints[i+2][0],pathPoints[i+1][1]-pathPoints[i+2][1])))))-distance);
+                float angleDiff = (float) (pointAngle[i]-Math.toDegrees(Math.atan2(pathPoints[i+1][0]-pathPoints[i+2][0],pathPoints[i+1][1]-pathPoints[i+2][1])));
+                if(rotPoly(getRefAngle(angleDiff))<distance || angleDiff < 45) {
+                    if(Math.abs(angleDiff)%180 < 90) pointAngle[i+1] = (int) Math.toDegrees(Math.atan2(pathPoints[i+1][0]-pathPoints[i+2][0],pathPoints[i+1][1]-pathPoints[i+2][1]));
+                    else pointAngle[i+1] = (int) Math.toDegrees(Math.atan2(pathPoints[i+2][0]-pathPoints[i+1][0],pathPoints[i+2][1]-pathPoints[i+1][1]));
+                } else {
+                    pointAngle[i+1] = pointAngle[i];
+                }
+            }
+        }
+    }
+
+    public static float rotPoly(float r) {
+        return (-0.0003f*r*r*r)+(0.0711f*r*r)-(4.3889f*r)+93;
+    }
+
+    public static float getRefAngle(float r) {
+        return (float) (180*Math.abs((r/180.0f)-Math.floor((r/180.0f)+0.5)));
     }
 
 }
