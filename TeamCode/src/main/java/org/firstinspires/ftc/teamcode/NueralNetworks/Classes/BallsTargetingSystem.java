@@ -55,24 +55,24 @@ public class BallsTargetingSystem {
         train();
 
         int predictions = 100;
-        String predictionsSave = "PREDICTIONS \n";
+        StringBuilder predictionsSave = new StringBuilder("PREDICTIONS \n");
 
         double accuracy = 0;
         for (int i = 0; i < predictions; i++) {
             Ball[] simulatedInputs = generateRandomBallStates();
 
-            predictionsSave += "Balls: ";
+            predictionsSave.append("Balls: ");
             for (Ball ball : simulatedInputs){
-                predictionsSave += "(" + ball.x + "," + ball.y + "," + ball.type + ") ";
+                predictionsSave.append("(").append(ball.x).append(",").append(ball.y).append(",").append(ball.type).append(") ");
             }
 
-            predictionsSave += "\n";
+            predictionsSave.append("\n");
 
             double[] outputs = network.predict(getInputs(simulatedInputs));
 
-            predictionsSave += Arrays.toString(outputs);
+            predictionsSave.append(Arrays.toString(outputs));
             // System.out.println(predictionsSave);
-            predictionsSave += "\n";
+            predictionsSave.append("\n");
 
             // Update accuracy
             int predictedBall = MiscUtils.getIndexOfMax(network.predict(getInputs(simulatedInputs)));
@@ -80,23 +80,23 @@ public class BallsTargetingSystem {
             int assumedBall = MiscUtils.getIndexOfMax(calculateOptimalScoresFromHeuristic(simulatedInputs));
             accuracy += outputs[assumedBall];
 
-            predictionsSave += "Predicted ball: " + predictedBall + "\n";
-            predictionsSave += "Assumed ball: " + assumedBall + "\n";
+            predictionsSave.append("Predicted ball: ").append(predictedBall).append("\n");
+            predictionsSave.append("Assumed ball: ").append(assumedBall).append("\n");
         }
 
         accuracy /= predictions;
         // System.out.println("Accuracy: " + accuracy);
 
 
-        predictionsSave += "\nAccuracy: " + (accuracy * 100) + "%\n";
+        predictionsSave.append("\nAccuracy: ").append(accuracy * 100).append("%\n");
 
 
-        MiscUtils.writeFile(NNFileReader.aldensPath + "\\output.txt", predictionsSave.getBytes(StandardCharsets.UTF_8));
+        MiscUtils.writeFile(NNFileReader.aldensPath + "\\output.txt", predictionsSave.toString().getBytes(StandardCharsets.UTF_8));
     }
 
     public static void runGoToBallTargetingSystem(){
         int predictions = 100;
-        String predictionsSave = "PREDICTIONS \n";
+        StringBuilder predictionsSave = new StringBuilder("PREDICTIONS \n");
 
         double accuracy = 0;
         int totalPredictions = 0;
@@ -104,17 +104,17 @@ public class BallsTargetingSystem {
             Ball[] simulatedInputsArray = generateRandomBallStates();
             ArrayList<Ball> simulatedInputs = new ArrayList<>(Arrays.asList(simulatedInputsArray));
 
-            predictionsSave += "\n";
-            predictionsSave += "\n";
+            predictionsSave.append("\n");
+            predictionsSave.append("\n");
 
-            predictionsSave += "Balls: \n";
+            predictionsSave.append("Balls: \n");
             for (int j =0; j< simulatedInputsArray.length; j++){
                 Ball ball = simulatedInputsArray[j];
-                predictionsSave += j + ". (" + ball.x + "," + ball.y + "," + ball.type + ") \n";
+                predictionsSave.append(j).append(". (").append(ball.x).append(",").append(ball.y).append(",").append(ball.type).append(") \n");
             }
 
-            predictionsSave += "\n";
-            predictionsSave += "OrderOfCollection: ";
+            predictionsSave.append("\n");
+            predictionsSave.append("OrderOfCollection: ");
 
             while (!simulatedInputs.isEmpty()){
                 Ball[] currentSimulatedInputs = simulatedInputs.toArray(new Ball[0]);
@@ -130,10 +130,10 @@ public class BallsTargetingSystem {
                 totalPredictions++;
 
                 if (predictedBall >= simulatedInputs.size()) {
-                    predictionsSave += "PREDICTED NON-EXISTENT BALL";
+                    predictionsSave.append("PREDICTED NON-EXISTENT BALL");
                     break;
                 }else{
-                    predictionsSave += MiscUtils.findIndexOf(simulatedInputsArray, simulatedInputs.get(predictedBall)) + ", ";
+                    predictionsSave.append(MiscUtils.findIndexOf(simulatedInputsArray, simulatedInputs.get(predictedBall))).append(", ");
                     simulatedInputs.remove(predictedBall);
                     accuracy += outputs[assumedBall];
                 }
@@ -144,10 +144,10 @@ public class BallsTargetingSystem {
         System.out.println("Accuracy: " + accuracy);
 
 
-        predictionsSave += "\nAccuracy: " + (accuracy * 100) + "%\n";
+        predictionsSave.append("\nAccuracy: ").append(accuracy * 100).append("%\n");
 
 
-        MiscUtils.writeFile(NNFileReader.aldensPath + "\\output.txt", predictionsSave.getBytes(StandardCharsets.UTF_8));
+        MiscUtils.writeFile(NNFileReader.aldensPath + "\\output.txt", predictionsSave.toString().getBytes(StandardCharsets.UTF_8));
     }
 
     public static ArrayList<Ball> orderBallsByPickup(Ball[] balls){
@@ -177,14 +177,12 @@ public class BallsTargetingSystem {
 
         int predictedBall = MiscUtils.getIndexOfMax(outputs);
 
-        String predicted = "Predicted ball: " + predictedBall + "\n Ouputs: " + Arrays.toString(outputs);
-
-        return predicted;
+        return "Predicted ball: " + predictedBall + "\n Ouputs: " + Arrays.toString(outputs);
         // telemetry.addLine("PREDICTED BALL: " + predictedBall);
     }
 
     public static double[] getInputs(Ball[] balls){
-        balls = orderBallsByDistance(balls);
+        orderBallsByDistance(balls);
         double[] inputs = new double[maxBalls * featuresPerBall];
 
 //        predictedBallCount = balls.length;
@@ -254,13 +252,12 @@ public class BallsTargetingSystem {
         }
     }
 
-    public static Ball[] orderBallsByDistance(Ball[] balls) {
+    public static void orderBallsByDistance(Ball[] balls) {
         java.util.Arrays.sort(balls, (b1, b2) -> {
             double dist1 = Math.sqrt(Math.pow(b1.x, 2) + Math.pow(b1.y, 2));
             double dist2 = Math.sqrt(Math.pow(b2.x, 2) + Math.pow(b2.y, 2));
             return Double.compare(dist1, dist2);
         });
-        return balls;
     }
 
     // THIS IS AI GENERATED JUST FOR QUICKLY GETTING TRAINING
