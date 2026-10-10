@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.Network;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class BallsTargetingSystem {
 
@@ -24,37 +25,53 @@ public class BallsTargetingSystem {
     public static void main(String[] args) {
         NNFileReader.Aldenify();
         train();
+        int predictions = 100;
+        String predictionsSave = "PREDICTIONS \n";
 
-        Ball[] simulatedInputs = {new Ball(0,2, false), new Ball(3,4,true), new Ball(2,9,true), new Ball(9,11, false)};// generateRandomBallStates();
 
-        double[] inputs = getInputs(simulatedInputs);
-        predict(inputs);
+        for (int i = 0; i < predictions; i++) {
+            Ball[] simulatedInputs = generateRandomBallStates();
+
+            predictionsSave += "Balls: ";
+            for (Ball ball : simulatedInputs){
+                predictionsSave += "(" + ball.x + "," + ball.y + "," + ball.type + ") ";
+            }
+
+            predictionsSave += "\n";
+
+            predictionsSave += predict(getInputs(simulatedInputs));
+            // System.out.println(predictionsSave);
+            predictionsSave += "\n";
+        }
+
+
+        MiscUtils.writeFile(NNFileReader.aldensPath + "\\output.txt", predictionsSave.getBytes(StandardCharsets.UTF_8));
     }
 
 //    public void runOpMode(){
 //
 //    }
 
-    public static void predict(double[] inputs){
+    public static String predict(double[] inputs){
         double[] outputs = network.predict(inputs);
 
         int predictedBall = MiscUtils.getIndexOfMax(outputs);
 
-        String predicted = "Predicted ball: " + predictedBall + "\n Ouputs: " + outputs.toString();
+        String predicted = "Predicted ball: " + predictedBall + "\n Ouputs: " + Arrays.toString(outputs);
 
-        MiscUtils.writeFile(NNFileReader.aldensPath, predicted.getBytes(StandardCharsets.UTF_8));
-
+        return predicted;
         // telemetry.addLine("PREDICTED BALL: " + predictedBall);
     }
 
     public static double[] getInputs(Ball[] balls){
+        balls = orderBallsByDistance(balls);
         double[] inputs = new double[maxBalls * featuresPerBall];
 
         predictedBallCount = balls.length;
 
         for (int i = 0; i < inputs.length; i += featuresPerBall){
-            if (i < balls.length){
-                int index = i / featuresPerBall;
+            int index = i / featuresPerBall;
+            if (index < balls.length){
                 inputs[i] = balls[index].x;
                 inputs[i + 1] = balls[index].y;
                 inputs[i + 2] = balls[index].type;
@@ -88,14 +105,20 @@ public class BallsTargetingSystem {
             network = new Network(inputSize, hiddenLayers, hiddenLayersSize, actionLayerSize);
         }
 
+        int trainingIterations = 5000;
+        for (int epoch = 0; epoch < trainingIterations; epoch++){
+            Ball[] simulatedInputs = generateRandomBallStates();
 
-        Ball[] simulatedInputs = {new Ball(0,2, false), new Ball(3,4,true), new Ball(2,9,true), new Ball(9,11, false)};// generateRandomBallStates();
+            double[] inputs = getInputs(simulatedInputs);
 
-        double[] inputs = getInputs(simulatedInputs);
+            double[] y_true = calculateOptimalScoresFromHeuristic(simulatedInputs); // e.g., 10 target scores
 
-        double[] y_true = {0.9, 0.09, 0, 0.01, 0,0,0,0,0,0};//calculateOptimalScoresFromHeuristic(simulatedInputs); // e.g., 10 target scores
+            network.train(0.0001, 1, y_true, inputs);
 
-        network.train(0.001, 500, null);
+            if (epoch % 1000 == 0) {
+                System.out.println("Training progress: Epoch " + epoch + "/" + trainingIterations);
+            }
+        }
 
         Save(filename);
     }
@@ -115,5 +138,102 @@ public class BallsTargetingSystem {
             this.y = y;
             this.type = isPollen ? 25 : 41;
         }
+    }
+
+    public static Ball[] orderBallsByDistance(Ball[] balls) {
+        java.util.Arrays.sort(balls, (b1, b2) -> {
+            double dist1 = Math.sqrt(Math.pow(b1.x, 2) + Math.pow(b1.y, 2));
+            double dist2 = Math.sqrt(Math.pow(b2.x, 2) + Math.pow(b2.y, 2));
+            return Double.compare(dist1, dist2);
+        });
+        return balls;
+    }
+
+    // THIS IS AI GENERATED JUST FOR QUICKLY GETTING TRAINING
+    public static double[] calculateOptimalScoresFromHeuristic(Ball[] balls) {
+        double[] scores = new double[maxBalls];
+        if (balls == null || balls.length == 0) {
+            return scores;
+        }
+
+        // Assuming robot position is at origin (0, 0)
+        float robotX = 0;
+        float robotY = 0;
+
+        double[] rawScores = new double[balls.length];
+        double totalScore = 0;
+
+        for (int i = 0; i < balls.length; i++) {
+            Ball b = balls[i];
+
+            // 1. Type Priority: Nectar (41) is prioritized over Pollen (25)
+            // Giving Nectar a higher weight multiplier
+            double typeWeight = (b.type == 41) ? 2.5 : 1.0;
+
+            // 2. Distance Priority: Closer to the robot is better
+            double distance = Math.sqrt(Math.pow(b.x - robotX, 2) + Math.pow(b.y - robotY, 2));
+            double distanceScore = 1.0 / (1.0 + distance); // Inverse distance (closer = higher score)
+
+            // 3. Group / Density Priority: Count nearby balls within a radius (e.g., 4.0 units)
+            int neighborCount = 0;
+            double groupRadius = 4.0;
+            for (int j = 0; j < balls.length; j++) {
+                if (i == j) continue;
+                double distToOther = Math.sqrt(Math.pow(b.x - balls[j].x, 2) + Math.pow(b.y - balls[j].y, 2));
+                if (distToOther <= groupRadius) {
+                    neighborCount++;
+                }
+            }
+            double groupScore = 1.0 + (neighborCount * 0.4); // Bonus multiplier for clustered balls
+
+            // Combine factors into a raw score for this ball
+            rawScores[i] = typeWeight * distanceScore * groupScore;
+            totalScore += rawScores[i];
+        }
+
+        // Normalize raw scores into a probability distribution (summing to ~1.0)
+        for (int i = 0; i < balls.length; i++) {
+            if (totalScore > 0) {
+                scores[i] = rawScores[i] / totalScore;
+            } else {
+                scores[i] = 1.0 / balls.length;
+            }
+        }
+
+        return scores;
+    }
+
+    public static Ball[] generateRandomBallStates() {
+        java.util.Random rand = new java.util.Random();
+
+        // Randomly decide how many balls are visible (between 1 and maxBalls)
+        int count = rand.nextInt(maxBalls) + 1;
+        Ball[] balls = new Ball[count];
+
+        // Frequently create a cluster center to test the "groups of balls" priority
+        boolean createCluster = rand.nextBoolean();
+        float clusterX = rand.nextFloat() * 10.0f;
+        float clusterY = rand.nextFloat() * 10.0f;
+
+        for (int i = 0; i < count; i++) {
+            float x, y;
+
+            // If clustering is enabled, place the first few balls tightly together
+            if (createCluster && i < 3 && count >= 3) {
+                x = clusterX + (rand.nextFloat() * 2.0f - 1.0f); // within 1 unit
+                y = clusterY + (rand.nextFloat() * 2.0f - 1.0f);
+            } else {
+                // Otherwise, scatter them randomly across the field (0 to 12 units)
+                x = rand.nextFloat() * 12.0f;
+                y = rand.nextFloat() * 12.0f;
+            }
+
+            // Type: 50% chance of being Pollen (25) or Nectar (41)
+            boolean isPollen = rand.nextBoolean();
+
+            balls[i] = new Ball(x, y, isPollen);
+        }
+
+        return balls;
     }
 }
