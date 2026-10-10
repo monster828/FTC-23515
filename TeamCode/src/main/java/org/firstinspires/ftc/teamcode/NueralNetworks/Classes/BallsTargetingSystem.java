@@ -250,6 +250,20 @@ public class BallsTargetingSystem {
             this.y = y;
             this.type = isPollen ? 25 : 41;
         }
+
+        /**
+         * Convert position to field coordinates
+         * @param rX robot X
+         * @param rY robot Y
+         * @param rotation rotation of the robot in degrees, North-Clockwise convention.
+         * @return float[0] = field X pos, float[1] = field Y pos.
+         */
+        public float[] toFieldCoords(float rX, float rY, float rotation) {
+            float[] out = new float[2];
+            out[0] = (float) (rX+(Math.cos(rotation)*x)+(Math.sin(rotation)*y));
+            out[1] = (float) (rX-(Math.sin(rotation)*x)+(Math.cos(rotation)*y));
+            return out;
+        }
     }
 
     public static void orderBallsByDistance(Ball[] balls) {
