@@ -1,7 +1,5 @@
-package org.firstinspires.ftc.teamcode.Tests.NeuralNetwork;
+package org.firstinspires.ftc.teamcode.NueralNetworks.Classes;
 
-import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.NNFileReader;
-import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.Network;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -9,7 +7,6 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 public class BallsTargetingSystem {
-
     static String filename = "MySpecialFile_BallTargetSystem";
 
     static Network network;
@@ -21,11 +18,27 @@ public class BallsTargetingSystem {
     // Type (0,1)
     // Is Used (0,1)
 
-    static int predictedBallCount;
+//    static int predictedBallCount;
+//
+//    public static void main(String[] args) {
+//        NNFileReader.Aldenify();
+//
+//        Load(filename);
+//        if (network == null){
+//            int inputSize = maxBalls * featuresPerBall; // 40
+//
+//            int hiddenLayers = 2;
+//            int hiddenLayersSize = 520;
+//            int actionLayerSize = maxBalls;
+//
+//            network = new Network(inputSize, hiddenLayers, hiddenLayersSize, actionLayerSize);
+//        }
+//
+//        // runTestNetwork();
+//        runGoToBallTargetingSystem();
+//    }
 
-    public static void main(String[] args) {
-        NNFileReader.Aldenify();
-
+    public static void setup(){
         Load(filename);
         if (network == null){
             int inputSize = maxBalls * featuresPerBall; // 40
@@ -36,9 +49,6 @@ public class BallsTargetingSystem {
 
             network = new Network(inputSize, hiddenLayers, hiddenLayersSize, actionLayerSize);
         }
-
-        // runTestNetwork();
-        runGoToBallTargetingSystem();
     }
 
     public static void runTestNetwork(){
@@ -232,12 +242,6 @@ public class BallsTargetingSystem {
 
         Save(filename);
     }
-
-//    public Ball[] generateRandomBallStates(){
-//        Ball[] balls =
-//    }
-
-
 
     public static class Ball{
         public float x, y;
