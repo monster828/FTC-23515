@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 public class BallsTargetingSystem {
 
@@ -24,10 +25,27 @@ public class BallsTargetingSystem {
 
     public static void main(String[] args) {
         NNFileReader.Aldenify();
+
+        Load(filename);
+        if (network == null){
+            int inputSize = maxBalls * featuresPerBall; // 40
+
+            int hiddenLayers = 2;
+            int hiddenLayersSize = 520;
+            int actionLayerSize = maxBalls;
+
+            network = new Network(inputSize, hiddenLayers, hiddenLayersSize, actionLayerSize);
+        }
+
+        // runTestNetwork();
+        runGoToBallTargetingSystem();
+    }
+
+    public static void runTestNetwork(){
         train();
+
         int predictions = 100;
         String predictionsSave = "PREDICTIONS \n";
-
 
         double accuracy = 0;
         for (int i = 0; i < predictions; i++) {
@@ -46,24 +64,103 @@ public class BallsTargetingSystem {
             // System.out.println(predictionsSave);
             predictionsSave += "\n";
 
-            // UPDATE THIS SO ACCURACY IS UPDATED BASED ON PREDICTION (LIKE ACCURACY += OUTPUTS   THEN DIVIDE BY TOTAL)
-            // int predictedBall = MiscUtils.getIndexOfMax(network.predict(getInputs(simulatedInputs)));
+            // Update accuracy
+            int predictedBall = MiscUtils.getIndexOfMax(network.predict(getInputs(simulatedInputs)));
+
             int assumedBall = MiscUtils.getIndexOfMax(calculateOptimalScoresFromHeuristic(simulatedInputs));
             accuracy += outputs[assumedBall];
+
+            predictionsSave += "Predicted ball: " + predictedBall + "\n";
+            predictionsSave += "Assumed ball: " + assumedBall + "\n";
         }
 
-        accuracy /= predictions;;
+        accuracy /= predictions;
         // System.out.println("Accuracy: " + accuracy);
 
 
-        predictionsSave += "\nAccuracy: " + accuracy + "%\n";
+        predictionsSave += "\nAccuracy: " + (accuracy * 100) + "%\n";
+
 
         MiscUtils.writeFile(NNFileReader.aldensPath + "\\output.txt", predictionsSave.getBytes(StandardCharsets.UTF_8));
     }
 
-//    public void runOpMode(){
-//
-//    }
+    public static void runGoToBallTargetingSystem(){
+        int predictions = 100;
+        String predictionsSave = "PREDICTIONS \n";
+
+        double accuracy = 0;
+        int totalPredictions = 0;
+        for (int i = 0; i < predictions; i++) {
+            Ball[] simulatedInputsArray = generateRandomBallStates();
+            ArrayList<Ball> simulatedInputs = new ArrayList<>(Arrays.asList(simulatedInputsArray));
+
+            predictionsSave += "\n";
+            predictionsSave += "\n";
+
+            predictionsSave += "Balls: \n";
+            for (int j =0; j< simulatedInputsArray.length; j++){
+                Ball ball = simulatedInputsArray[j];
+                predictionsSave += j + ". (" + ball.x + "," + ball.y + "," + ball.type + ") \n";
+            }
+
+            predictionsSave += "\n";
+            predictionsSave += "OrderOfCollection: ";
+
+            while (!simulatedInputs.isEmpty()){
+                Ball[] currentSimulatedInputs = simulatedInputs.toArray(new Ball[0]);
+
+                double[] outputs = network.predict(getInputs(currentSimulatedInputs));
+
+                // Update accuracy
+                int predictedBall = MiscUtils.getIndexOfMax(outputs);
+
+                int assumedBall = MiscUtils.getIndexOfMax(calculateOptimalScoresFromHeuristic(currentSimulatedInputs));
+
+
+                totalPredictions++;
+
+                if (predictedBall >= simulatedInputs.size()) {
+                    predictionsSave += "PREDICTED NON-EXISTENT BALL";
+                    break;
+                }else{
+                    predictionsSave += MiscUtils.findIndexOf(simulatedInputsArray, simulatedInputs.get(predictedBall)) + ", ";
+                    simulatedInputs.remove(predictedBall);
+                    accuracy += outputs[assumedBall];
+                }
+            }
+        }
+
+        accuracy /= totalPredictions;
+        System.out.println("Accuracy: " + accuracy);
+
+
+        predictionsSave += "\nAccuracy: " + (accuracy * 100) + "%\n";
+
+
+        MiscUtils.writeFile(NNFileReader.aldensPath + "\\output.txt", predictionsSave.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public static ArrayList<Ball> orderBallsByPickup(Ball[] balls){
+        ArrayList<Ball> simulatedInputs = new ArrayList<>(Arrays.asList(balls));
+        ArrayList<Ball> orderOfCollection = new ArrayList<>();
+
+        while (!simulatedInputs.isEmpty()){
+            Ball[] currentSimulatedInputs = simulatedInputs.toArray(new Ball[0]);
+
+            double[] outputs = network.predict(getInputs(currentSimulatedInputs));
+
+            // Update accuracy
+            int predictedBall = MiscUtils.getIndexOfMax(outputs);
+
+            if (predictedBall >= simulatedInputs.size()) {
+                break;
+            }else{
+
+                orderOfCollection.add(simulatedInputs.remove(predictedBall));
+            }
+        }
+        return orderOfCollection;
+    }
 
     public static String predict(double[] inputs){
         double[] outputs = network.predict(inputs);
