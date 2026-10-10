@@ -20,7 +20,7 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
         telemetry.addLine("ARE THESE POSITIONS CORRECT? A: CONTINUE  B: EXIT");
 
 
-        while (true){
+        while (opModeIsActive() || opModeInInit()){
             if (gamepad1.a){
                 while (gamepad1.a){}
                 break;
