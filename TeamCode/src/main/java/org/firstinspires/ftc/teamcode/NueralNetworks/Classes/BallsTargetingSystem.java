@@ -6,6 +6,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+//TO DO
+//        - WHEN GETTING CONTINUES PATH, UPDATE BALL POSITIONS
+
 public class BallsTargetingSystem {
     static String filename = "MySpecialFile_BallTargetSystem";
 

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Tests.NeuralNetwork;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.BallsTargetingSystem;
+import org.firstinspires.ftc.teamcode.Utils.Detection.LimelightBallDetection;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
 
@@ -10,6 +11,9 @@ import java.util.ArrayList;
 
 @TeleOp
 public class PickupBallOrderTelop extends LinearOpMode2026 {
+
+    LimelightBallDetection limelightBallDetection;
+
     @Override
     public void runOpMode() {
 
@@ -45,8 +49,13 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
         Pathfinder.pickRotations();
         Pathfinder.saveI(4);
 
+        limelightBallDetection = new LimelightBallDetection(limelight);
+
 
         waitForStart();
+
+        limelightBallDetection.SwitchToPollen();
+        limelightBallDetection.DetectBalls(telemetry);
 
         // Move and pick up
     }
