@@ -44,6 +44,8 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
 
         try {
             limelight = hardwareMap.get(Limelight3A.class, "Limelight");
+            limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
+            limelight.start(); // DO THIS RIGHT HERE?
         } catch (Exception e) {
             telemetry.addData("Config error: ","Limelight not found");
         }
