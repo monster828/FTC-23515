@@ -31,7 +31,7 @@ public class Network {
         }
 
         // OUTPUT
-        layers.add(new Layer(actionLayerSize, hiddenLayersSize, Neuron.ActivationFunctionNueralNetwork.Linear));
+        layers.add(new Layer(actionLayerSize, hiddenLayersSize, Neuron.ActivationFunctionNueralNetwork.Sigmoid));  // POSSIBLY MAKE THIS SOFTMAX
     }
 
     public Network(Layer[] layers) {
@@ -63,27 +63,23 @@ public class Network {
         return output;
     }
 
-    public void train(double learningRate, int episodes, Telemetry telemetry){
+    public void train(double learningRate, int episodes, double[] y_true, double[] input){ //Telemetry telemetry
         double total_cost = 0;
         long total_time = 0;
 
         for (int i = 0; i < episodes; i++){
             long start_time = System.currentTimeMillis();
             // Currently just a input that will need to be changed to something for real
-            double[] output = {0.5, 5, 2};
+            double[] output = input;
             for (Layer layer : layers){
                 output = layer.activate(output);
             }
 
-            double[] y_true = {1, 0};
-
-            telemetry.addLine("NAN   Output: " + MiscUtils.hasNan(output) + "  Y_True: " + MiscUtils.hasNan(y_true));
             double[] doubles = MiscUtils.addDoubles(output, y_true, false);
             double[] gradient = MiscUtils.mutiplyDouble(doubles, 2);
             total_cost += MiscUtils.totalAddedNumber(doubles);
 
-            telemetry.addLine("NAN   Gradient: " + MiscUtils.hasNan(gradient) + "Doubles: " + MiscUtils.hasNan(doubles));
-            telemetry.addLine("Gradient: " +gradient.toString());
+
 
             for (int j = layers.size() - 1; j > -1; j--){
                 gradient = layers.get(j).backwards(gradient, learningRate);
@@ -91,15 +87,22 @@ public class Network {
 
             total_time += System.currentTimeMillis() - start_time;
 
-//            telemetry.addLine("Network: " + layers.toString());
+//            if (telemetry != null){
+//                //            telemetry.addLine("Network: " + layers.toString());
+//                telemetry.addLine("NAN   Output: " + MiscUtils.hasNan(output) + "  Y_True: " + MiscUtils.hasNan(y_true));
+//                telemetry.addLine("NAN   Gradient: " + MiscUtils.hasNan(gradient) + "Doubles: " + MiscUtils.hasNan(doubles));
+//                telemetry.addLine("Gradient: " +gradient.toString());
+//                telemetry.addLine("Total Cost: " + total_cost + "   i: " + i);
+//                telemetry.addLine("Episode: " + i + ", Adverage Cost: " + (total_cost / (i + 1)));
+//                telemetry.addLine("It took " + (System.currentTimeMillis() - start_time) + "m to run this episode.");
+//                telemetry.addLine("Estimated time remaining: " + ((total_time / (i + 1)) * (episodes - i + 1)));
+//                telemetry.update();
+//            }else {
+//                System.out.println("Episode: " + i + ", Adverage Cost: " + (total_cost / (i + 1)));
+//                System.out.println("Estimated time remaining: " + ((total_time / (i + 1)) * (episodes - i + 1)));
+//            }
 
-            telemetry.addLine("Total Cost: " + total_cost + "   i: " + i);
-            telemetry.addLine("Episode: " + i + ", Adverage Cost: " + (total_cost / (i + 1)));
-            telemetry.addLine("It took " + (System.currentTimeMillis() - start_time) + "m to run this episode.");
-            telemetry.addLine("Estimated time remaining: " + ((total_time / (i + 1)) * (episodes - i + 1)));
-            telemetry.update();
-
-            sleep(10);
+            //sleep(10);
         }
     }
 

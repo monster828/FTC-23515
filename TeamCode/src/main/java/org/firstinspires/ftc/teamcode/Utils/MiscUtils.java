@@ -495,4 +495,18 @@ public class MiscUtils {
 
         return false;
     }
+
+    public static int findIndexOf(Object[] array, Object value){
+        if (array == null || array.length == 0) {
+            return -1; // Handle empty or null array
+        }
+
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(value)) {
+                return i; // Return the index of the found value
+            }
+        }
+
+        return -1; // Value not found
+    }
 }
