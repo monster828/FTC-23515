@@ -187,7 +187,7 @@ public class BallsTargetingSystem {
         balls = orderBallsByDistance(balls);
         double[] inputs = new double[maxBalls * featuresPerBall];
 
-        predictedBallCount = balls.length;
+//        predictedBallCount = balls.length;
 
         for (int i = 0; i < inputs.length; i += featuresPerBall){
             int index = i / featuresPerBall;
