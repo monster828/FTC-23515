@@ -4,9 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.media.Image;
-import android.media.ImageWriter;
 
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
