@@ -267,6 +267,10 @@ public class BallsTargetingSystem {
             out[1] = (float) (rX-(Math.sin(rotation)*x)+(Math.cos(rotation)*y));
             return out;
         }
+
+        public String toString() {
+            return "X: "+x+", Y: "+y+", Type: "+(type == 25 ? "pollen" : "nectar");
+        }
     }
 
     public static void orderBallsByDistance(Ball[] balls) {
