@@ -76,6 +76,6 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
         limelightBallDetection.SwitchToPollen();
         limelightBallDetection.DetectBalls(telemetry);
 
-        // Move and pick up
+        // Move and pick up YAY!
     }
 }
