@@ -8,6 +8,8 @@ import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 @TeleOp
 public class PickupBallOrderTelop extends LinearOpMode2026 {
@@ -19,9 +21,15 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
 
         config();
 
+        Random rand = new Random();
         BallsTargetingSystem.Ball[] balls = new BallsTargetingSystem.Ball[5];
+        for(int i = 0; i < balls.length; i++) {
+            balls[i] = new BallsTargetingSystem.Ball(rand.nextFloat() * 140, rand.nextFloat() * 140, rand.nextBoolean());
+        }
 
+        telemetry.addLine(Arrays.toString(balls));
         telemetry.addLine("ARE THESE POSITIONS CORRECT? A: CONTINUE  B: EXIT");
+        telemetry.update();
 
 
         while (opModeIsActive() || opModeInInit()){
@@ -32,6 +40,7 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
                 return;
             }
         }
+        long start = System.currentTimeMillis();
 
         // Ball Targeting Setup
         BallsTargetingSystem.setup();
@@ -57,6 +66,9 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
         }
 
         limelightBallDetection = new LimelightBallDetection(limelight);
+
+        telemetry.addData("Time in ms",System.currentTimeMillis()-start);
+        telemetry.update();
 
 
         waitForStart();
