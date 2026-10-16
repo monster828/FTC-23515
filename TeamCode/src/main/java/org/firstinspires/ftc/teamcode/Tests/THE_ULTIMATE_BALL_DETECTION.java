@@ -23,8 +23,8 @@ public class THE_ULTIMATE_BALL_DETECTION extends LinearOpMode2026 {
         ControlsTrigger switchBallDetection = new ControlsTrigger(secondGamepadButton);
         GamepadButton thirdGamepadButton = new GamepadButton(gamepad1, GamepadButton.GButton.y);
         ControlsTrigger switchAlliences = new ControlsTrigger(thirdGamepadButton);
-        Boolean isDetectingPollen = true;
-        Boolean isBlueAllience = true;
+        boolean isDetectingPollen = true;
+        boolean isBlueAllience = true;
         limelightBallDetection.SwitchToPollen();
 
         telemetry.addLine("CONTROLS - \n -Detect Balls  (a)\n -Switch Ball Detection (Pollen/Nector)  (b) \n -Switch Allience  (y)");
