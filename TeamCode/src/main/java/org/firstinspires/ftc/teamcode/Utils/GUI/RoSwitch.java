@@ -16,6 +16,9 @@ public class RoSwitch extends RoGraphic {
         return switchiness;
     }
 
+    /**
+     * Boolean
+     */
     @Override
     public void setOutput(Object o) {
         switchiness = (boolean)o;

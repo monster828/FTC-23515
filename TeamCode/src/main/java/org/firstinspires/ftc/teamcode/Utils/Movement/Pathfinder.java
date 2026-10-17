@@ -5,13 +5,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class Pathfinder {
 
+    public static Telemetry telemetry;
     public static float[][] field = new float[141][141];
     public static boolean[][] obstacle = new boolean[141][141];
     public static float[][] moveT = {
@@ -164,10 +167,42 @@ public class Pathfinder {
             }
         }
         try {
-            FileOutputStream fO = new FileOutputStream(MiscUtils.dataFolder+"/"+name+".png");
-            bit.compress(Bitmap.CompressFormat.PNG,100,fO);
-            fO.flush(); fO.close();
-        } catch (Exception ignored) {}
+            File f = new File(MiscUtils.dataFolder+"/"+name+".jpeg");
+            f.createNewFile();
+            FileOutputStream fO = new FileOutputStream(f);
+            bit.compress(Bitmap.CompressFormat.JPEG,90,fO);
+        } catch (Exception e) {
+            if(telemetry != null) {
+                telemetry.addData("Error", e.toString());
+                StackTraceElement[] St = e.getStackTrace();
+                for (int i = 0; i < St.length; i++) telemetry.addLine(St[i].toString());
+            }
+        }
+    }
+
+    public static void saveTxT(String name) {
+        StringBuilder s = new StringBuilder();
+        for(int i = 0; i < pathPoints.length; i++) {
+            s.append("X: ");
+            s.append(pathPoints[i][0]);
+            s.append(", Y: ");
+            s.append(pathPoints[i][1]);
+            s.append(", R: ");
+            s.append(pointAngle[i]);
+            if(i < pathPoints.length-1) s.append("; ");
+        }
+        try {
+            File f = new File(MiscUtils.dataFolder + "/" + name + ".txt");
+            f.createNewFile();
+            FileOutputStream fO = new FileOutputStream(f);
+            fO.write(s.toString().getBytes());
+        } catch (Exception e) {
+            if(telemetry != null) {
+                telemetry.addData("Error", e.toString());
+                StackTraceElement[] St = e.getStackTrace();
+                for (int i = 0; i < St.length; i++) telemetry.addLine(St[i].toString());
+            }
+        }
     }
 
 }
