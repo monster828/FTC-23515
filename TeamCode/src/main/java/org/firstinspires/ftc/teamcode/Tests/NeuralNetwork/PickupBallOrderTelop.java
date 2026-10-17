@@ -64,7 +64,7 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
             Pathfinder.generatePathPoints((int) robotRotation);
             Pathfinder.pickRotations();
             Pathfinder.saveTxT("PathOfBall"+i);
-            Pathfinder.saveI(4, "PathOfBall"+i);
+            Pathfinder.saveI(4,60, "PathOfBall"+i);
             int[][] points = Pathfinder.pathPoints;
             int[] pointRots = Pathfinder.pointAngle;
             robotX = points[points.length-1][0];

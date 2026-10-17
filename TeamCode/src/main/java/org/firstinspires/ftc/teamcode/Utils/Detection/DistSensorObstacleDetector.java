@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Utils.Detection;
 
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Utils.ArrayDrawer;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
@@ -15,6 +16,7 @@ public class DistSensorObstacleDetector {
     float leftAngle = -10;
     float rightAngle = 10;
     PositionGetter posGet;
+    public static Telemetry telemetry;
     public DistSensorObstacleDetector(DistanceSensor left, DistanceSensor right, boolean[][] obstacles, PositionGetter p) {
         l = left; r = right;
         o = obstacles;
@@ -24,20 +26,22 @@ public class DistSensorObstacleDetector {
     public void update(float turretAngle) {
         Position p = new Position(70,70,0);
         if(posGet != null) p = posGet.getPosi();
+        telemetry.addData("LeftDist",l.getDistance(DistanceUnit.INCH));
+        telemetry.addData("RightDist",l.getDistance(DistanceUnit.INCH));
         if(l.getDistance(DistanceUnit.INCH) > 0.1f){
-            int lX = (int) (Math.sin(leftAngle - (FOV / 2)) * l.getDistance(DistanceUnit.INCH));
-            int rX = (int) (Math.sin(leftAngle + (FOV / 2)) * l.getDistance(DistanceUnit.INCH));
-            int mY = (int) Math.min(Math.cos(leftAngle - (FOV / 2)) * l.getDistance(DistanceUnit.INCH), Math.cos(leftAngle + (FOV / 2)) * l.getDistance(DistanceUnit.INCH));
+            int lX = (int) (Math.sin(Math.toRadians(leftAngle - (FOV / 2))) * l.getDistance(DistanceUnit.INCH));
+            int rX = (int) (Math.sin(Math.toRadians(leftAngle + (FOV / 2))) * l.getDistance(DistanceUnit.INCH));
+            int mY = (int) Math.min(Math.cos(Math.toRadians(leftAngle - (FOV / 2))) * l.getDistance(DistanceUnit.INCH), Math.cos(Math.toRadians(leftAngle + (FOV / 2))) * l.getDistance(DistanceUnit.INCH));
             Position lC = new Position(lX, mY, 0);
-            Position rC = new Position((float) rX, (float) l.getDistance(DistanceUnit.INCH), 0);
+            Position rC = new Position((float) rX, (float) l.getDistance(DistanceUnit.INCH)+18, 0);
             lC.rotateCoords(p.r()+turretAngle);
             rC.rotateCoords(p.r()+turretAngle);
             ArrayDrawer.drawRect(o, (int) lC.x(), (int) lC.y(), (int) (rC.x() - lC.x()), (int) (rC.y() - lC.y()), true);
         }
         if(r.getDistance(DistanceUnit.INCH) > 0.1f){
-            int lX = (int) (Math.sin(rightAngle - (FOV / 2)) * r.getDistance(DistanceUnit.INCH));
-            int rX = (int) (Math.sin(rightAngle + (FOV / 2)) * r.getDistance(DistanceUnit.INCH));
-            int mY = (int) Math.min(Math.cos(rightAngle - (FOV / 2)) * r.getDistance(DistanceUnit.INCH), Math.cos(rightAngle + (FOV / 2)) * r.getDistance(DistanceUnit.INCH));
+            int lX = (int) (Math.sin(Math.toRadians(rightAngle - (FOV / 2))) * r.getDistance(DistanceUnit.INCH));
+            int rX = (int) (Math.sin(Math.toRadians(rightAngle + (FOV / 2))) * r.getDistance(DistanceUnit.INCH));
+            int mY = (int) Math.min(Math.cos(Math.toRadians(rightAngle - (FOV / 2))) * r.getDistance(DistanceUnit.INCH), Math.cos(Math.toRadians(rightAngle + (FOV / 2))) * r.getDistance(DistanceUnit.INCH));
             Position lC = new Position(lX, mY, 0);
             Position rC = new Position((float) rX, (float) r.getDistance(DistanceUnit.INCH), 0);
             lC.rotateCoords(p.r()+turretAngle);

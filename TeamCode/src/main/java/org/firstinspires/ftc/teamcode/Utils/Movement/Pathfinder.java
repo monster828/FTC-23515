@@ -138,7 +138,7 @@ public class Pathfinder {
         return (float) (180*Math.abs((r/180.0f)-Math.floor((r/180.0f)+0.5)));
     }
 
-    public static void saveI(int scale, String name) {
+    public static void saveI(int scale, int quality, String name) {
         Bitmap bit = Bitmap.createBitmap(141*scale,141*scale, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bit);
         for(int x = 0; x < field.length; x++) {
@@ -170,7 +170,7 @@ public class Pathfinder {
             File f = new File(MiscUtils.dataFolder+"/"+name+".jpeg");
             f.createNewFile();
             FileOutputStream fO = new FileOutputStream(f);
-            bit.compress(Bitmap.CompressFormat.JPEG,60,fO);
+            bit.compress(Bitmap.CompressFormat.JPEG,quality,fO);
             fO.flush();
         } catch (Exception e) {
             if(telemetry != null) {
