@@ -456,6 +456,22 @@ public class MiscUtils {
         return maxIndex;
     }
 
+    public static int getIndexOfMax(double[] array,int start, int end) {
+        if (array == null || array.length == 0 || start > end || start > array.length-2) {
+            return -1; // Handle empty or null array
+        }
+
+        int maxIndex = start; // Start assuming the first element is the largest
+
+        for (int i = 1+start; i < Math.min(array.length,end); i++) {
+            if (array[i] > array[maxIndex]) {
+                maxIndex = i; // Update index of the highest value
+            }
+        }
+
+        return maxIndex;
+    }
+
     public static double[] mutiplyDouble(double[] doubles, double multiplied){
         double[] result = new double[doubles.length];
         for (int i = 0; i < doubles.length; i++){
