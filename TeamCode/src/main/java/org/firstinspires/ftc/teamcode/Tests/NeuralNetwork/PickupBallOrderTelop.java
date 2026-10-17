@@ -49,22 +49,23 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
         // Pathfinding Setup
         Pathfinder.compileCircleMoveT(3);
 
-        float robotX = 70;
-        float robotY = 70;
-        float robotRotation = 0;
+        float sRX = 70; float sRY = 70; float sRR = 0;
+        float robotX = sRX;
+        float robotY = sRY;
+        float robotRotation = sRR;
         for(int i = 0; i < ballsInOrder.size(); i++) {
             Pathfinder.pathFrom((int) robotX, (int) robotY);
-            Pathfinder.getPathTo((int) ballsInOrder.get(i).toFieldCoords(robotX, robotY, robotRotation)[0], (int) ballsInOrder.get(0).toFieldCoords(robotX, robotY, robotRotation)[1]);
+            Pathfinder.getPathTo((int) ballsInOrder.get(i).toFieldCoords(sRX, sRY, sRR)[0], (int) ballsInOrder.get(0).toFieldCoords(sRX, sRY, sRR)[1]);
             Pathfinder.generatePathPoints((int) robotRotation);
             Pathfinder.pickRotations();
-            //Pathfinder.saveI(4, "PathOfBall"+i);
             Pathfinder.saveTxT("PathOfBall"+i);
+            Pathfinder.saveI(4, "PathOfBall"+i);
             int[][] points = Pathfinder.pathPoints;
             int[] pointRots = Pathfinder.pointAngle;
             robotX = points[points.length-1][0];
             robotY = points[points.length-1][1];
             robotRotation = pointRots[pointRots.length-1];
-            sleep(200);
+            sleep(1000);
         }
 
         //limelightBallDetection = new LimelightBallDetection(limelight);

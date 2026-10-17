@@ -170,7 +170,8 @@ public class Pathfinder {
             File f = new File(MiscUtils.dataFolder+"/"+name+".jpeg");
             f.createNewFile();
             FileOutputStream fO = new FileOutputStream(f);
-            bit.compress(Bitmap.CompressFormat.JPEG,90,fO);
+            bit.compress(Bitmap.CompressFormat.JPEG,70,fO);
+            fO.flush();
         } catch (Exception e) {
             if(telemetry != null) {
                 telemetry.addData("Error", e.toString());
@@ -196,6 +197,7 @@ public class Pathfinder {
             f.createNewFile();
             FileOutputStream fO = new FileOutputStream(f);
             fO.write(s.toString().getBytes());
+            fO.flush();
         } catch (Exception e) {
             if(telemetry != null) {
                 telemetry.addData("Error", e.toString());
