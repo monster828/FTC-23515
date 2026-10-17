@@ -6,7 +6,7 @@ public class ArrayDrawer {
         boolean[][] out = in.clone();
         for(int x0 = x; x0 < x+w; x0++) {
             for(int y0 = y; y0 < y+h; y0++) {
-                if(x0 < out.length && y0 < out[0].length) out[x0][y0] = v;
+                if(x0 < out.length && y0 < out[0].length && x0 > 0 && y0 > 0) out[x0][y0] = v;
             }
         }
         return out;
