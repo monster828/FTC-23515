@@ -65,7 +65,7 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
             robotRotation = pointRots[pointRots.length-1];
         }
 
-        limelightBallDetection = new LimelightBallDetection(limelight);
+        //limelightBallDetection = new LimelightBallDetection(limelight);
 
         telemetry.addData("Time in ms",System.currentTimeMillis()-start);
         telemetry.update();

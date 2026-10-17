@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.NNFileReader;
+import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PinpointPosGet;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
 
@@ -34,6 +35,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
         };
 
         NNFileReader.telemetry = telemetry;
+        Pathfinder.telemetry = telemetry;
 
         Random random = new Random();
         boolean doMessage = random.nextFloat() > 0.9;
