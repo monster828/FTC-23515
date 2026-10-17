@@ -27,6 +27,7 @@ public class ObstacleDetectionTest extends LinearOpMode2026 {
             File f = new File(MiscUtils.dataFolder+"/"+name+".jpeg");
             if(f.exists())f.delete();
             Pathfinder.saveI(2,40,name);
+            telemetry.update();
             while(System.currentTimeMillis()-start < 3000 && opModeIsActive());
         }
     }
