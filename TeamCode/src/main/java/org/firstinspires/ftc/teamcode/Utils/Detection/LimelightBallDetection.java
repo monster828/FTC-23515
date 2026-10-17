@@ -7,7 +7,9 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.BallsTargetingSystem;
+import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class LimelightBallDetection {
@@ -21,9 +23,12 @@ public class LimelightBallDetection {
     /**
      * DetectBalls() will detect balls that it finds in its current pipeline
      * **/
-    public BallsTargetingSystem.Ball[] DetectBalls(Telemetry telemetry){
+    public BallsTargetingSystem.Ball[] DetectBalls(Telemetry telemetry, boolean saveToFile){
         LLResult result = limelight.getLatestResult();
         BallsTargetingSystem.Ball[] balls = new BallsTargetingSystem.Ball[0];
+
+        StringBuilder saveFileTXT = new StringBuilder("Balls: ");
+
         if (result != null && result.isValid()) {
             double tx = result.getTx(); // How far left or right the target is (degrees)
             double ty = result.getTy(); // How far up or down the target is (degrees)
@@ -39,6 +44,7 @@ public class LimelightBallDetection {
 
             // Pollen 25   Nector 41
             int type = limelight.getStatus().getPipelineIndex() == 0 ? 25 : 41;
+            saveFileTXT.append("Ball Type: ").append(limelight.getStatus().getPipelineIndex() == 0 ? "Pollen" : limelight.getStatus().getPipelineIndex() == 1 ? "Nector_Blue" : "Nector_Red");
 
             for (int i = 0; i < colorTargets.size(); i++) {
                 LLResultTypes.ColorResult colorTarget = colorTargets.get(i);
@@ -50,6 +56,9 @@ public class LimelightBallDetection {
                 BallsTargetingSystem.Ball ball = balls[i];
                 ball.type = type;
 
+                saveFileTXT.append("Ball_").append(i);
+                saveFileTXT.append("\nPostion: (").append(x).append(", ").append(y).append(")\nSize: ").append(area);
+
 
                 // TO DO: PROPERLY SET X AND Y
 //                ball.x = (float) x;
@@ -57,6 +66,16 @@ public class LimelightBallDetection {
             }
         } else {
             telemetry.addData("Limelight", "No Targets");
+        }
+
+        if (saveToFile){
+            int i = 0;
+
+            while (MiscUtils.checkFile(MiscUtils.dataFolder + "ballDetection_"+i+".txt")){
+                i++;
+            }
+
+            MiscUtils.writeFile(MiscUtils.dataFolder + "ballDetection_"+i+".txt", saveFileTXT.toString().getBytes(StandardCharsets.UTF_8));
         }
 
         return balls;

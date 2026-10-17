@@ -54,7 +54,7 @@ public class THE_ULTIMATE_BALL_DETECTION extends LinearOpMode2026 {
             }
 
             if (controlsTrigger.IsTriggered()){
-                limelightBallDetection.DetectBalls(telemetry);
+                limelightBallDetection.DetectBalls(telemetry, true);
 
                 // telemetry.addLine("NUERAL NETWORK  -  " + BallsTargetingSystem.predict());
 
