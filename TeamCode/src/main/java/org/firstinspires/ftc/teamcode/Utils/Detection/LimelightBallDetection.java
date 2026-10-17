@@ -15,6 +15,9 @@ import java.util.List;
 public class LimelightBallDetection {
     private Limelight3A limelight;
 
+    public static double CAMERA_HEIGHT = 10;
+    public static double LIMELIGHT_ANGLE = 30;
+
     public LimelightBallDetection(Limelight3A limelight3A){
         this.limelight = limelight3A;
         limelight.pipelineSwitch(0);
@@ -52,13 +55,16 @@ public class LimelightBallDetection {
                 double x = colorTarget.getTargetXDegrees(); // Where it is (left-right)
                 double y = colorTarget.getTargetYDegrees(); // Where it is (up-down)
                 double area = colorTarget.getTargetArea(); // size (0-100)
+                double distanceToBall = DistanceToBall(y);
+                double distanceToTheSide = DistanceToTheSide(x, distanceToBall);
                 telemetry.addData("Color Target", "takes up " + area + "% of the image");
 
                 balls[i] = new BallsTargetingSystem.Ball((float)x,(float)y, type == 25);
 
                 saveFileTXT.append("Ball_").append(i);
-                saveFileTXT.append("\nPostion: (").append(x).append(", ").append(y).append(")\nSize: ").append(area);
-
+                saveFileTXT.append("\nPostion: (").append(x).append(", ").append(y).append(")\nSize: ").append(area).append(" Distance To Ball: ").append(distanceToBall).append(" Distance To Side: ").append(distanceToTheSide);
+                telemetry.addData("Distance To Ball: ", distanceToBall);
+                telemetry.addData("Distance To The Side: ", distanceToTheSide);
 
                 // TO DO: PROPERLY SET X AND Y
 //                ball.x = (float) x;
@@ -71,14 +77,22 @@ public class LimelightBallDetection {
         if (saveToFile){
             int i = 0;
 
-            while (MiscUtils.checkFile(MiscUtils.dataFolder + "ballDetection_"+i+".txt")){
+            while (MiscUtils.checkFile(MiscUtils.dataFolder + "/ballDetection_"+i+".txt")){
                 i++;
             }
 
-            MiscUtils.writeFile(MiscUtils.dataFolder + "ballDetection_"+i+".txt", saveFileTXT.toString().getBytes(StandardCharsets.UTF_8));
+            MiscUtils.writeFile(MiscUtils.dataFolder + "/ballDetection_"+i+".txt", saveFileTXT.toString().getBytes(StandardCharsets.UTF_8));
         }
 
         return balls;
+    }
+
+    public double DistanceToBall(double ty){
+        return (0 /*Target Height*/ - CAMERA_HEIGHT) / Math.tan(LIMELIGHT_ANGLE + ty);
+    }
+
+    public double DistanceToTheSide(double tx, double distance){
+        return distance * Math.tan(tx);
     }
 
     /**
