@@ -21,7 +21,7 @@ public class DistSensorObstacleDetector {
         posGet = p;
     }
 
-    public void update() {
+    public void update(float turretAngle) {
         Position p = posGet.getPosi();
         if(l.getDistance(DistanceUnit.INCH) > 0.1f){
             int lX = (int) (Math.sin(leftAngle - (FOV / 2)) * l.getDistance(DistanceUnit.INCH));
@@ -29,8 +29,8 @@ public class DistSensorObstacleDetector {
             int mY = (int) Math.min(Math.cos(leftAngle - (FOV / 2)) * l.getDistance(DistanceUnit.INCH), Math.cos(leftAngle + (FOV / 2)) * l.getDistance(DistanceUnit.INCH));
             Position lC = new Position(lX, mY, 0);
             Position rC = new Position((float) rX, (float) l.getDistance(DistanceUnit.INCH), 0);
-            lC.rotateCoords(p.r());
-            rC.rotateCoords(p.r());
+            lC.rotateCoords(p.r()+turretAngle);
+            rC.rotateCoords(p.r()+turretAngle);
             ArrayDrawer.drawRect(o, (int) lC.x(), (int) lC.y(), (int) (rC.x() - lC.x()), (int) (rC.y() - lC.y()), true);
         }
         if(r.getDistance(DistanceUnit.INCH) > 0.1f){
@@ -39,8 +39,8 @@ public class DistSensorObstacleDetector {
             int mY = (int) Math.min(Math.cos(rightAngle - (FOV / 2)) * r.getDistance(DistanceUnit.INCH), Math.cos(rightAngle + (FOV / 2)) * r.getDistance(DistanceUnit.INCH));
             Position lC = new Position(lX, mY, 0);
             Position rC = new Position((float) rX, (float) r.getDistance(DistanceUnit.INCH), 0);
-            lC.rotateCoords(p.r());
-            rC.rotateCoords(p.r());
+            lC.rotateCoords(p.r()+turretAngle);
+            rC.rotateCoords(p.r()+turretAngle);
             ArrayDrawer.drawRect(o, (int) lC.x(), (int) lC.y(), (int) (rC.x() - lC.x()), (int) (rC.y() - lC.y()), true);
         }
     }

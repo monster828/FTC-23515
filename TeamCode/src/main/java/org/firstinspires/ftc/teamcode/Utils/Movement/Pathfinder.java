@@ -170,7 +170,7 @@ public class Pathfinder {
             File f = new File(MiscUtils.dataFolder+"/"+name+".jpeg");
             f.createNewFile();
             FileOutputStream fO = new FileOutputStream(f);
-            bit.compress(Bitmap.CompressFormat.JPEG,70,fO);
+            bit.compress(Bitmap.CompressFormat.JPEG,60,fO);
             fO.flush();
         } catch (Exception e) {
             if(telemetry != null) {
