@@ -37,6 +37,9 @@ public class THE_ULTIMATE_BALL_DETECTION extends LinearOpMode2026 {
                 isBlueAllience = !isBlueAllience;
 
                 DoTelemetry(isDetectingPollen, isBlueAllience);
+                if (!isDetectingPollen){
+                    limelight.pipelineSwitch(isBlueAllience ? 1 : 2);
+                }
                 telemetry.update();
             }
 
@@ -47,6 +50,12 @@ public class THE_ULTIMATE_BALL_DETECTION extends LinearOpMode2026 {
                 }else {
                     limelightBallDetection.SwitchToPollen();
                     isDetectingPollen = true;
+                }
+
+                if (isDetectingPollen){
+                    limelight.pipelineSwitch(0);
+                }else{
+                    limelight.pipelineSwitch(isBlueAllience ? 1 : 2);
                 }
 
                 DoTelemetry(isDetectingPollen, isBlueAllience);
