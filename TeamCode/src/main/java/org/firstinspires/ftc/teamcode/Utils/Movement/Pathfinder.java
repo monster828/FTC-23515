@@ -161,7 +161,7 @@ public class Pathfinder {
                     }
                 }
                 Paint p = new Paint();
-                p.setColor(Color.HSVToColor(new float[] {field[x][y]/200,1,b})); //200 for field gradient, 8 for ripple
+                p.setColor(Color.HSVToColor(new float[] {field[x][y]/1f,1,b})); //1f for field gradient, 0.25f for ripple
                 if(obstacle[x][y]) p.setColor(Color.BLACK);
                 c.drawRect(x*scale,y*scale,x*scale+scale,y*scale+scale,p);
             }
