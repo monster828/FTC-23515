@@ -47,14 +47,14 @@ public class LimelightBallDetection {
             saveFileTXT.append("Ball Type: ").append(limelight.getStatus().getPipelineIndex() == 0 ? "Pollen" : limelight.getStatus().getPipelineIndex() == 1 ? "Nector_Blue" : "Nector_Red");
 
             for (int i = 0; i < colorTargets.size(); i++) {
+
                 LLResultTypes.ColorResult colorTarget = colorTargets.get(i);
                 double x = colorTarget.getTargetXDegrees(); // Where it is (left-right)
                 double y = colorTarget.getTargetYDegrees(); // Where it is (up-down)
                 double area = colorTarget.getTargetArea(); // size (0-100)
                 telemetry.addData("Color Target", "takes up " + area + "% of the image");
 
-                BallsTargetingSystem.Ball ball = balls[i];
-                ball.type = type;
+                balls[i] = new BallsTargetingSystem.Ball((float)x,(float)y, type == 25);
 
                 saveFileTXT.append("Ball_").append(i);
                 saveFileTXT.append("\nPostion: (").append(x).append(", ").append(y).append(")\nSize: ").append(area);
