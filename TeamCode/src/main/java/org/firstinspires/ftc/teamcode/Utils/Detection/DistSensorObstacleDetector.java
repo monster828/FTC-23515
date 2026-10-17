@@ -22,7 +22,8 @@ public class DistSensorObstacleDetector {
     }
 
     public void update(float turretAngle) {
-        Position p = posGet.getPosi();
+        Position p = new Position(70,70,0);
+        if(posGet != null) p = posGet.getPosi();
         if(l.getDistance(DistanceUnit.INCH) > 0.1f){
             int lX = (int) (Math.sin(leftAngle - (FOV / 2)) * l.getDistance(DistanceUnit.INCH));
             int rX = (int) (Math.sin(leftAngle + (FOV / 2)) * l.getDistance(DistanceUnit.INCH));

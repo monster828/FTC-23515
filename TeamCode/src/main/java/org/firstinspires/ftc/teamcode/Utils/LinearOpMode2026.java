@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.NNFileReader;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
@@ -22,6 +23,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
     public File loggerFile = new File(MiscUtils.dataFolder+"/log.robolog");
     public Logger log = new Logger(loggerFile);
     public Limelight3A limelight;
+    public DistanceSensor dsl, dsr;
 
 
     /**
@@ -73,6 +75,12 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
             posGet = new PinpointPosGet(pin);
         } catch (Exception e) {
             telemetry.addData("Config error: ","Pinpoint not found");
+        }
+        try {
+            dsl = hardwareMap.get(DistanceSensor.class,"DSL");
+            dsr = hardwareMap.get(DistanceSensor.class,"DSR");
+        } catch (Exception e) {
+            telemetry.addData("Config error: ","Obstacle dist sensors not found");
         }
 
         if(!MiscUtils.checkBattery(hardwareMap)) {

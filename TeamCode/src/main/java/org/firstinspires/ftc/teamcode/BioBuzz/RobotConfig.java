@@ -16,6 +16,7 @@ public class RobotConfig extends LinearOpMode2026 {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        config();
         RoGUI gui = new RoGUI(telemetry);
         RoTab funStuff = new RoTab("Fun Stuff",telemetry);
         gui.add(funStuff);

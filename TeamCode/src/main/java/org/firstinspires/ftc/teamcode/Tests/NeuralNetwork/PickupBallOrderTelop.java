@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Tests.NeuralNetwork;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.BallsTargetingSystem;
+import org.firstinspires.ftc.teamcode.Utils.Detection.DistSensorObstacleDetector;
 import org.firstinspires.ftc.teamcode.Utils.Detection.LimelightBallDetection;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
@@ -25,6 +26,7 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
         BallsTargetingSystem.Ball[] balls = new BallsTargetingSystem.Ball[5];
         for(int i = 0; i < balls.length; i++) {
             balls[i] = new BallsTargetingSystem.Ball((rand.nextFloat() * 100)-50, (rand.nextFloat() * 100)-50, rand.nextBoolean());
+            for(int n = 0; n < 5; n++) rand.nextFloat();
         }
 
         telemetry.addLine(Arrays.toString(balls));
@@ -47,6 +49,9 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
         ArrayList<BallsTargetingSystem.Ball> ballsInOrder = BallsTargetingSystem.orderBallsByPickup(balls);
 
         // Pathfinding Setup
+        DistSensorObstacleDetector obst = new DistSensorObstacleDetector(dsl,dsr,Pathfinder.obstacle,posGet);
+        obst.update(0);
+
         Pathfinder.compileCircleMoveT(3);
 
         float sRX = 70; float sRY = 70; float sRR = 0;
