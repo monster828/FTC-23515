@@ -16,7 +16,7 @@ public class LimelightBallDetection {
     private Limelight3A limelight;
 
     public static double CAMERA_HEIGHT = 10;
-    public static double LIMELIGHT_ANGLE = 30;
+    public static double LIMELIGHT_ANGLE = 0;
 
     public LimelightBallDetection(Limelight3A limelight3A){
         this.limelight = limelight3A;
