@@ -163,7 +163,7 @@ public class BallsTargetingSystem {
             double[] outputs = network.predict(getInputs(currentSimulatedInputs));
 
             // Update accuracy
-            int predictedBall = MiscUtils.getIndexOfMax(outputs);
+            int predictedBall = MiscUtils.getIndexOfMax(outputs,0,simulatedInputs.size());
 
             if (predictedBall >= simulatedInputs.size()) {
                 break;
