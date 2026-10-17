@@ -37,11 +37,13 @@ public class LimelightBallDetection {
             double ty = result.getTy(); // How far up or down the target is (degrees)
             double ta = result.getTa(); // How big the target looks (0%-100% of the image)
 
+            List<LLResultTypes.ColorResult> colorTargets = result.getColorResults();
+
+            telemetry.addData("Ball Count: ", colorTargets);
+
             telemetry.addData("Target X", tx);
             telemetry.addData("Target Y", ty);
             telemetry.addData("Target Area", ta);
-
-            List<LLResultTypes.ColorResult> colorTargets = result.getColorResults();
 
             balls = new BallsTargetingSystem.Ball[colorTargets.size()];
 
