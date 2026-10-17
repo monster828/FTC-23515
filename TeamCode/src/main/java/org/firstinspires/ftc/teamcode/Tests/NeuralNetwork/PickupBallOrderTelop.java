@@ -24,7 +24,7 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
         Random rand = new Random();
         BallsTargetingSystem.Ball[] balls = new BallsTargetingSystem.Ball[5];
         for(int i = 0; i < balls.length; i++) {
-            balls[i] = new BallsTargetingSystem.Ball(rand.nextFloat() * 140, rand.nextFloat() * 140, rand.nextBoolean());
+            balls[i] = new BallsTargetingSystem.Ball((rand.nextFloat() * 100)-50, (rand.nextFloat() * 100)-50, rand.nextBoolean());
         }
 
         telemetry.addLine(Arrays.toString(balls));
@@ -57,12 +57,14 @@ public class PickupBallOrderTelop extends LinearOpMode2026 {
             Pathfinder.getPathTo((int) ballsInOrder.get(i).toFieldCoords(robotX, robotY, robotRotation)[0], (int) ballsInOrder.get(0).toFieldCoords(robotX, robotY, robotRotation)[1]);
             Pathfinder.generatePathPoints((int) robotRotation);
             Pathfinder.pickRotations();
-            Pathfinder.saveI(4, "PathOfBall"+i);
+            //Pathfinder.saveI(4, "PathOfBall"+i);
+            Pathfinder.saveTxT("PathOfBall"+i);
             int[][] points = Pathfinder.pathPoints;
             int[] pointRots = Pathfinder.pointAngle;
             robotX = points[points.length-1][0];
-            robotY = points[points.length-1][0];
+            robotY = points[points.length-1][1];
             robotRotation = pointRots[pointRots.length-1];
+            sleep(200);
         }
 
         //limelightBallDetection = new LimelightBallDetection(limelight);
