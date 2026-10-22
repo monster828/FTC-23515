@@ -68,7 +68,7 @@ public class Position {
     }
 
     /**
-     * Rotates the position by the given value in Degrees
+     * Rotates the position around origin by the given value in Degrees
      * @param rotation The angle (in Degrees) to rotate the movement
      */
     public Position rotateCoords(float rotation) {

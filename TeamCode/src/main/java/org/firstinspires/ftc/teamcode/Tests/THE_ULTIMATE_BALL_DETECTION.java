@@ -37,6 +37,9 @@ public class THE_ULTIMATE_BALL_DETECTION extends LinearOpMode2026 {
                 isBlueAllience = !isBlueAllience;
 
                 DoTelemetry(isDetectingPollen, isBlueAllience);
+                if (!isDetectingPollen){
+                    limelight.pipelineSwitch(isBlueAllience ? 1 : 2);
+                }
                 telemetry.update();
             }
 
@@ -49,12 +52,21 @@ public class THE_ULTIMATE_BALL_DETECTION extends LinearOpMode2026 {
                     isDetectingPollen = true;
                 }
 
+                if (isDetectingPollen){
+                    limelight.pipelineSwitch(0);
+                }else{
+                    limelight.pipelineSwitch(isBlueAllience ? 1 : 2);
+                }
+
                 DoTelemetry(isDetectingPollen, isBlueAllience);
                 telemetry.update();
             }
 
             if (controlsTrigger.IsTriggered()){
-                limelightBallDetection.DetectBalls(telemetry);
+                // limelight.updateRobotOrientation(robotYaw);
+                limelightBallDetection.DetectBalls(telemetry, true);
+
+                // telemetry.addLine("NUERAL NETWORK  -  " + BallsTargetingSystem.predict());
 
                 DoTelemetry(isDetectingPollen, isBlueAllience);
                 telemetry.update();

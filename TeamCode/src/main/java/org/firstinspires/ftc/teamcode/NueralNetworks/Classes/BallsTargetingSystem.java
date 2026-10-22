@@ -163,7 +163,7 @@ public class BallsTargetingSystem {
             double[] outputs = network.predict(getInputs(currentSimulatedInputs));
 
             // Update accuracy
-            int predictedBall = MiscUtils.getIndexOfMax(outputs);
+            int predictedBall = MiscUtils.getIndexOfMax(outputs,0,simulatedInputs.size());
 
             if (predictedBall >= simulatedInputs.size()) {
                 break;
@@ -266,6 +266,10 @@ public class BallsTargetingSystem {
             out[0] = (float) (rX+(Math.cos(rotation)*x)+(Math.sin(rotation)*y));
             out[1] = (float) (rX-(Math.sin(rotation)*x)+(Math.cos(rotation)*y));
             return out;
+        }
+
+        public String toString() {
+            return "X: "+x+", Y: "+y+", Type: "+(type == 25 ? "pollen" : "nectar");
         }
     }
 

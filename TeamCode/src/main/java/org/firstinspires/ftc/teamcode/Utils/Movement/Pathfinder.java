@@ -4,17 +4,17 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.media.Image;
-import android.media.ImageWriter;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class Pathfinder {
 
+    public static Telemetry telemetry;
     public static float[][] field = new float[141][141];
     public static boolean[][] obstacle = new boolean[141][141];
     public static float[][] moveT = {
@@ -138,7 +138,7 @@ public class Pathfinder {
         return (float) (180*Math.abs((r/180.0f)-Math.floor((r/180.0f)+0.5)));
     }
 
-    public static void saveI(int scale, String name) {
+    public static void saveI(int scale, int quality, String name) {
         Bitmap bit = Bitmap.createBitmap(141*scale,141*scale, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bit);
         for(int x = 0; x < field.length; x++) {
@@ -161,16 +161,50 @@ public class Pathfinder {
                     }
                 }
                 Paint p = new Paint();
-                p.setColor(Color.HSVToColor(new float[] {field[x][y]/200,1,b})); //200 for field gradient, 8 for ripple
+                p.setColor(Color.HSVToColor(new float[] {field[x][y]/1f,1,b})); //1f for field gradient, 0.25f for ripple
                 if(obstacle[x][y]) p.setColor(Color.BLACK);
                 c.drawRect(x*scale,y*scale,x*scale+scale,y*scale+scale,p);
             }
         }
         try {
-            FileOutputStream fO = new FileOutputStream(MiscUtils.dataFolder+"/"+name+".png");
-            bit.compress(Bitmap.CompressFormat.PNG,100,fO);
-            fO.flush(); fO.close();
-        } catch (Exception ignored) {}
+            File f = new File(MiscUtils.dataFolder+"/"+name+".jpeg");
+            f.createNewFile();
+            FileOutputStream fO = new FileOutputStream(f);
+            bit.compress(Bitmap.CompressFormat.JPEG,quality,fO);
+            fO.flush();
+        } catch (Exception e) {
+            if(telemetry != null) {
+                telemetry.addData("Error", e.toString());
+                StackTraceElement[] St = e.getStackTrace();
+                for (int i = 0; i < St.length; i++) telemetry.addLine(St[i].toString());
+            }
+        }
+    }
+
+    public static void saveTxT(String name) {
+        StringBuilder s = new StringBuilder();
+        for(int i = 0; i < pathPoints.length; i++) {
+            s.append("X: ");
+            s.append(pathPoints[i][0]);
+            s.append(", Y: ");
+            s.append(pathPoints[i][1]);
+            s.append(", R: ");
+            s.append(pointAngle[i]);
+            if(i < pathPoints.length-1) s.append("; ");
+        }
+        try {
+            File f = new File(MiscUtils.dataFolder + "/" + name + ".txt");
+            f.createNewFile();
+            FileOutputStream fO = new FileOutputStream(f);
+            fO.write(s.toString().getBytes());
+            fO.flush();
+        } catch (Exception e) {
+            if(telemetry != null) {
+                telemetry.addData("Error", e.toString());
+                StackTraceElement[] St = e.getStackTrace();
+                for (int i = 0; i < St.length; i++) telemetry.addLine(St[i].toString());
+            }
+        }
     }
 
 }
