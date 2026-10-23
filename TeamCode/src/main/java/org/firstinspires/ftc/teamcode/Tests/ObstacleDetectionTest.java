@@ -17,18 +17,20 @@ public class ObstacleDetectionTest extends LinearOpMode2026 {
         DistSensorObstacleDetector obst = new DistSensorObstacleDetector(dsl,dsr, Pathfinder.obstacle,posGet);
         waitForStart();
         while(opModeIsActive()) {
+            long start = System.currentTimeMillis();
             obst.update(0);
             Pathfinder.pathFrom(0,0);
             Pathfinder.getPathTo(1,1);
             Pathfinder.generatePathPoints(0);
             Pathfinder.pickRotations();
-            String name = "ObstacleFeed";
-            long start = System.currentTimeMillis();
-            File f = new File(MiscUtils.dataFolder+"/"+name+".jpeg");
-            if(f.exists())f.delete();
-            Pathfinder.saveI(2,40,name);
             telemetry.update();
             while(System.currentTimeMillis()-start < 3000 && opModeIsActive());
         }
+        String name = "ObstacleFeed";
+        File f = new File(MiscUtils.dataFolder+"/"+name+".jpeg");
+        if(f.exists())f.delete();
+        Pathfinder.saveI(2,40,name);
+        telemetry.update();
+        sleep(5000);
     }
 }
