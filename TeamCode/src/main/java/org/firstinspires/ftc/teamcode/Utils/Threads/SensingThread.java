@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Utils.Detection.CheckedDistanceSensor;
 public class SensingThread extends Thread {
 
     public LinearOpMode opMode;
-    public Object[] sensors;
+    public Object[] sensors = new Object[0];
 
     public SensingThread(LinearOpMode opMode) {
         this.opMode = opMode;
