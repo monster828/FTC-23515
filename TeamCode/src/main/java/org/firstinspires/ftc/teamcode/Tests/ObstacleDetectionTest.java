@@ -19,13 +19,13 @@ public class ObstacleDetectionTest extends LinearOpMode2026 {
         while(opModeIsActive()) {
             long start = System.currentTimeMillis();
             obst.update(0);
-            Pathfinder.pathFrom(0,0);
-            Pathfinder.getPathTo(1,1);
-            Pathfinder.generatePathPoints(0);
-            Pathfinder.pickRotations();
             telemetry.update();
-            while(System.currentTimeMillis()-start < 3000 && opModeIsActive());
+            while(System.currentTimeMillis()-start < 50 && opModeIsActive());
         }
+        Pathfinder.pathFrom(0,0);
+        Pathfinder.getPathTo(1,1);
+        Pathfinder.generatePathPoints(0);
+        Pathfinder.pickRotations();
         String name = "ObstacleFeed";
         File f = new File(MiscUtils.dataFolder+"/"+name+".jpeg");
         if(f.exists())f.delete();
