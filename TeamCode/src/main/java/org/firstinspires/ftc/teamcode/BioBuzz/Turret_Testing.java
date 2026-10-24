@@ -3,23 +3,30 @@ package org.firstinspires.ftc.teamcode.BioBuzz;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "Turret_Testing")
 public class Turret_Testing extends OpMode {
 
-    DcMotor flywheel;
-
-    static final int MAX_POWER_PERCENT = 100;
-    static final int STEP_PERCENT = 5;
+    DcMotorEx flywheel;
+    Servo hood;
+    static final int MAX_VELOCITY_PERCENT = 6000;
 
     // Tracked as an integer percent to avoid floating-point drift
-    int powerPercent = 0;
+    int velocity = 0;
     boolean lastDpadUp = false;
     boolean lastDpadDown = false;
+    boolean lastDpadLeft = false;
+    boolean lastDpadRight = false;
+
+    int[] velocityIncrements = {100, 10, 1};
+
+    int selectedIncrement;
 
     @Override
     public void init() {
-        flywheel = hardwareMap.get(DcMotor.class, "Flywheel");
+        flywheel = hardwareMap.get(DcMotorEx.class, "Flywheel");
         flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
@@ -27,21 +34,37 @@ public class Turret_Testing extends OpMode {
     public void loop() {
         boolean dpadUp = gamepad1.dpad_up;
         boolean dpadDown = gamepad1.dpad_down;
+        boolean dpadLeft = gamepad1.dpad_left;
+        boolean dpadRight = gamepad1.dpad_right;
 
-        if (dpadUp && !lastDpadUp) {
-            powerPercent = Math.min(powerPercent + STEP_PERCENT, MAX_POWER_PERCENT);
+        if (dpadLeft && !lastDpadLeft) {
+            selectedIncrement += 1;
+            if (selectedIncrement > 2)
+                selectedIncrement = 2;
         }
-        if (dpadDown && !lastDpadDown) {
-            powerPercent = Math.max(powerPercent - STEP_PERCENT, 0);
+        if (dpadRight && !lastDpadRight) {
+            selectedIncrement -= 1;
+            if (selectedIncrement < 0)
+                selectedIncrement = 0;
         }
         lastDpadUp = dpadUp;
         lastDpadDown = dpadDown;
 
-        double power = powerPercent / 100.0;
-        flywheel.setPower(power);
+        if (dpadUp && !lastDpadUp) {
+            velocity = Math.min(velocity + velocityIncrements[selectedIncrement], MAX_VELOCITY_PERCENT);
+        }
+        if (dpadDown && !lastDpadDown) {
+            velocity = Math.min(velocity - velocityIncrements[selectedIncrement], 0);
+        }
+        lastDpadUp = dpadUp;
+        lastDpadDown = dpadDown;
 
-        telemetry.addData("Controls", "Dpad Up/Down: +/-%d%%", STEP_PERCENT);
-        telemetry.addData("Flywheel Power", "%d%%", powerPercent);
+
+        flywheel.setVelocity(velocity);
+
+        telemetry.addData("Increment Value ", velocityIncrements[selectedIncrement]);
+        telemetry.addData("Flywheel Wanted Velocity ", velocity);
+        telemetry.addData("Flywheel Current Velocity ", flywheel.getVelocity() / 28.0 * 60);
         telemetry.update();
     }
 }
