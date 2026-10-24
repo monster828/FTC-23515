@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.Utils.Detection;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Utils.ArrayDrawer;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
@@ -19,6 +18,11 @@ public class DistSensorObstacleDetector {
     public static Telemetry telemetry;
     public DistSensorObstacleDetector(DistanceSensor left, DistanceSensor right, boolean[][] obstacles, PositionGetter p) {
         l = new CheckedDistanceSensor(left,3); r = new CheckedDistanceSensor(right,3);
+        o = obstacles;
+        posGet = p;
+    }
+    public DistSensorObstacleDetector(CheckedDistanceSensor left, CheckedDistanceSensor right, boolean[][] obstacles, PositionGetter p) {
+        l = left; r = right;
         o = obstacles;
         posGet = p;
     }

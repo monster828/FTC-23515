@@ -15,7 +15,9 @@ public class ObstacleDetectionTest extends LinearOpMode2026 {
     public void runOpMode() throws InterruptedException {
         Pathfinder.obstacle = new boolean[141][141];
         config();
-        DistSensorObstacleDetector obst = new DistSensorObstacleDetector(dsl,dsr, Pathfinder.obstacle,posGet);
+        sensing.add(dslC); sensing.add(dsrC);
+        sensing.start();
+        DistSensorObstacleDetector obst = new DistSensorObstacleDetector(dslC,dsrC, Pathfinder.obstacle,posGet);
         waitForStart();
         while(opModeIsActive()) {
             long start = System.currentTimeMillis();
