@@ -43,7 +43,7 @@ public class DistSensorObstacleDetector {
             Position rC = new Position((float) rX, (float) lD+18, 0);
             lC.rotateCoords(p.r()+turretAngle);
             rC.rotateCoords(p.r()+turretAngle);
-            ArrayDrawer.drawRect(o, (int) (lC.x()+p.x()), (int) (lC.y()+p.y()), (int) (rC.x() - lC.x()), (int) (rC.y() - lC.y()), true);
+            ArrayDrawer.drawRect(o, (int) (Math.min(lC.x(),rC.x())+p.x()), (int) (Math.min(lC.y(),rC.y())+p.y()), (int) Math.abs(rC.x() - lC.x()), (int) Math.abs(rC.y() - lC.y()), true);
         }
         if(rD > 0.1f){
             int lX = (int) (Math.sin(Math.toRadians(rightAngle - (FOV / 2))) * rD);
@@ -53,7 +53,7 @@ public class DistSensorObstacleDetector {
             Position rC = new Position((float) rX, (float) rD+18, 0);
             lC.rotateCoords(p.r()+turretAngle);
             rC.rotateCoords(p.r()+turretAngle);
-            ArrayDrawer.drawRect(o, (int) (lC.x()+p.x()), (int) (lC.y()+p.y()), (int) (rC.x() - lC.x()), (int) (rC.y() - lC.y()), true);
+            ArrayDrawer.drawRect(o, (int) (Math.min(lC.x(),rC.x())+p.x()), (int) (Math.min(lC.y(),rC.y())), (int) Math.abs(rC.x() - lC.x()), (int) Math.abs(rC.y() - lC.y()), true);
         }
     }
 
