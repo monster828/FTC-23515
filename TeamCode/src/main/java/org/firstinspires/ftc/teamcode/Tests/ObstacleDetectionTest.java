@@ -13,6 +13,7 @@ import java.io.File;
 public class ObstacleDetectionTest extends LinearOpMode2026 {
     @Override
     public void runOpMode() throws InterruptedException {
+        Pathfinder.obstacle = new boolean[141][141];
         config();
         DistSensorObstacleDetector obst = new DistSensorObstacleDetector(dsl,dsr, Pathfinder.obstacle,posGet);
         waitForStart();
@@ -29,8 +30,8 @@ public class ObstacleDetectionTest extends LinearOpMode2026 {
         String name = "ObstacleFeed";
         File f = new File(MiscUtils.dataFolder+"/"+name+".jpeg");
         if(f.exists())f.delete();
-        Pathfinder.saveI(2,40,name);
+        Pathfinder.saveI(1,50,name);
         telemetry.update();
-        sleep(5000);
+        sleep(7000);
     }
 }
