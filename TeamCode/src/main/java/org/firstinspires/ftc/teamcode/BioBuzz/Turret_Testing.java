@@ -20,7 +20,7 @@ public class Turret_Testing extends OpMode {
     boolean lastDpadLeft = false;
     boolean lastDpadRight = false;
 
-    int[] velocityIncrements = {100, 10, 1};
+    int[] velocityIncrements = {10, 100, 500};
 
     int selectedIncrement;
 
@@ -28,6 +28,7 @@ public class Turret_Testing extends OpMode {
     public void init() {
         flywheel = hardwareMap.get(DcMotorEx.class, "Flywheel");
         flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -47,20 +48,20 @@ public class Turret_Testing extends OpMode {
             if (selectedIncrement < 0)
                 selectedIncrement = 0;
         }
-        lastDpadUp = dpadUp;
-        lastDpadDown = dpadDown;
+        lastDpadLeft = dpadLeft;
+        lastDpadRight = dpadRight;
 
         if (dpadUp && !lastDpadUp) {
             velocity = Math.min(velocity + velocityIncrements[selectedIncrement], MAX_VELOCITY_PERCENT);
         }
         if (dpadDown && !lastDpadDown) {
-            velocity = Math.min(velocity - velocityIncrements[selectedIncrement], 0);
+            velocity = Math.max(velocity - velocityIncrements[selectedIncrement], 0);
         }
         lastDpadUp = dpadUp;
         lastDpadDown = dpadDown;
 
 
-        flywheel.setVelocity(velocity);
+        flywheel.setVelocity(velocity * 28.0/60);
 
         telemetry.addData("Increment Value ", velocityIncrements[selectedIncrement]);
         telemetry.addData("Flywheel Wanted Velocity ", velocity);
