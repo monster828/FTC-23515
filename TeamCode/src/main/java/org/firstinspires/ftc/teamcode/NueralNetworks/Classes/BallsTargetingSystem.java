@@ -157,7 +157,7 @@ public class BallsTargetingSystem {
         ArrayList<Ball> simulatedInputs = new ArrayList<>(Arrays.asList(balls));
         ArrayList<Ball> orderOfCollection = new ArrayList<>();
 
-        while (!simulatedInputs.isEmpty()){
+        while (!simulatedInputs.isEmpty() || orderOfCollection.size() < 4){
             Ball[] currentSimulatedInputs = simulatedInputs.toArray(new Ball[0]);
 
             double[] outputs = network.predict(getInputs(currentSimulatedInputs));
@@ -203,6 +203,27 @@ public class BallsTargetingSystem {
         }
 
         return inputs;
+    }
+
+    public static int getValidPredictedBall(double[] inputs, double[] outputs) {
+        // Count how many active balls are actually in the inputs
+        int totalBalls = 0;
+        for (int i = 0; i < inputs.length; i += featuresPerBall) {
+            if (inputs[i + 3] == 1) {
+                totalBalls++;
+            }
+        }
+
+        // Clone outputs so we don't mutate the original raw network outputs
+        double[] maskedOutputs = outputs.clone();
+
+        // Mask out all non-existent/padded slots by setting them to negative infinity
+        for (int i = totalBalls; i < maskedOutputs.length; i++) {
+            maskedOutputs[i] = Double.NEGATIVE_INFINITY;
+        }
+
+        // Now it is mathematically impossible to pick a non-existent ball
+        return MiscUtils.getIndexOfMax(maskedOutputs);
     }
 
     public static void Save(String fileName){

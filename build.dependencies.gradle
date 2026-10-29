@@ -5,6 +5,7 @@ repositories {
     maven { url = "https://repo.dairy.foundation/releases/" }
 }
 
+// SLOTH ISSUES LAST HAPPENED WHEN UPGRADING PEDROPATHING TUNING
 dependencies {
     implementation 'org.firstinspires.ftc:Inspection:12.0.0'
     implementation 'org.firstinspires.ftc:Blocks:12.0.0'
@@ -16,7 +17,7 @@ dependencies {
     implementation 'org.firstinspires.ftc:Vision:12.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.pedropathing:revhub:3.0.2'
-    implementation 'com.pedropathing:tuning:1.0.0'
+    implementation 'com.pedropathing:tuning:1.0.0'  // DON'T UPDRADE UNTIL SAFE, WATCH FOR SLOTH ERRORS
     implementation 'com.bylazar:fullpanels:1.0.12'
     implementation 'com.pedropathing.ivy:pedro:1.1.1' // pulls in com.pedropathing.ivy:core
 }
