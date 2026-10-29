@@ -9,10 +9,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.NNFileReader;
+import org.firstinspires.ftc.teamcode.Utils.Detection.CheckedDistanceSensor;
 import org.firstinspires.ftc.teamcode.Utils.Detection.DistSensorObstacleDetector;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PinpointPosGet;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
+import org.firstinspires.ftc.teamcode.Utils.Threads.SensingThread;
 
 import java.io.File;
 import java.util.Random;
@@ -25,10 +27,12 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
     public Logger log = new Logger(loggerFile);
     public Limelight3A limelight;
     public DistanceSensor dsl, dsr;
+    public CheckedDistanceSensor dslC, dsrC;
+    public SensingThread sensing = new SensingThread(this);
 
 
     /**
-     * Call this to configure motors and the position getter.
+     * Call this to configure motors and the position getter...
      */
     public void config() {
         String[] dailyMessage = {"We're no strangers to looove, you know the rules and so do i. A full commitment is what I'm thinking of, you won't get this far from any other guy, I, just want to tell you how I'm feeling. Just wanna make you understand, never gunna give you up, never gunna let you down, never gunna run around and desert you, never gunna make you cry, never gunna say goodbye! never gunna tell a lie and hurt you!",
@@ -81,6 +85,8 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
         try {
             dsl = hardwareMap.get(DistanceSensor.class,"DSL");
             dsr = hardwareMap.get(DistanceSensor.class,"DSR");
+            dslC = new CheckedDistanceSensor(dsl,3);
+            dsrC = new CheckedDistanceSensor(dsr,3);
         } catch (Exception e) {
             telemetry.addData("Config error: ","Obstacle dist sensors not found");
         }

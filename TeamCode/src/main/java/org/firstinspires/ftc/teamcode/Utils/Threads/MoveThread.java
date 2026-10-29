@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.teamcode.Utils.Logger;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
+import org.firstinspires.ftc.teamcode.Utils.Movement.MovementUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
 import org.firstinspires.ftc.teamcode.Utils.RobofileUtils;
@@ -95,7 +96,7 @@ public class MoveThread extends Thread {
                         transP = tP*(
                                 (positions[posNum].getDistTo(positions[posNum-1])/
                                         (positions[posNum].getTimeStamp()-positions[posNum-1].getTimeStamp()))/
-                                        MiscUtils.v(MiscUtils.getAngleDifferenceDegrees(p.r(),(float) Math.toDegrees(angle)))
+                                        MovementUtils.v(MiscUtils.getAngleDifferenceDegrees(p.r(),(float) Math.toDegrees(angle)))
                         );
                     }
 
