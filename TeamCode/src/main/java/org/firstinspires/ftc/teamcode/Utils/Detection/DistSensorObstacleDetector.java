@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode.Utils.Detection;
 
+import android.graphics.Point;
+
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utils.ArrayDrawer;
+import org.firstinspires.ftc.teamcode.Utils.MatrixDrawer;
+import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
 
@@ -39,21 +43,33 @@ public class DistSensorObstacleDetector {
             int lX = (int) (Math.sin(Math.toRadians(leftAngle - (FOV / 2))) * lD);
             int rX = (int) (Math.sin(Math.toRadians(leftAngle + (FOV / 2))) * lD);
             int mY = (int) Math.min(Math.cos(Math.toRadians(leftAngle - (FOV / 2))) * lD, Math.cos(Math.toRadians(leftAngle + (FOV / 2))) * lD);
-            Position lC = new Position(lX, mY, 0);
-            Position rC = new Position((float) rX, (float) lD+18, 0);
-            lC.rotateCoords(p.r()+turretAngle);
-            rC.rotateCoords(p.r()+turretAngle);
-            ArrayDrawer.drawRect(o, (int) (Math.min(lC.x(),rC.x())+p.x()), (int) (Math.min(lC.y(),rC.y())+p.y()), (int) Math.abs(rC.x() - lC.x()), (int) Math.abs(rC.y() - lC.y()), true);
+            Position lcC = new Position(lX, mY, 0);
+            Position rcC = new Position(rX, mY, 0);
+            Position lfC = new Position((float) lX, (float) (lD+18), 0);
+            Position rfC = new Position((float) rX, (float) (lD+18), 0);
+            lcC.rotateCoords(p.r()+turretAngle); rcC.rotateCoords(p.r()+turretAngle); lfC.rotateCoords(p.r()+turretAngle); rfC.rotateCoords(p.r()+turretAngle);
+            MatrixDrawer.fillNGon(o,new Point[]{
+                    new Point((int) lcC.x(), (int) lcC.y()),
+                    new Point((int) rcC.x(), (int) rcC.y()),
+                    new Point((int) lfC.x(), (int) lfC.y()),
+                    new Point((int) rfC.x(), (int) rfC.y())
+            },true);
         }
         if(rD > 0.1f){
             int lX = (int) (Math.sin(Math.toRadians(rightAngle - (FOV / 2))) * rD);
             int rX = (int) (Math.sin(Math.toRadians(rightAngle + (FOV / 2))) * rD);
             int mY = (int) Math.min(Math.cos(Math.toRadians(rightAngle - (FOV / 2))) * rD, Math.cos(Math.toRadians(rightAngle + (FOV / 2))) * rD);
-            Position lC = new Position(lX, mY, 0);
-            Position rC = new Position((float) rX, (float) rD+18, 0);
-            lC.rotateCoords(p.r()+turretAngle);
-            rC.rotateCoords(p.r()+turretAngle);
-            ArrayDrawer.drawRect(o, (int) (Math.min(lC.x(),rC.x())+p.x()), (int) (Math.min(lC.y(),rC.y())), (int) Math.abs(rC.x() - lC.x()), (int) Math.abs(rC.y() - lC.y()), true);
+            Position lcC = new Position(lX, mY, 0);
+            Position rcC = new Position(rX, mY, 0);
+            Position lfC = new Position((float) lX, (float) (rD+18), 0);
+            Position rfC = new Position((float) rX, (float) (rD+18), 0);
+            lcC.rotateCoords(p.r()+turretAngle); rcC.rotateCoords(p.r()+turretAngle); lfC.rotateCoords(p.r()+turretAngle); rfC.rotateCoords(p.r()+turretAngle);
+            MatrixDrawer.fillNGon(o,new Point[]{
+                    new Point((int) lcC.x(), (int) lcC.y()),
+                    new Point((int) rcC.x(), (int) rcC.y()),
+                    new Point((int) lfC.x(), (int) lfC.y()),
+                    new Point((int) rfC.x(), (int) rfC.y())
+            },true);
         }
     }
 
