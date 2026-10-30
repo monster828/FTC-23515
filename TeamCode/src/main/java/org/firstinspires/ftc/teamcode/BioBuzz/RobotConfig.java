@@ -35,7 +35,7 @@ public class RobotConfig extends LinearOpMode2026 {
                 byte d = MiscUtils.readConfig(path,(byte) 0);
                 s.setOutput(d==0);
                 d = MiscUtils.readConfig(path,(byte) 1);
-                turretA.setOutput(d);
+                turretA.setOutput((int)d);
             }
         } catch (Exception e) {
             telemetry.update();
