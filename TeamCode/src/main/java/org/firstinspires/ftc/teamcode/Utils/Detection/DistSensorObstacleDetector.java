@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utils.ArrayDrawer;
 import org.firstinspires.ftc.teamcode.Utils.MatrixDrawer;
+import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
@@ -49,10 +50,10 @@ public class DistSensorObstacleDetector {
             Position rfC = new Position((float) rX, (float) (lD+18), 0);
             lcC.rotateCoords(p.r()+turretAngle); rcC.rotateCoords(p.r()+turretAngle); lfC.rotateCoords(p.r()+turretAngle); rfC.rotateCoords(p.r()+turretAngle);
             MatrixDrawer.fillNGon(o,new Point[]{
-                    new Point((int) lcC.x(), (int) lcC.y()),
-                    new Point((int) rcC.x(), (int) rcC.y()),
-                    new Point((int) lfC.x(), (int) lfC.y()),
-                    new Point((int) rfC.x(), (int) rfC.y())
+                    new Point((int) MiscUtils.Clamp(lcC.x(),0,141), (int) MiscUtils.Clamp(lcC.y(),0,141)),
+                    new Point((int) MiscUtils.Clamp(rcC.x(),0,141), (int) MiscUtils.Clamp(rcC.y(),0,141)),
+                    new Point((int) MiscUtils.Clamp(rfC.x(),0,141), (int) MiscUtils.Clamp(rfC.y(),0,141)),
+                    new Point((int) MiscUtils.Clamp(lfC.x(),0,141), (int) MiscUtils.Clamp(lfC.y(),0,141))
             },true);
         }
         if(rD > 0.1f){
@@ -65,10 +66,10 @@ public class DistSensorObstacleDetector {
             Position rfC = new Position((float) rX, (float) (rD+18), 0);
             lcC.rotateCoords(p.r()+turretAngle); rcC.rotateCoords(p.r()+turretAngle); lfC.rotateCoords(p.r()+turretAngle); rfC.rotateCoords(p.r()+turretAngle);
             MatrixDrawer.fillNGon(o,new Point[]{
-                    new Point((int) lcC.x(), (int) lcC.y()),
-                    new Point((int) rcC.x(), (int) rcC.y()),
-                    new Point((int) lfC.x(), (int) lfC.y()),
-                    new Point((int) rfC.x(), (int) rfC.y())
+                    new Point((int) MiscUtils.Clamp(lcC.x(),0,141), (int) MiscUtils.Clamp(lcC.y(),0,141)),
+                    new Point((int) MiscUtils.Clamp(rcC.x(),0,141), (int) MiscUtils.Clamp(rcC.y(),0,141)),
+                    new Point((int) MiscUtils.Clamp(rfC.x(),0,141), (int) MiscUtils.Clamp(rfC.y(),0,141)),
+                    new Point((int) MiscUtils.Clamp(lfC.x(),0,141), (int) MiscUtils.Clamp(lfC.y(),0,141))
             },true);
         }
     }
