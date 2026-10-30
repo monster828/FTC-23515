@@ -50,10 +50,10 @@ public class DistSensorObstacleDetector {
             Position rfC = new Position((float) rX, (float) (lD+18), 0);
             lcC.rotateCoords(p.r()+turretAngle); rcC.rotateCoords(p.r()+turretAngle); lfC.rotateCoords(p.r()+turretAngle); rfC.rotateCoords(p.r()+turretAngle);
             MatrixDrawer.fillNGon(o,new Point[]{
-                    new Point((int) MiscUtils.Clamp(lcC.x(),0,140), (int) MiscUtils.Clamp(lcC.y(),0,140)),
-                    new Point((int) MiscUtils.Clamp(rcC.x(),0,140), (int) MiscUtils.Clamp(rcC.y(),0,140)),
-                    new Point((int) MiscUtils.Clamp(rfC.x(),0,140), (int) MiscUtils.Clamp(rfC.y(),0,140)),
-                    new Point((int) MiscUtils.Clamp(lfC.x(),0,140), (int) MiscUtils.Clamp(lfC.y(),0,140))
+                    new Point((int) MiscUtils.Clamp(lcC.x()+p.x(),0,140), (int) MiscUtils.Clamp(lcC.y()+p.y(),0,140)),
+                    new Point((int) MiscUtils.Clamp(rcC.x()+p.x(),0,140), (int) MiscUtils.Clamp(rcC.y()+p.y(),0,140)),
+                    new Point((int) MiscUtils.Clamp(rfC.x()+p.x(),0,140), (int) MiscUtils.Clamp(rfC.y()+p.y(),0,140)),
+                    new Point((int) MiscUtils.Clamp(lfC.x()+p.x(),0,140), (int) MiscUtils.Clamp(lfC.y()+p.y(),0,140))
             },true);
         }
         if(rD > 0.1f){
@@ -66,10 +66,10 @@ public class DistSensorObstacleDetector {
             Position rfC = new Position((float) rX, (float) (rD+18), 0);
             lcC.rotateCoords(p.r()+turretAngle); rcC.rotateCoords(p.r()+turretAngle); lfC.rotateCoords(p.r()+turretAngle); rfC.rotateCoords(p.r()+turretAngle);
             MatrixDrawer.fillNGon(o,new Point[]{
-                    new Point((int) MiscUtils.Clamp(lcC.x(),0,140), (int) MiscUtils.Clamp(lcC.y(),0,140)),
-                    new Point((int) MiscUtils.Clamp(rcC.x(),0,140), (int) MiscUtils.Clamp(rcC.y(),0,140)),
-                    new Point((int) MiscUtils.Clamp(rfC.x(),0,140), (int) MiscUtils.Clamp(rfC.y(),0,140)),
-                    new Point((int) MiscUtils.Clamp(lfC.x(),0,140), (int) MiscUtils.Clamp(lfC.y(),0,140))
+                    new Point((int) MiscUtils.Clamp(lcC.x()+p.x(),0,140), (int) MiscUtils.Clamp(lcC.y()+p.y(),0,140)),
+                    new Point((int) MiscUtils.Clamp(rcC.x()+p.x(),0,140), (int) MiscUtils.Clamp(rcC.y()+p.y(),0,140)),
+                    new Point((int) MiscUtils.Clamp(rfC.x()+p.x(),0,140), (int) MiscUtils.Clamp(rfC.y()+p.y(),0,140)),
+                    new Point((int) MiscUtils.Clamp(lfC.x()+p.x(),0,140), (int) MiscUtils.Clamp(lfC.y()+p.y(),0,140))
             },true);
         }
     }

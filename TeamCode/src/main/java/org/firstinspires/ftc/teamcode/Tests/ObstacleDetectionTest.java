@@ -21,7 +21,7 @@ public class ObstacleDetectionTest extends LinearOpMode2026 {
         waitForStart();
         while(opModeIsActive()) {
             long start = System.currentTimeMillis();
-            obst.update(20);
+            obst.update(0);
             telemetry.update();
             //while(System.currentTimeMillis()-start < 50 && opModeIsActive());
         }
