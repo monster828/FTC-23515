@@ -20,15 +20,22 @@ public class RobotConfig extends LinearOpMode2026 {
         RoGUI gui = new RoGUI(telemetry);
         RoTab funStuff = new RoTab("Fun Stuff",telemetry);
         gui.add(funStuff);
+        RoTab tests = new RoTab("Tests",telemetry);
+        gui.add(tests);
         String path = configPath;
         RoSwitch s = new RoSwitch("Easter Eggs",telemetry);
         funStuff.add(s);
+        RoLabel turretALabel = new RoLabel("Turret Angle x10 (OBDT)",telemetry);
+        RoSlider turretA = new RoSlider(-18,18,telemetry);
+        tests.add(turretALabel); tests.add(turretA);
         File f = new File(path);
         try {
             if (!f.exists()) f.createNewFile();
             else {
                 byte d = MiscUtils.readConfig(path,(byte) 0);
                 s.setOutput(d==0);
+                d = MiscUtils.readConfig(path,(byte) 1);
+                turretA.setOutput(d);
             }
         } catch (Exception e) {
             telemetry.update();
@@ -36,7 +43,7 @@ public class RobotConfig extends LinearOpMode2026 {
             StackTraceElement[] St = e.getStackTrace();
             for (int i = 0; i < St.length; i++) telemetry.addLine(St[i].toString());
             telemetry.update();
-            sleep(500);
+            sleep(5000);
         }
         ControlsTrigger up = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.dpad_up));
         ControlsTrigger down = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.dpad_down));
@@ -57,6 +64,7 @@ public class RobotConfig extends LinearOpMode2026 {
             if (!f.exists()) f.createNewFile();
             else {
                 MiscUtils.writeToConfig(path, (byte)0, (byte) ((boolean) s.getOutput() ? 0 : 1));
+                MiscUtils.writeToConfig(path, (byte)1, (byte) ((int) turretA.getOutput()));
             }
         } catch (Exception e) {
             telemetry.update();
@@ -64,7 +72,7 @@ public class RobotConfig extends LinearOpMode2026 {
             StackTraceElement[] St = e.getStackTrace();
             for (int i = 0; i < St.length; i++) telemetry.addLine(St[i].toString());
             telemetry.update();
-            sleep(500);
+            sleep(5000);
         }
     }
 }
