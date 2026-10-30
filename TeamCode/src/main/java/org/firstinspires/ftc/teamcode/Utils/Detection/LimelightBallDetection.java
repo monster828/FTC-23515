@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Utils.Detection;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -15,7 +14,7 @@ import java.util.List;
 public class LimelightBallDetection {
     private Limelight3A limelight;
 
-    public static double CAMERA_HEIGHT = 10;
+    public static double CAMERA_HEIGHT_CM = 10;
     public static double LIMELIGHT_ANGLE = 0;
 
     public LimelightBallDetection(Limelight3A limelight3A){
@@ -92,7 +91,9 @@ public class LimelightBallDetection {
     }
 
     public double DistanceToBall(double ty){
-        return (0 /*Target Height*/ - CAMERA_HEIGHT) / Math.tan(LIMELIGHT_ANGLE + ty);
+        double angleToTarget = LIMELIGHT_ANGLE + ty;
+        double heightDifference = 0 - CAMERA_HEIGHT_CM;
+        return heightDifference / Math.tan(Math.toRadians(angleToTarget));
     }
 
     public double DistanceToTheSide(double tx, double distance){
