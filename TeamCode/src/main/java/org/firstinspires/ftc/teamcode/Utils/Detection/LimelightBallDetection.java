@@ -39,7 +39,7 @@ public class LimelightBallDetection {
 
             List<LLResultTypes.ColorResult> colorTargets = result.getColorResults();
 
-            telemetry.addData("Ball Count: ", colorTargets);
+            telemetry.addData("Ball Count: ", colorTargets.size());
 
             telemetry.addData("Target X", tx);
             telemetry.addData("Target Y", ty);
@@ -52,6 +52,8 @@ public class LimelightBallDetection {
             saveFileTXT.append("Ball Type: ").append(limelight.getStatus().getPipelineIndex() == 0 ? "Pollen" : limelight.getStatus().getPipelineIndex() == 1 ? "Nector_Blue" : "Nector_Red");
 
             for (int i = 0; i < colorTargets.size(); i++) {
+
+                telemetry.addLine("BALL " + i);
 
                 LLResultTypes.ColorResult colorTarget = colorTargets.get(i);
                 double x = colorTarget.getTargetXDegrees(); // Where it is (left-right)
