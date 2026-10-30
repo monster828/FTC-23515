@@ -37,4 +37,12 @@ public class MovementUtils {
         }
     }
 
+    public static float timeToTravel(float angle, float distance) {
+        float v = v(angle); float a = a(angle);
+        if(distance < (v*v)/(2*a)) {
+            return (float) Math.sqrt(2*distance/a);
+        } else {
+            return (distance/v)+(v/(2*a));
+        }
+    }
 }
