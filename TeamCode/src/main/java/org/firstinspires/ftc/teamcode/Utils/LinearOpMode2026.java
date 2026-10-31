@@ -30,6 +30,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
     public DistanceSensor dsl, dsr;
     public CheckedDistanceSensor dslC, dsrC;
     public SensingThread sensing = new SensingThread(this);
+    public DcMotorEx turret;
 
     // public IMU imu;
 
@@ -95,6 +96,11 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
             dsrC = new CheckedDistanceSensor(dsr,3);
         } catch (Exception e) {
             telemetry.addData("Config error: ","Obstacle dist sensors not found");
+        }
+        try {
+            turret = hardwareMap.get(DcMotorEx.class,"TR");
+        } catch (Exception e) {
+            telemetry.addData("Config error: ","Turret motor not found");
         }
 
         if(!MiscUtils.checkBattery(hardwareMap)) {
