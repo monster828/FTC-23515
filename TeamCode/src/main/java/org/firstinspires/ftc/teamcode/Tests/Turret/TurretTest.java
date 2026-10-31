@@ -62,7 +62,7 @@ public class TurretTest extends LinearOpMode2026 {
     }
 
     void SetCurrentPosition(){
-        currentPosition = MiscUtils.getDegreesFromMotor(turret.getCurrentPosition(), 537.7) * 43/14;
+        currentPosition = MiscUtils.getDegreesFromMotor(turret.getCurrentPosition(), 537.7) * 14 / 43;
     }
 
 }
