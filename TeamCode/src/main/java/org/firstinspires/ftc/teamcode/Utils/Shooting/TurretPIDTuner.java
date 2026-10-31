@@ -21,11 +21,12 @@ public class TurretPIDTuner extends LinearOpMode2026 {
     float I = 3;
     float D = 1;
     String done = null;
-    AprilTagsTurretTarget attt = new AprilTagsTurretTarget(turret);
+    AprilTagsTurretTarget attt;
 
     @Override
     public void runOpMode() throws InterruptedException {
         config();
+        attt = new AprilTagsTurretTarget(turret);
         attt.kp = P; attt.ki = I; attt.kd = D;
         loss = -1;
         if(MiscUtils.checkFile(path)) {
