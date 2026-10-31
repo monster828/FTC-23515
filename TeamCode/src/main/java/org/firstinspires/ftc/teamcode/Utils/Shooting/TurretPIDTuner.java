@@ -58,6 +58,7 @@ public class TurretPIDTuner extends LinearOpMode2026 {
             String def = "Proportional: 5\nIntegral: 3\nDerivative: 1\nAdjust: 2";
             MiscUtils.writeFile(path,def.getBytes());
         }
+        waitForStart();
         if(loss == -1) {
             loss = getLoss();
         }
