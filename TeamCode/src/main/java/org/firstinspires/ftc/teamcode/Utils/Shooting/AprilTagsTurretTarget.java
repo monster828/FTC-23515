@@ -17,6 +17,9 @@ public class AprilTagsTurretTarget {
 
     DcMotorEx dcMotorEx;
 
+    public AprilTagsTurretTarget(DcMotorEx turretMotor){
+        dcMotorEx = turretMotor;
+    }
     public AprilTagsTurretTarget(DcMotorEx turretMotor, Limelight3A limelight3A){
         dcMotorEx = turretMotor;
     }
