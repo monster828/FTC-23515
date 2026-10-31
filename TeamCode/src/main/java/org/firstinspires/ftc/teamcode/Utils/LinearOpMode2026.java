@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.NNFileReader;
 import org.firstinspires.ftc.teamcode.Utils.Detection.CheckedDistanceSensor;
@@ -29,6 +30,8 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
     public DistanceSensor dsl, dsr;
     public CheckedDistanceSensor dslC, dsrC;
     public SensingThread sensing = new SensingThread(this);
+
+    // public IMU imu;
 
 
     /**
@@ -55,7 +58,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
         try {
             limelight = hardwareMap.get(Limelight3A.class, "Limelight");
 
-//            limelight.updateRobotOrientation(imu.getYaw(Degrees))
+            // limelight.updateRobotOrientation(imu.getYaw(Degrees));
 
             limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
             limelight.start(); // DO THIS RIGHT HERE? Possibly Do this at start
