@@ -100,7 +100,7 @@ public class AprilTagsTurretTarget {
             motorPower += Math.signum(tx) * kf;
         }
 
-        motorPower = MiscUtils.Clamp(motorPower, -1, 1);
+        motorPower = MiscUtils.Clamp(motorPower, -0.2, 0.2);
 
         dcMotorEx.setPower(motorPower);
 
