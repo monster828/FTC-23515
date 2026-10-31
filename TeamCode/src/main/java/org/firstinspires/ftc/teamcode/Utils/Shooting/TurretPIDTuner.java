@@ -121,6 +121,7 @@ public class TurretPIDTuner extends LinearOpMode2026 {
                 done = null;
                 save();
             }
+            adjust /= 1.5f;
         }
     }
 
