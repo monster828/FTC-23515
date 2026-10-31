@@ -13,6 +13,8 @@ public class TurretTest extends LinearOpMode2026 {
 
     double currentPosition = 0;
 
+    double tolerance = 0.1;
+
     @Override
     public void runOpMode(){
         config();
@@ -28,9 +30,10 @@ public class TurretTest extends LinearOpMode2026 {
                 double targetPosition = currentPosition + num;
 
 
-                while (currentPosition != targetPosition){
+                while (Math.abs(num) > tolerance){
                     SetCurrentPosition();
-                    aprilTagsTurretTarget.ChangeAngle(currentPosition);
+                    num = targetPosition - currentPosition;
+                    aprilTagsTurretTarget.ChangeAngle(num);
                 }
 
                 turret.setPower(0);
