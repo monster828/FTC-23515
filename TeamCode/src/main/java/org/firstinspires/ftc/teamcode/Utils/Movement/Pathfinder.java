@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Utils.MatrixDrawer;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 import java.io.File;
@@ -17,6 +18,7 @@ public class Pathfinder {
     public static Telemetry telemetry;
     public static float[][] field = new float[141][141];
     public static boolean[][] obstacle = new boolean[141][141];
+    public static boolean[][] obstacleDef = new boolean[141][141];
     public static float[][] moveT = {
             {5,4,3,4,5},
             {4,3,2,3,4},
@@ -29,6 +31,23 @@ public class Pathfinder {
     public static int[][] lastPath;
     public static int[][] pathPoints;
     public static int[] pointAngle;
+
+    public static void compileDefaultObstaclesLC(int buffer) {
+        //Fl1 47 in +y, 6in yW, 5in xW
+        //FL2 94 in +x, 6in xW, 5in yW
+        //Beam1 51 in +y, 46 in +x, 3in xW, 39in yW
+        MatrixDrawer.fillSquare(obstacleDef,0,47-buffer,5+buffer,6+(buffer*2),true);
+        MatrixDrawer.fillSquare(obstacleDef,94-buffer,0,6+(buffer*2),5+buffer,true);
+        MatrixDrawer.fillSquare(obstacleDef,46-buffer,51-buffer,3+(buffer*2),39+(buffer*2),true);
+        MatrixDrawer.fillSquare(obstacleDef,94-buffer,51-buffer,3+(buffer*2),39+(buffer*2),true);
+        MatrixDrawer.fillSquare(obstacleDef,135-buffer,93-buffer,5+buffer,6+(buffer*2),true);
+        MatrixDrawer.fillSquare(obstacleDef,46-buffer,135-buffer,6+(buffer*2),5+buffer,true);
+        MatrixDrawer.fillSquare(obstacleDef,0,0,buffer,141,true);
+        MatrixDrawer.fillSquare(obstacleDef,140-buffer,0,buffer,141,true);
+        MatrixDrawer.fillSquare(obstacleDef,0,0,141,buffer,true);
+        MatrixDrawer.fillSquare(obstacleDef,0,140-buffer,141,buffer,true);
+        obstacle = obstacleDef;
+    }
 
     public static void compileCircleMoveT(int r) {
         moveT = new float[(r*2)+1][(r*2)+1];

@@ -103,6 +103,8 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
         }
         try {
             turret = hardwareMap.get(DcMotorEx.class,"TR");
+            turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         } catch (Exception e) {
             telemetry.addData("Config error: ","Turret motor not found");
         }
