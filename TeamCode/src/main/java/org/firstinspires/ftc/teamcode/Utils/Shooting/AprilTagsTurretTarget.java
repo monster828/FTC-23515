@@ -4,9 +4,14 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 public class AprilTagsTurretTarget {
+    // Limelight Pipelines
+    // 3 Blue
+    // 4 Red
+
     public double kp = 0.001; // Ramps the speed
     public double ki = 0.001; // Removes error
     public double kd = 0.005; // Damps movement
@@ -17,12 +22,16 @@ public class AprilTagsTurretTarget {
 
     DcMotorEx dcMotorEx;
 
+    int limelightPipeline;
+
     public AprilTagsTurretTarget(DcMotorEx turretMotor){
         dcMotorEx = turretMotor;
+
+        limelightPipeline = LinearOpMode2026.isCurrentAllienceRed ? 4 : 3;
     }
-    public AprilTagsTurretTarget(DcMotorEx turretMotor, Limelight3A limelight3A){
-        dcMotorEx = turretMotor;
-    }
+//    public AprilTagsTurretTarget(DcMotorEx turretMotor, Limelight3A limelight3A){
+//        dcMotorEx = turretMotor;
+//    }
 
     /**
      * Run this about every loop
@@ -32,6 +41,9 @@ public class AprilTagsTurretTarget {
      * Pass in the limelight
      * **/
     public void UpdateAprilTagsResults(Limelight3A limelight3A){
+        if (limelight3A.getStatus().getPipelineIndex() != limelightPipeline){
+            limelight3A.pipelineSwitch(limelightPipeline);
+        }
         LLResult limelightResult = limelight3A.getLatestResult();
 
         if (limelightResult != null && limelightResult.isValid()){

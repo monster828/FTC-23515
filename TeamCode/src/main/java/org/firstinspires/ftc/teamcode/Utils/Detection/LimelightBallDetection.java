@@ -17,6 +17,8 @@ public class LimelightBallDetection {
     public static double CAMERA_HEIGHT_CM = 10;
     public static double LIMELIGHT_ANGLE = 0;
 
+    private int currentPipeline = 0;
+
     public LimelightBallDetection(Limelight3A limelight3A){
         this.limelight = limelight3A;
         limelight.pipelineSwitch(0);
@@ -26,6 +28,10 @@ public class LimelightBallDetection {
      * DetectBalls() will detect balls that it finds in its current pipeline
      * **/
     public BallsTargetingSystem.Ball[] DetectBalls(Telemetry telemetry, boolean saveToFile){
+        if (limelight.getStatus().getPipelineIndex() != currentPipeline){
+            ResetPipeline();
+        }
+
         LLResult result = limelight.getLatestResult();
         BallsTargetingSystem.Ball[] balls = new BallsTargetingSystem.Ball[0];
 
@@ -106,6 +112,7 @@ public class LimelightBallDetection {
     public void SwitchToPollen(){
         if (limelight.getStatus().getPipelineIndex() != 0){
             limelight.pipelineSwitch(0);
+            currentPipeline = 0;
         }
     }
 
@@ -116,11 +123,17 @@ public class LimelightBallDetection {
         if (isBlue){
             if (limelight.getStatus().getPipelineIndex() != 1){
                 limelight.pipelineSwitch(1);
+                currentPipeline = 1;
             }
         }else {
             if (limelight.getStatus().getPipelineIndex() != 2){
                 limelight.pipelineSwitch(2);
+                currentPipeline = 2;
             }
         }
+    }
+
+    public void ResetPipeline(){
+        limelight.pipelineSwitch(currentPipeline);
     }
 }
