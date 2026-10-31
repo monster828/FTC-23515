@@ -36,6 +36,14 @@ public class TurretTest extends LinearOpMode2026 {
                 turret.setPower(0);
             }
 
+            if (gamepad1.b){
+                aprilTagsTurretTarget.Reset();
+
+                while (gamepad1.b){
+                    aprilTagsTurretTarget.UpdateAprilTagsResults(limelight);
+                }
+            }
+
             if (gamepad1.dpad_up){
                 num += 1;
             }
@@ -45,6 +53,7 @@ public class TurretTest extends LinearOpMode2026 {
             }
 
             telemetry.addData("Text TX", num);
+            telemetry.addLine("Controls: \nA: Run test\nDPad up and down: Changes test rotation amount\nB: Run april tag");
             telemetry.update();
         }
     }
