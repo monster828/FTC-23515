@@ -93,7 +93,7 @@ public class MoveThread extends Thread {
                     //Translation
                     float transP = 0;
                     if(positions[posNum].getDistTo(p) > tolerance) {
-                        transP = tP*(
+                        transP = (
                                 (positions[posNum].getDistTo(positions[posNum-1])/
                                         (positions[posNum].getTimeStamp()-positions[posNum-1].getTimeStamp()))/
                                         MovementUtils.v(MiscUtils.getAngleDifferenceDegrees(p.r(),(float) Math.toDegrees(angle)))
@@ -102,8 +102,8 @@ public class MoveThread extends Thread {
 
                     float antiJ = positions[posNum].getType() > 0 ? antiJERK : 0;
 
-                    float p2 = MiscUtils.Clamp((transP/antiJ)*positions[posNum].getDistTo(p),0.2f,1.0f);
-                    DriveUtils.FieldDriveThing((float)Math.sin(angle),(float)Math.cos(angle),rP,p2, (float) Math.toRadians(p.r()),mot);
+                    float p2 = MiscUtils.Clamp((transP/antiJ)*positions[posNum].getDistTo(p),0.2f,transP);
+                    DriveUtils.FieldDriveThing((float)Math.sin(angle)*p2,(float)Math.cos(angle)*p2,rP,tP, (float) Math.toRadians(p.r()),mot);
 
                     //check if the robot has passed the target point
                     int i = 1;
