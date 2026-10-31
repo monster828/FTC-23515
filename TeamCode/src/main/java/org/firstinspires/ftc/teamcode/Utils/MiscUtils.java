@@ -499,4 +499,8 @@ public class MiscUtils {
 
         return -1; // Value not found
     }
+
+    public static double getDegreesFromMotor(double currentPosition, double countsPerRevolution){
+        return currentPosition / countsPerRevolution * 360;
+    }
 }
