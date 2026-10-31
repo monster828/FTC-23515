@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.Utils.Shooting;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 import java.io.File;
 
+@Autonomous
 public class TurretPIDTuner extends LinearOpMode2026 {
 
     String path = MiscUtils.dataFolder+"/PID.txt";
@@ -121,6 +124,7 @@ public class TurretPIDTuner extends LinearOpMode2026 {
                 done = null;
                 save();
             }
+            adjust /= 1.5f;
         }
     }
 
