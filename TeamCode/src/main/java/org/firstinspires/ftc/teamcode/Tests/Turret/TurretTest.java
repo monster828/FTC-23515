@@ -45,11 +45,11 @@ public class TurretTest extends LinearOpMode2026 {
             }
 
             if (gamepad1.dpad_up){
-                num += 1;
+                num += 0.05;
             }
 
             if (gamepad1.dpad_down){
-                num += -1;
+                num += -0.05;
             }
 
             telemetry.addData("Text TX", num);
