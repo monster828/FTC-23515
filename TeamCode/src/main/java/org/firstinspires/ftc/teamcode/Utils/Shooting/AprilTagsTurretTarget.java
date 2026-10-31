@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Utils.Shooting;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
@@ -12,11 +13,11 @@ public class AprilTagsTurretTarget {
     // 3 Blue
     // 4 Red
 
-    public double kp = 0.001; // Ramps the speed
-    public double ki = 0.001; // Removes error
-    public double kd = 0.005; // Damps movement
+    public double kp = 0.035; // Ramps the speed
+    public double ki = 0.000; // Removes error
+    public double kd = 0.0015; // Damps movement
 
-    double lastTime = 0;
+    private ElapsedTime dtTimer = new ElapsedTime();
     double lastTx = 0;
     double integralSum = 0;
 
@@ -51,7 +52,8 @@ public class AprilTagsTurretTarget {
             UpdateMotor(tx);
         }else {
             dcMotorEx.setPower(0);
-            lastTime = System.currentTimeMillis() / 1000;
+            dtTimer.reset();
+            lastTx = 0;
         }
     }
 
@@ -67,9 +69,15 @@ public class AprilTagsTurretTarget {
         UpdateMotor(tx);
     }
 
+    public void Reset(){
+        dtTimer.reset();
+        lastTx = 0;
+
+    }
+
     private void UpdateMotor(double tx){
-        double currentTime = System.currentTimeMillis() / 1000;
-        double dt = currentTime - lastTime;
+        double dt = dtTimer.seconds();
+        dtTimer.reset();
 
         double targetVelocity = 0;
         if (dt > 0){
@@ -97,6 +105,5 @@ public class AprilTagsTurretTarget {
         dcMotorEx.setPower(motorPower);
 
         lastTx = tx;
-        lastTime = currentTime;
     }
 }
