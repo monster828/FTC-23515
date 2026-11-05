@@ -43,7 +43,7 @@ public class SparkfunPosGet extends PositionGetter{
     @Override
     public float[] getPos() {
         SparkFunOTOS.Pose2D pos = sparkfun.getPosition();
-        return new float[] {-(float)pos.y,(float)pos.x,(float)-pos.h};
+        return new float[] {-(float)pos.y+xOffset,(float)pos.x+yOffset,(float)-pos.h};
     }
 
     /**
@@ -52,7 +52,7 @@ public class SparkfunPosGet extends PositionGetter{
     @Override
     public Position getPosi() {
         SparkFunOTOS.Pose2D pos = sparkfun.getPosition();
-        return new Position(-(float)pos.y,(float)pos.x,(float)-pos.h).rotateCoords(rOffset);
+        return new Position(-(float)pos.y+xOffset,(float)pos.x+yOffset,(float)-pos.h).rotateCoords(rOffset);
     }
 
     /**

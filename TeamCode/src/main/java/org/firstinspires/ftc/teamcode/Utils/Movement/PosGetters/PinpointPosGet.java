@@ -11,8 +11,6 @@ public class PinpointPosGet extends PositionGetter {
     private long _timeOfLastUpdate;
     private GoBildaPinpointDriver _pinpoint;
     private float _pinpointUpdateWait = 3;
-    private float xOffset = 0;
-    private float yOffset = 0;
 
     public PinpointPosGet(GoBildaPinpointDriver _pinpoint) {
         this._pinpoint = _pinpoint;
@@ -69,10 +67,5 @@ public class PinpointPosGet extends PositionGetter {
     @Override
     public float getV() {
         return 0;
-    }
-
-    public void setOffset(float x, float y) {
-        xOffset = x;
-        yOffset = y;
     }
 }
