@@ -20,6 +20,8 @@ public class Teleop extends OpMode {
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -29,9 +31,9 @@ public class Teleop extends OpMode {
 
     @Override
     public void loop(){
-        double y  = -gamepad1.left_stick_y * 0.5;       // forward/back (Y is inverted)
+        double y  = -gamepad1.left_stick_y * 0.9;       // forward/back (Y is inverted)
         double x  =  gamepad1.left_stick_x * 0.9; // strafe
-        double rx =  gamepad1.right_stick_x * 0.6;       // rotate
+        double rx =  gamepad1.right_stick_x * 0.5;       // rotate
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         frontLeft.setPower((y + x + rx) / denominator);
