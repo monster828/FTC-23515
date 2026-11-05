@@ -14,6 +14,7 @@ public class PosiBaseDriveThreadTest extends LinearOpMode2026 {
         PosiBasedDriveThread dt = new PosiBasedDriveThread(this);
         Pathfinder.compileDefaultObstaclesLC(11);
         waitForStart();
+        dt.start();
         while(opModeIsActive()) {
 
         }

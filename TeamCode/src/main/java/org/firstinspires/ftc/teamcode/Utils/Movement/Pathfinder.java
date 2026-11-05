@@ -31,6 +31,7 @@ public class Pathfinder {
     public static int[][] lastPath;
     public static int[][] pathPoints;
     public static int[] pointAngle;
+    public static ArrayList<Position> pos;
 
     public static void compileDefaultObstaclesLC(int buffer) {
         //Fl1 47 in +y, 6in yW, 5in xW
@@ -147,6 +148,47 @@ public class Pathfinder {
                 }
             }
         }
+    }
+
+    public static float freq = 0.05f;
+    public static void generatePoses() {
+        pos = new ArrayList<>();
+        for(int i = 0; i < pathPoints.length-1; i++) {
+            pos.add(new Position(pathPoints[i][0],pathPoints[i][1],pointAngle[i]));
+            float distance = (float) Math.sqrt(((pathPoints[i][0]-pathPoints[i+1][0])*(pathPoints[i][0]-pathPoints[i+1][0]))+((pathPoints[i][1]-pathPoints[i+1][1])*(pathPoints[i][1]-pathPoints[i+1][1])));
+            float angle = (float) (Math.atan2(pathPoints[i+1][0]-pathPoints[i][0],pathPoints[i+1][1]-pathPoints[i][1]));
+            float sin = (float) Math.sin(angle); float cos = (float) Math.cos(angle);
+            float d = 0;
+            float a = 0;
+            ArrayList<Position> po2 = new ArrayList<>();
+            while(d < distance/2.0f) {
+                d = MovementUtils.distanceCovered(0,a);
+                pos.add(new Position(
+                        pathPoints[i][0]+(sin*d),
+                        pathPoints[i][1]+(cos*d),
+                        0));
+                po2.add(new Position(
+                        pathPoints[i+1][0]-(sin*d),
+                        pathPoints[i+1][1]-(cos*d),
+                        0));
+                a += freq;
+            }
+            for(int b = po2.size()-1; b >= 0; b--) {
+                pos.add(po2.get(b));
+            }
+        }
+        pos.add(new Position(
+                pathPoints[pathPoints.length-1][0],
+                pathPoints[pathPoints.length-1][1],
+                pointAngle[pathPoints.length-1]));
+    }
+
+    public static void pathfind(int x0, int y0, int r, int x1, int y1) {
+        pathFrom(x0,y0);
+        getPathTo(x1,y1);
+        generatePathPoints(r);
+        pickRotations();
+        generatePoses();
     }
 
     public static float rotPoly(float r) {

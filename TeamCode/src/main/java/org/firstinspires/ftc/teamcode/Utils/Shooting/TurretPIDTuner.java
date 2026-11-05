@@ -15,10 +15,9 @@ public class TurretPIDTuner extends LinearOpMode2026 {
     public float loss;
     public float[] dataset = {0,90};
     public long refresh = 2000; // Time between data points in ms
-    public long lossDelay = 20;
     public float adjust = 2.0f;
-    float P = 10f;
-    float I = 3f;
+    float P = 0.05f;
+    float I = 0.02f;
     float D = 0f;
     String done = null;
     AprilTagsTurretTarget attt;
@@ -64,7 +63,7 @@ public class TurretPIDTuner extends LinearOpMode2026 {
             loss = getLoss();
         }
         while(opModeIsActive()) {
-            if(done == null) {
+            if(done == null && P > 0) {
                 float nP = P;
                 attt.kp = P / (adjust+1);
                 printTestTem();
@@ -85,7 +84,7 @@ public class TurretPIDTuner extends LinearOpMode2026 {
                 save();
             }
 
-            if(done.equals("P") && opModeIsActive()) {
+            if(done.equals("P") && opModeIsActive() && I > 0) {
                 float nI = I;
                 attt.ki = I / (adjust+1);
                 printTestTem();
@@ -106,7 +105,7 @@ public class TurretPIDTuner extends LinearOpMode2026 {
                 save();
             }
 
-            if(opModeIsActive()) {
+            if(opModeIsActive() && D > 0) {
                 float nD = D;
                 attt.kd = D / (adjust+1);
                 printTestTem();
@@ -123,16 +122,16 @@ public class TurretPIDTuner extends LinearOpMode2026 {
                     loss = tLoss;
                 }
                 D = nD;
-                done = null;
                 save();
             }
+            done = null;
             adjust /= 1.5f;
         }
     }
 
     public float getLoss() {
         float p = (float) attt.kp; float in = (float) attt.ki; float d = (float) attt.kd;
-        attt.kp = 10f; attt.ki = 3f; attt.kd = 0f;
+        attt.kp = 0.05f; attt.ki = 0.02f; attt.kd = 0f;
         while(Math.abs((turret.getCurrentPosition()*537.7f)/(360.0f/((float) 43 /14))-dataset[0]) > 5f) {
             attt.ChangeAngle(dataset[0]-turret.getCurrentPosition());
         }
@@ -140,10 +139,10 @@ public class TurretPIDTuner extends LinearOpMode2026 {
         float l = 0;
         for(int i = 1; i < dataset.length; i++) {
             long start = System.currentTimeMillis();
-            long prev = System.currentTimeMillis();
+            long prev = System.nanoTime();
             while(System.currentTimeMillis()-start < refresh && opModeIsActive()) {
                 attt.ChangeAngle(dataset[i]-turret.getCurrentPosition());
-                l += Math.abs(((turret.getCurrentPosition()*537.7f)/360.0f/((float) 43 /14))-dataset[i])*((System.currentTimeMillis()-prev)/1000.0f);
+                l += Math.abs(((turret.getCurrentPosition()*537.7f)/360.0f/((float) 43 /14))-dataset[i])*((System.nanoTime()-prev)/100.0f);
                 prev = System.currentTimeMillis();
             }
         }
