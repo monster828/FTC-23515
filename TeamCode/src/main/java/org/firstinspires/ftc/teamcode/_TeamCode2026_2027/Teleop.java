@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 @TeleOp
 public class Teleop extends OpMode {
 
-    DcMotor frontLeft, backLeft, frontRight, backRight;
+    DcMotor frontLeft, backLeft, frontRight, backRight, flywheel, lift, intake, turretrotation;
 
     @Override
     public void init() {
@@ -17,11 +17,16 @@ public class Teleop extends OpMode {
         backLeft = hardwareMap.get(DcMotorEx.class, "BL");
         frontRight = hardwareMap.get(DcMotorEx.class, "FR");
         backRight = hardwareMap.get(DcMotorEx.class, "BR");
+        flywheel = hardwareMap.get(DcMotorEx.class, "FW");
+        lift = hardwareMap.get(DcMotorEx.class, "lift");
+        intake = hardwareMap.get(DcMotorEx.class, "intake");
+        turretrotation = hardwareMap.get(DcMotorEx.class, "TR");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        lift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -32,8 +37,8 @@ public class Teleop extends OpMode {
     @Override
     public void loop(){
         double y  = -gamepad1.left_stick_y * 0.9;       // forward/back (Y is inverted)
-        double x  =  gamepad1.left_stick_x * 0.9; // strafe
-        double rx =  gamepad1.right_stick_x * 0.5;       // rotate
+        double x  =  gamepad1.left_stick_x * 0.9;       // strafe
+        double rx =  gamepad1.right_stick_x * 0.5;      // rotate
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         frontLeft.setPower((y + x + rx) / denominator);
