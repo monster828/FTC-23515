@@ -14,56 +14,56 @@ public class MatrixDrawer {
     public static void fillSquare(boolean[][] a, int x, int y, int w, int h, boolean o) {
         for(int x0 = x; x0 < x+w; x0++) {
             for(int y0 = y; y0 < y+h; y0++) {
-                if(x0 > 0 && x0 < a.length && y0 > 0 && y0 < a[x0].length) a[x0][y0] = o;
+                if(x0 >= 0 && x0 < a.length && y0 >= 0 && y0 < a[x0].length) a[x0][y0] = o;
             }
         }
     }
     public static void fillSquare(byte[][] a, int x, int y, int w, int h, byte o) {
         for(int x0 = x; x0 < x+w; x0++) {
             for(int y0 = y; y0 < y+h; y0++) {
-                if(x0 > 0 && x0 < a.length && y0 > 0 && y0 < a[x0].length) a[x0][y0] = o;
+                if(x0 >= 0 && x0 < a.length && y0 >= 0 && y0 < a[x0].length) a[x0][y0] = o;
             }
         }
     }
     public static void fillSquare(char[][] a, int x, int y, int w, int h, char o) {
         for(int x0 = x; x0 < x+w; x0++) {
             for(int y0 = y; y0 < y+h; y0++) {
-                if(x0 > 0 && x0 < a.length && y0 > 0 && y0 < a[x0].length) a[x0][y0] = o;
+                if(x0 >= 0 && x0 < a.length && y0 >= 0 && y0 < a[x0].length) a[x0][y0] = o;
             }
         }
     }
     public static void fillSquare(double[][] a, int x, int y, int w, int h, double o) {
         for(int x0 = x; x0 < x+w; x0++) {
             for(int y0 = y; y0 < y+h; y0++) {
-                if(x0 > 0 && x0 < a.length && y0 > 0 && y0 < a[x0].length) a[x0][y0] = o;
+                if(x0 >= 0 && x0 < a.length && y0 >= 0 && y0 < a[x0].length) a[x0][y0] = o;
             }
         }
     }
     public static void fillSquare(float[][] a, int x, int y, int w, int h, float o) {
         for(int x0 = x; x0 < x+w; x0++) {
             for(int y0 = y; y0 < y+h; y0++) {
-                if(x0 > 0 && x0 < a.length && y0 > 0 && y0 < a[x0].length) a[x0][y0] = o;
+                if(x0 >= 0 && x0 < a.length && y0 >= 0 && y0 < a[x0].length) a[x0][y0] = o;
             }
         }
     }
     public static void fillSquare(int[][] a, int x, int y, int w, int h, int o) {
         for(int x0 = x; x0 < x+w; x0++) {
             for(int y0 = y; y0 < y+h; y0++) {
-                if(x0 > 0 && x0 < a.length && y0 > 0 && y0 < a[x0].length) a[x0][y0] = o;
+                if(x0 >= 0 && x0 < a.length && y0 >= 0 && y0 < a[x0].length) a[x0][y0] = o;
             }
         }
     }
     public static void fillSquare(long[][] a, int x, int y, int w, int h, long o) {
         for(int x0 = x; x0 < x+w; x0++) {
             for(int y0 = y; y0 < y+h; y0++) {
-                if(x0 > 0 && x0 < a.length && y0 > 0 && y0 < a[x0].length) a[x0][y0] = o;
+                if(x0 > 0 && x0 < a.length && y0 >= 0 && y0 < a[x0].length) a[x0][y0] = o;
             }
         }
     }
     public static void fillSquare(short[][] a, int x, int y, int w, int h, short o) {
         for(int x0 = x; x0 < x+w; x0++) {
             for(int y0 = y; y0 < y+h; y0++) {
-                if(x0 > 0 && x0 < a.length && y0 > 0 && y0 < a[x0].length) a[x0][y0] = o;
+                if(x0 > 0 && x0 < a.length && y0 >= 0 && y0 < a[x0].length) a[x0][y0] = o;
             }
         }
     }

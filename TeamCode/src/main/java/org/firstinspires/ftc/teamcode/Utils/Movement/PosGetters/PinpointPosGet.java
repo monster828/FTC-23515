@@ -15,13 +15,13 @@ public class PinpointPosGet extends PositionGetter {
 
     public PinpointPosGet(GoBildaPinpointDriver _pinpoint) {
         this._pinpoint = _pinpoint;
-        _pinpoint.setEncoderResolution(Constants.pinpointConfig.podType.get());
-        _pinpoint.setEncoderDirections(Constants.pinpointConfig.xPodDirection.get(),
-                Constants.pinpointConfig.yPodDirection.get());
+        _pinpoint.setEncoderResolution(Constants.localizerConfig.podType.get());
+        _pinpoint.setEncoderDirections(Constants.localizerConfig.xPodDirection.get(),
+                Constants.localizerConfig.yPodDirection.get());
 
-        _pinpoint.setOffsets(Constants.pinpointConfig.yPodOffset.get(),
-                Constants.pinpointConfig.xPodOffset.get(),
-                Constants.pinpointConfig.offsetUnits.get());
+        _pinpoint.setOffsets(Constants.localizerConfig.yPodOffset.get(),
+                Constants.localizerConfig.xPodOffset.get(),
+                Constants.localizerConfig.offsetUnits.get());
 
         _pinpoint.resetPosAndIMU();
 
@@ -30,13 +30,13 @@ public class PinpointPosGet extends PositionGetter {
 
     public PinpointPosGet(GoBildaPinpointDriver _pinpoint, RobotOdoSetup setup) {
         this._pinpoint = _pinpoint;
-        _pinpoint.setEncoderResolution(Constants.pinpointConfig.podType.get());
-        _pinpoint.setEncoderDirections(Constants.pinpointConfig.xPodDirection.get(),
-                Constants.pinpointConfig.yPodDirection.get());
+        _pinpoint.setEncoderResolution(Constants.localizerConfig.podType.get());
+        _pinpoint.setEncoderDirections(Constants.localizerConfig.xPodDirection.get(),
+                Constants.localizerConfig.yPodDirection.get());
 
-        _pinpoint.setOffsets(Constants.pinpointConfig.yPodOffset.get(),
-                Constants.pinpointConfig.xPodOffset.get(),
-                Constants.pinpointConfig.offsetUnits.get());
+        _pinpoint.setOffsets(Constants.localizerConfig.yPodOffset.get(),
+                Constants.localizerConfig.xPodOffset.get(),
+                Constants.localizerConfig.offsetUnits.get());
 
         _pinpoint.resetPosAndIMU();
 
