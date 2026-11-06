@@ -79,8 +79,7 @@ public class Teleop extends OpMode {
         frontRight.setPower((y - x - rx) / denominator);
         backRight.setPower((y + x - rx) / denominator);
         intake.setPower(intakepow);
-        lift.setPower(flywheelpow);
-        flywheel.setPower(0);
-        throughput = 0;
+        lift.setPower(liftpow);
+        flywheel.setPower(flywheelpow);
     }
 }
