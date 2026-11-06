@@ -56,6 +56,18 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
         Random random = new Random();
         boolean doMessage = random.nextFloat() > 0.9;
 
+        while (!gamepad1.a){
+            telemetry.addLine("Current Alliance: " + (isCurrentAllienceRed ? "Red" : "Blue"));
+            if (gamepad1.b){
+                isCurrentAllienceRed = !isCurrentAllienceRed;
+                while(gamepad1.b){
+
+                }
+            }
+        }
+
+
+
         if (doMessage && MiscUtils.readConfig(configPath, (byte) 0) == 0){
             telemetry.speak(dailyMessage[random.nextInt(dailyMessage.length)]);
         }
