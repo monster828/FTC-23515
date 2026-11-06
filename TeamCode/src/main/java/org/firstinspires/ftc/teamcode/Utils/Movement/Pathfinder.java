@@ -125,10 +125,12 @@ public class Pathfinder {
             pathPoints[i] = PP.get(PP.size()-1-i);
         }
         pointAngle = new int[PP.size()];
-        pointAngle[pointAngle.length-1] = (int) Math.toDegrees(Math.atan2(
-                pathPoints[pathPoints.length-1][0]-pathPoints[pathPoints.length-2][0],
-                pathPoints[pathPoints.length-1][1]-pathPoints[pathPoints.length-2][1]
-        ));
+        if(pathPoints.length > 2) {
+            pointAngle[pointAngle.length - 1] = (int) Math.toDegrees(Math.atan2(
+                    pathPoints[pathPoints.length - 1][0] - pathPoints[pathPoints.length - 2][0],
+                    pathPoints[pathPoints.length - 1][1] - pathPoints[pathPoints.length - 2][1]
+            ));
+        }
         pointAngle[0] = r;
         return pathPoints;
     }
