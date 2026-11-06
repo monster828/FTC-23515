@@ -41,7 +41,7 @@ public class AprilTagsTurretTarget {
      * @param limelight3A
      * Pass in the limelight
      * **/
-    public void UpdateAprilTagsResults(Limelight3A limelight3A){
+    public double UpdateAprilTagsResults(Limelight3A limelight3A){
         if (limelight3A.getStatus().getPipelineIndex() != limelightPipeline){
             limelight3A.pipelineSwitch(limelightPipeline);
         }
@@ -50,11 +50,15 @@ public class AprilTagsTurretTarget {
         if (limelightResult != null && limelightResult.isValid()){
             double tx = limelightResult.getTx(); // Horizontal  0 is middle
             UpdateMotor(tx);
+
+            return tx;
         }else {
             dcMotorEx.setPower(0);
             dtTimer.reset();
             lastTx = 0;
         }
+
+        return 0;
     }
 
     public double UpdateTxValue(Limelight3A limelight3A){
