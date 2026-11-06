@@ -29,7 +29,7 @@ public class TurretTest extends LinearOpMode2026 {
             if (gamepad1.a){
 //                aprilTagsTurretTarget.Reset();
                 turret.setPower(0.05);
-                turret.setTargetPosition(0);
+
 //
                 while (gamepad1.a){
                     double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
