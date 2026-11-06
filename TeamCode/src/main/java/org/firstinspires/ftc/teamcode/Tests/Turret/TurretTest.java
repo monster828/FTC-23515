@@ -13,6 +13,8 @@ public class TurretTest extends LinearOpMode2026 {
 
     double currentPosition = 0;
 
+    double targetPosition = 0;
+
     double tolerance = 0.1;
 
     @Override
@@ -67,14 +69,25 @@ public class TurretTest extends LinearOpMode2026 {
             }
 
             if (gamepad1.dpad_up){
-                num += 0.05;
+                targetPosition += 0.05;
             }
 
             if (gamepad1.dpad_down){
-                num += -0.05;
+                targetPosition += -0.05;
+            }
+
+            if (gamepad1.x){
+                aprilTagsTurretTarget.Reset();
+
+                turret.setPower(0.05);
+
+                aprilTagsTurretTarget.ChangeAngleSetPosition(targetPosition);
+
+
             }
 
             telemetry.addData("Text TX", num);
+            telemetry.addData("Target Position", targetPosition);
             telemetry.addLine("Controls: \nA: Run test\nDPad up and down: Changes test rotation amount\nB: Run april tag");
             telemetry.update();
         }
