@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.teamcode.BioBuzz.RobotConfig;
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.NNFileReader;
 import org.firstinspires.ftc.teamcode.Utils.Detection.CheckedDistanceSensor;
 import org.firstinspires.ftc.teamcode.Utils.Detection.DistSensorObstacleDetector;
@@ -56,6 +57,10 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
         Random random = new Random();
         boolean doMessage = random.nextFloat() > 0.9;
 
+        try {
+            isCurrentAllienceRed = MiscUtils.readConfig(configPath, (byte) 2) == 0;
+        } catch (Exception e) {}
+
         while (!gamepad1.a){
             telemetry.addLine("Current Alliance: " + (isCurrentAllienceRed ? "Red" : "Blue"));
             if (gamepad1.b){
@@ -67,6 +72,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
 
             telemetry.update();
         }
+
 
 
 
@@ -97,7 +103,9 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
             mot[3].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             mot[0].setDirection(DcMotorSimple.Direction.REVERSE);
+            mot[1].setDirection(DcMotorSimple.Direction.REVERSE);
             mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
+            mot[3].setDirection(DcMotorSimple.Direction.REVERSE);
         } catch (Exception e) {
             telemetry.addData("Config error: ","Motors not found");
         }

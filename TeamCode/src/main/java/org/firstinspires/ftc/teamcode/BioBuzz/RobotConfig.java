@@ -27,6 +27,7 @@ public class RobotConfig extends LinearOpMode2026 {
         funStuff.add(s);
         RoLabel turretALabel = new RoLabel("Turret Angle x10 (OBDT)",telemetry);
         RoSlider turretA = new RoSlider(-18,18,telemetry);
+        RoSwitch isRedAlliance = new RoSwitch("Is Red",telemetry);
         tests.add(turretALabel); tests.add(turretA);
         File f = new File(path);
         try {
@@ -36,6 +37,8 @@ public class RobotConfig extends LinearOpMode2026 {
                 s.setOutput(d==0);
                 d = MiscUtils.readConfig(path,(byte) 1);
                 turretA.setOutput((int)d);
+                d = MiscUtils.readConfig(path,(byte) 2);
+                isRedAlliance.setOutput(d==0);
             }
         } catch (Exception e) {
             telemetry.update();
@@ -65,6 +68,7 @@ public class RobotConfig extends LinearOpMode2026 {
             else {
                 MiscUtils.writeToConfig(path, (byte)0, (byte) ((boolean) s.getOutput() ? 0 : 1));
                 MiscUtils.writeToConfig(path, (byte)1, (byte) ((int) turretA.getOutput()));
+                MiscUtils.writeToConfig(path, (byte)2, (byte) ((boolean) isRedAlliance.getOutput() ? 0 : 1));
             }
         } catch (Exception e) {
             telemetry.update();
