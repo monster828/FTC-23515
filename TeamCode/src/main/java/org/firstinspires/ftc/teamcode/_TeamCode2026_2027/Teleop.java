@@ -43,6 +43,9 @@ public class Teleop extends OpMode {
        */
 
     int throughput = 0;
+    int intakepow = 0;
+    int liftpow = 0;
+    int flywheelpow = 0;
 
     @Override
     public void loop(){
@@ -53,19 +56,19 @@ public class Teleop extends OpMode {
 
 
         if (gamepad1.a && throughput == 0) {
-            intake.setPower(50);
-            lift.setPower(80);
-            flywheel.setPower(80);
+            intakepow = 50;
+            liftpow = 80;
+            flywheelpow = 80;
             throughput = 1;
             long start = System.currentTimeMillis();
             while (System.currentTimeMillis()-start < 250);
         };
 
         if (gamepad1.a && throughput == 1) {
-            intake.setPower(0);
-            lift.setPower(0);
-            flywheel.setPower(0);
-            throughput = 0;
+                intakepow = 0;
+                liftpow = 0;
+                flywheelpow = 0;
+                throughput = 0;
             long start = System.currentTimeMillis();
             while (System.currentTimeMillis()-start < 250);
         };
@@ -75,5 +78,9 @@ public class Teleop extends OpMode {
         backLeft.setPower((y - x + rx) / denominator);
         frontRight.setPower((y - x - rx) / denominator);
         backRight.setPower((y + x - rx) / denominator);
+        intake.setPower(intakepow);
+        lift.setPower(flywheelpow);
+        flywheel.setPower(0);
+        throughput = 0;
     }
 }
