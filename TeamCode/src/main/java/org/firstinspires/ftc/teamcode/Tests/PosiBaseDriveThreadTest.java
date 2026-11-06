@@ -14,6 +14,7 @@ public class PosiBaseDriveThreadTest extends LinearOpMode2026 {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        config();
         Random random = new Random();
         PosiBasedDriveThread dt = new PosiBasedDriveThread(this);
         Pathfinder.compileDefaultObstaclesLC(11);

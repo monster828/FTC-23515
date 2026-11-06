@@ -61,7 +61,9 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
             isCurrentAllienceRed = MiscUtils.readConfig(configPath, (byte) 2) == 0;
         } catch (Exception e) {}
 
-        while (!gamepad1.a){
+        telemetry.addLine("Current Alliance: " + (isCurrentAllienceRed ? "Red" : "Blue"));
+
+        /*while (!gamepad1.a){
             telemetry.addLine("Current Alliance: " + (isCurrentAllienceRed ? "Red" : "Blue"));
             if (gamepad1.b){
                 isCurrentAllienceRed = !isCurrentAllienceRed;
@@ -71,7 +73,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
             }
 
             telemetry.update();
-        }
+        }*/
 
 
 
