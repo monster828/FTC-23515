@@ -153,6 +153,7 @@ public class Pathfinder {
     public static float freq = 0.05f;
     public static void generatePoses() {
         pos = new ArrayList<>();
+        float time = 0;
         for(int i = 0; i < pathPoints.length-1; i++) {
             pos.add(new Position(pathPoints[i][0],pathPoints[i][1],pointAngle[i]));
             float distance = (float) Math.sqrt(((pathPoints[i][0]-pathPoints[i+1][0])*(pathPoints[i][0]-pathPoints[i+1][0]))+((pathPoints[i][1]-pathPoints[i+1][1])*(pathPoints[i][1]-pathPoints[i+1][1])));
@@ -163,18 +164,23 @@ public class Pathfinder {
             ArrayList<Position> po2 = new ArrayList<>();
             while(d < distance/2.0f) {
                 d = MovementUtils.distanceCovered(0,a);
-                pos.add(new Position(
+                Position p = new Position(
                         pathPoints[i][0]+(sin*d),
                         pathPoints[i][1]+(cos*d),
-                        0));
+                        0);
+                p.setTimeStamp((long) (time*1000));
+                pos.add(p);
                 po2.add(new Position(
                         pathPoints[i+1][0]-(sin*d),
                         pathPoints[i+1][1]-(cos*d),
                         0));
                 a += freq;
+                time += freq;
             }
             for(int b = po2.size()-1; b >= 0; b--) {
+                po2.get(b).setTimeStamp((long) (time*1000));
                 pos.add(po2.get(b));
+                time += freq;
             }
         }
         pos.add(new Position(
