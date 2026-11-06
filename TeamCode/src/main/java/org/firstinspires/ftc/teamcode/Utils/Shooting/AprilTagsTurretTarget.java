@@ -88,7 +88,7 @@ public class AprilTagsTurretTarget {
     }
 
     public void ChangeAngleSetPosition(double tx){
-        dcMotorEx.setTargetPosition((int) (dcMotorEx.getCurrentPosition() - MiscUtils.getDegreesFromMotor(tx, 537.7)));
+        dcMotorEx.setTargetPosition((int) (dcMotorEx.getCurrentPosition() + MiscUtils.getPositionFromDegrees(tx, 537.7)));
     }
 
     public void SetPositionBasedOnPosition(double target){
@@ -126,9 +126,9 @@ public class AprilTagsTurretTarget {
             motorPower += Math.signum(tx) * kf;
         }
 
-        motorPower = MiscUtils.Clamp(motorPower, -0.2, 0.2);
+        motorPower = MiscUtils.Clamp(motorPower, -0.05, 0.05);
 
-        dcMotorEx.setPower(motorPower);
+        dcMotorEx.setPower(motorPower * -1);
 
         lastTx = tx;
     }
