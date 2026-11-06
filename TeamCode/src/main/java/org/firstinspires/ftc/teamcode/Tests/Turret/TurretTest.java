@@ -25,18 +25,21 @@ public class TurretTest extends LinearOpMode2026 {
 
         while (opModeIsActive()){
             if (gamepad1.a){
-                aprilTagsTurretTarget.Reset();
+                turret.setPower(0.1);
+                aprilTagsTurretTarget.ChangeAngleSetPosition(turret.getCurrentPosition());
 
-                double targetPosition = currentPosition + num;
 
-
-                while (Math.abs(num) > tolerance){
-                    SetCurrentPosition();
-                    num = targetPosition - currentPosition;
-                    aprilTagsTurretTarget.ChangeAngle(num);
-                }
-
-                turret.setPower(0);
+//                aprilTagsTurretTarget.Reset();
+//
+//                double targetPosition = currentPosition + num;
+//
+//                while (Math.abs(num) > tolerance){
+//                    SetCurrentPosition();
+//                    num = targetPosition - currentPosition;
+//                    aprilTagsTurretTarget.ChangeAngle(num);
+//                }
+//
+//                turret.setPower(0);
             }
 
             if (gamepad1.b){
@@ -45,6 +48,8 @@ public class TurretTest extends LinearOpMode2026 {
                 while (gamepad1.b){
                     aprilTagsTurretTarget.UpdateAprilTagsResults(limelight);
                 }
+
+                turret.setPower(0);
             }
 
             if (gamepad1.dpad_up){

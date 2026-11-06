@@ -69,6 +69,10 @@ public class AprilTagsTurretTarget {
         UpdateMotor(tx);
     }
 
+    public void ChangeAngleSetPosition(double tx){
+        dcMotorEx.setTargetPosition((int) (dcMotorEx.getCurrentPosition() + MiscUtils.getDegreesFromMotor(tx, 537.7)));
+    }
+
     public void Reset(){
         dtTimer.reset();
         lastTx = 0;
