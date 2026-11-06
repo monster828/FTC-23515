@@ -32,7 +32,10 @@ public class TurretTest extends LinearOpMode2026 {
 //
                 while (gamepad1.a){
                     double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
-                    aprilTagsTurretTarget.ChangeAngleSetPosition(tx);
+
+                    if (gamepad1.right_trigger_pressed){
+                        aprilTagsTurretTarget.ChangeAngleSetPosition(tx);
+                    }
 
                     telemetry.addLine("tx: " + tx);
                     telemetry.update();
@@ -62,7 +65,7 @@ public class TurretTest extends LinearOpMode2026 {
                 aprilTagsTurretTarget.Reset();
 
                 while (gamepad1.b){
-                    aprilTagsTurretTarget.UpdateAprilTagsResults(limelight);
+                    telemetry.addData("", aprilTagsTurretTarget.UpdateAprilTagsResults(limelight));
                 }
 
                 turret.setPower(0);
@@ -85,6 +88,8 @@ public class TurretTest extends LinearOpMode2026 {
 
 
             }
+
+            turret.setPower(0);
 
             telemetry.addData("Text TX", num);
             telemetry.addData("Target Position", targetPosition);
