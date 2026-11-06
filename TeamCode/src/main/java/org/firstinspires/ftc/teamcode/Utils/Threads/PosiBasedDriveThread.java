@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 public class PosiBasedDriveThread extends Thread {
 
-    ArrayList<Position> path;
+    ArrayList<Position> path = new ArrayList<>();
     DcMotor[] mot;
     PositionGetter posGet;
     LinearOpMode opMode;
