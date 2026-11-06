@@ -29,6 +29,7 @@ public class RobotConfig extends LinearOpMode2026 {
         RoSlider turretA = new RoSlider(-18,18,telemetry);
         RoSwitch isRedAlliance = new RoSwitch("Is Red",telemetry);
         tests.add(turretALabel); tests.add(turretA);
+        gui.add(isRedAlliance);
         File f = new File(path);
         try {
             if (!f.exists()) f.createNewFile();
