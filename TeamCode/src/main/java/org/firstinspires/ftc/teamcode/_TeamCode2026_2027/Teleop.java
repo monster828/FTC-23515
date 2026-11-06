@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.Utils.Controls.ControlsTrigger;
+import org.firstinspires.ftc.teamcode.Utils.Controls.GamepadButton;
+
 @TeleOp
 public class Teleop extends OpMode {
 
@@ -34,11 +37,38 @@ public class Teleop extends OpMode {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
+    /*ControlsTrigger on = new ControlsTrigger(
+               new GamepadButton(gamepad1, GamepadButton.GButton.dpad_up)
+       );
+       */
+
+    int throughput = 0;
+
     @Override
     public void loop(){
         double y  = -gamepad1.left_stick_y * 0.9;       // forward/back (Y is inverted)
         double x  =  gamepad1.left_stick_x * 0.9;       // strafe
         double rx =  gamepad1.right_stick_x * 0.5;      // rotate
+
+
+
+        if (gamepad1.a && throughput == 0) {
+            intake.setPower(50);
+            lift.setPower(80);
+            flywheel.setPower(80);
+            throughput = 1;
+            long start = System.currentTimeMillis();
+            while (System.currentTimeMillis()-start < 250);
+        };
+
+        if (gamepad1.a && throughput == 1) {
+            intake.setPower(0);
+            lift.setPower(0);
+            flywheel.setPower(0);
+            throughput = 0;
+            long start = System.currentTimeMillis();
+            while (System.currentTimeMillis()-start < 250);
+        };
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         frontLeft.setPower((y + x + rx) / denominator);
