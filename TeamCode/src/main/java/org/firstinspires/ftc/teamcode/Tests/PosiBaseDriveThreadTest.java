@@ -26,8 +26,11 @@ public class PosiBaseDriveThreadTest extends LinearOpMode2026 {
             for(int i = 0; i < 30; i++) {
                 int x0 = random.nextInt(120)+10;
                 int y0 = random.nextInt(120)+10;
-                if(!Pathfinder.obstacle[x0][y0]) break;
-                x = x0; y = y0;
+                if(!Pathfinder.obstacle[x0][y0]) {
+                    x = x0;
+                    y = y0;
+                    break;
+                }
             }
             if(x > 0) {
                 Pathfinder.pathfind(
@@ -37,6 +40,8 @@ public class PosiBaseDriveThreadTest extends LinearOpMode2026 {
                         x,
                         y
                 );
+                telemetry.addData("Current pos",posGet.getPosi());
+                telemetry.addData("Target pos", x+","+y);
                 Pathfinder.saveI(1,40,"DriveThreadTest");
                 Position p = new Position(x,y,0);
                 dt.queuePath(Pathfinder.pos.toArray(new Position[0]));
