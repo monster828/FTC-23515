@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Utils.Threads.PosiBasedDriveThread;
 
 import java.util.Random;
 
-@Autonomous
+@TeleOp
 public class PosiBaseDriveThreadTest extends LinearOpMode2026 {
 
     @Override
@@ -37,9 +37,11 @@ public class PosiBaseDriveThreadTest extends LinearOpMode2026 {
                         x,
                         y
                 );
+                Pathfinder.saveI(1,40,"DriveThreadTest");
                 Position p = new Position(x,y,0);
                 dt.queuePath(Pathfinder.pos.toArray(new Position[0]));
-                while(posGet.getPosi().getDistTo(p) > 1 && opModeIsActive());
+                while(posGet.getPosi().getDistTo(p) > 1 && opModeIsActive() && !gamepad1.a);
+                while(gamepad1.a);
             }
 
         }
