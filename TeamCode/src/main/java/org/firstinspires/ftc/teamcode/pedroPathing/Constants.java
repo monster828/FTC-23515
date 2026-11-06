@@ -20,7 +20,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
-    public static MecanumConfig mecanumConfig = new MecanumConfig(c -> {
+    public static MecanumConfig drivetrainConfig = new MecanumConfig(c -> {
         c.frontLeftName.set("FL");
         c.backLeftName.set("BL");
         c.frontRightName.set("FR");
@@ -34,7 +34,7 @@ public class Constants {
     // xPodOffset/yPodOffset carried over from the old forwardPodY/strafePodX values.
     // Re-run the Pinpoint Tuner (AutoTune) to confirm these before relying on them -
     // axis/sign conventions are not guaranteed to match the old FollowerConstants 1:1.
-    public static PinpointConfig pinpointConfig = new PinpointConfig(c -> {
+    public static PinpointConfig localizerConfig = new PinpointConfig(c -> {
         c.name.set("POC");
         c.xPodOffset.set(5.9019067719226745);
         c.yPodOffset.set(-6.673296230045829);
@@ -73,19 +73,11 @@ public class Constants {
         c.naturalStrafeDeceleration.set(73.08765219721323);
     });
 
-    public static Drivetrain drivetrain(HardwareMap hardwareMap) {
-        return new Mecanum(hardwareMap, mecanumConfig);
-    }
-
-    public static Localizer localizer(HardwareMap hardwareMap) {
-        return new PinpointLocalizer(hardwareMap, pinpointConfig);
-    }
-
-    public static Algorithm algorithm() {
-        return new Foresight(foresightConfig);
-    }
-
-    public static Follower create(HardwareMap hardwareMap) {
-        return new Follower(localizer(hardwareMap), drivetrain(hardwareMap), algorithm());
+    public static Follower create(HardwareMap h) {
+        return new Follower(
+                new PinpointLocalizer(h, localizerConfig),
+                new Mecanum(h, drivetrainConfig),
+                new Foresight(foresightConfig)
+        );
     }
 }
