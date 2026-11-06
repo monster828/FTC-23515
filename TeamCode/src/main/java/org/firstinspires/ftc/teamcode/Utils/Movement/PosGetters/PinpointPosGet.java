@@ -11,6 +11,7 @@ public class PinpointPosGet extends PositionGetter {
     private long _timeOfLastUpdate;
     private GoBildaPinpointDriver _pinpoint;
     private float _pinpointUpdateWait = 3;
+    private RobotOdoSetup setup = RobotOdoSetup.PINPOINT2026;
 
     public PinpointPosGet(GoBildaPinpointDriver _pinpoint) {
         this._pinpoint = _pinpoint;
@@ -27,25 +28,43 @@ public class PinpointPosGet extends PositionGetter {
         _timeOfLastUpdate = System.currentTimeMillis();
     }
 
+    public PinpointPosGet(GoBildaPinpointDriver _pinpoint, RobotOdoSetup setup) {
+        this._pinpoint = _pinpoint;
+        _pinpoint.setEncoderResolution(Constants.pinpointConfig.podType.get());
+        _pinpoint.setEncoderDirections(Constants.pinpointConfig.xPodDirection.get(),
+                Constants.pinpointConfig.yPodDirection.get());
+
+        _pinpoint.setOffsets(Constants.pinpointConfig.yPodOffset.get(),
+                Constants.pinpointConfig.xPodOffset.get(),
+                Constants.pinpointConfig.offsetUnits.get());
+
+        _pinpoint.resetPosAndIMU();
+
+        _timeOfLastUpdate = System.currentTimeMillis();
+        this.setup = setup;
+    }
+
     @Override
     public float[] getPos() {
         UpdatePinpoint();
+        setup.given((float) _pinpoint.getPosX(DistanceUnit.INCH), (float) _pinpoint.getPosY(DistanceUnit.INCH), (float) _pinpoint.getHeading(AngleUnit.DEGREES));
         //2025 robot: -Y,X,-R
         //2026 test bot: Y,-X,-R
         return new float[] {
-                -(float) _pinpoint.getPosY(DistanceUnit.INCH)+xOffset,
-                (float) _pinpoint.getPosX(DistanceUnit.INCH)+yOffset,
-                -(float) _pinpoint.getHeading(AngleUnit.DEGREES)
+                setup.getX()+xOffset,
+                setup.getY()+yOffset,
+                setup.getR()
         };
     }
 
     @Override
     public Position getPosi() {
         UpdatePinpoint();
+        setup.given((float) _pinpoint.getPosX(DistanceUnit.INCH), (float) _pinpoint.getPosY(DistanceUnit.INCH), (float) _pinpoint.getHeading(AngleUnit.DEGREES));
         return new Position(
-                -(float) _pinpoint.getPosY(DistanceUnit.INCH)+xOffset,
-                (float) _pinpoint.getPosX(DistanceUnit.INCH)+yOffset,
-                -(float) _pinpoint.getHeading(AngleUnit.DEGREES)
+                setup.getX()+xOffset,
+                setup.getY()+yOffset,
+                setup.getR()
         );
     }
 
