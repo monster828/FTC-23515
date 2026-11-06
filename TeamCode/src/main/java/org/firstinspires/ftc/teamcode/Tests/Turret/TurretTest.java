@@ -39,6 +39,7 @@ public class TurretTest extends LinearOpMode2026 {
                     }
 
                     telemetry.addLine("tx: " + tx);
+                    telemetry.addLine("Amount of Position changes: " +MiscUtils.getPositionFromDegrees(tx, 537.7));
                     telemetry.update();
                 }
 //

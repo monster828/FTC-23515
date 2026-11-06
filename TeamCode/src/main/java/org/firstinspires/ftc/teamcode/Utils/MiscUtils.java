@@ -505,6 +505,6 @@ public class MiscUtils {
     }
 
     public static double getPositionFromDegrees(double degrees, double countsPerRevolution){
-        return countsPerRevolution / 360 / degrees;
+        return (countsPerRevolution / 360) * degrees;
     }
 }
