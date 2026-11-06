@@ -64,6 +64,8 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
 
                 }
             }
+
+            telemetry.update();
         }
 
 
