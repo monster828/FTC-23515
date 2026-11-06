@@ -28,15 +28,15 @@ public class TurretTest extends LinearOpMode2026 {
         while (opModeIsActive()){
             if (gamepad1.a){
 //                aprilTagsTurretTarget.Reset();
-//                turret.setPower(0.1);
+                turret.setPower(0.05);
 //
-//                while (gamepad1.a){
-//                    double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
-//                    aprilTagsTurretTarget.ChangeAngleSetPosition(tx);
-//
-//                    telemetry.addLine("tx: " + tx);
-//                    telemetry.update();
-//                }
+                while (gamepad1.a){
+                    double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
+                    aprilTagsTurretTarget.ChangeAngleSetPosition(tx);
+
+                    telemetry.addLine("tx: " + tx);
+                    telemetry.update();
+                }
 //
 //                sleep(1000);
 
