@@ -28,7 +28,7 @@ public class TurretTest extends LinearOpMode2026 {
         while (opModeIsActive()){
             if (gamepad1.a){
 //                aprilTagsTurretTarget.Reset();
-                turret.setPower(0.05);
+                turret.setPower(0.25);
 
 //
                 while (gamepad1.a){
