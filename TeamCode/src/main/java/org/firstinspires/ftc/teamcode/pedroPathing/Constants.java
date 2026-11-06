@@ -27,8 +27,8 @@ public class Constants {
         c.backRightName.set("BR");
         c.frontLeftDirection.set(DcMotorSimple.Direction.REVERSE);
         c.backLeftDirection.set(DcMotorSimple.Direction.REVERSE);
-        c.frontRightDirection.set(DcMotorSimple.Direction.FORWARD);
-        c.backRightDirection.set(DcMotorSimple.Direction.FORWARD);
+        c.frontRightDirection.set(DcMotorSimple.Direction.REVERSE);
+        c.backRightDirection.set(DcMotorSimple.Direction.REVERSE);
     });
 
     // xPodOffset/yPodOffset carried over from the old forwardPodY/strafePodX values.
@@ -36,13 +36,13 @@ public class Constants {
     // axis/sign conventions are not guaranteed to match the old FollowerConstants 1:1.
     public static PinpointConfig localizerConfig = new PinpointConfig(c -> {
         c.name.set("POC");
-        c.xPodOffset.set(5.9019067719226745);
-        c.yPodOffset.set(-6.673296230045829);
-        c.offsetUnits.set(DistanceUnit.INCH);
-        c.globalDistanceUnit.set(DistanceUnit.INCH);
         c.podType.set(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        c.xPodOffset.set(6.806982445904589);
+        c.yPodOffset.set(-2.203244186761811);
         c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.REVERSED);
         c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        c.globalDistanceUnit.set(DistanceUnit.INCH);
+        c.offsetUnits.set(DistanceUnit.INCH);
     });
 
     // Only the values that carry over safely from the old FollowerConstants are set here

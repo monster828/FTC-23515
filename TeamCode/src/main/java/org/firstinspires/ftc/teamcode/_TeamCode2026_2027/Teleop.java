@@ -42,10 +42,10 @@ public class Teleop extends OpMode {
        );
        */
 
-    int throughput = 0;
-    int intakepow = 0;
-    int liftpow = 0;
-    int flywheelpow = 0;
+    boolean throughputOn = false;
+    boolean wasAPressed = false;
+    double intakepow = 0;
+    double liftpow = 0;
 
     @Override
     public void loop(){
@@ -53,25 +53,18 @@ public class Teleop extends OpMode {
         double x  =  gamepad1.left_stick_x * 0.9;       // strafe
         double rx =  gamepad1.right_stick_x * 0.5;      // rotate
 
-
-
-        if (gamepad1.a && throughput == 0) {
-            intakepow = 50;
-            liftpow = 80;
-            flywheelpow = 80;
-            throughput = 1;
-            long start = System.currentTimeMillis();
-            while (System.currentTimeMillis()-start < 250);
-        };
-
-        if (gamepad1.a && throughput == 1) {
+        // toggle only on the moment A goes down, not while it's held
+        if (gamepad1.a && !wasAPressed) {
+            throughputOn = !throughputOn;
+            if (throughputOn) {
+                intakepow = 0.8;
+                liftpow = 1.0;
+            } else {
                 intakepow = 0;
                 liftpow = 0;
-                flywheelpow = 0;
-                throughput = 0;
-            long start = System.currentTimeMillis();
-            while (System.currentTimeMillis()-start < 250);
-        };
+            }
+        }
+        wasAPressed = gamepad1.a;
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         frontLeft.setPower((y + x + rx) / denominator);
@@ -80,6 +73,6 @@ public class Teleop extends OpMode {
         backRight.setPower((y + x - rx) / denominator);
         intake.setPower(intakepow);
         lift.setPower(liftpow);
-        flywheel.setPower(flywheelpow);
+        flywheel.setPower(0.8);
     }
 }
