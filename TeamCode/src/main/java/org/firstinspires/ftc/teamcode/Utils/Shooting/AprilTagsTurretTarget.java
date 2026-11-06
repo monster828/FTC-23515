@@ -57,6 +57,20 @@ public class AprilTagsTurretTarget {
         }
     }
 
+    public double UpdateTxValue(Limelight3A limelight3A){
+        if (limelight3A.getStatus().getPipelineIndex() != limelightPipeline){
+            limelight3A.pipelineSwitch(limelightPipeline);
+        }
+        LLResult limelightResult = limelight3A.getLatestResult();
+
+        if (limelightResult != null && limelightResult.isValid()){
+            double tx = limelightResult.getTx(); // Horizontal  0 is middle
+            return tx;
+        }else {
+            return 0;
+        }
+    }
+
     /**
      * This is for PID tuning
      * Run this about every loop
