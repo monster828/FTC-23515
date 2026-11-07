@@ -164,7 +164,7 @@ public class Pathfinder {
             float d = 0;
             float a = 0;
             ArrayList<Position> po2 = new ArrayList<>();
-            while(d < distance/2.0f) {
+            while(d+(MovementUtils.velocity(0,a)*freq)+1 < distance/2.0f) {
                 d = MovementUtils.distanceCovered(0,a);
                 Position p = new Position(
                         pathPoints[i][0]+(sin*d),

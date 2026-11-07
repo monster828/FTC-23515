@@ -23,6 +23,7 @@ import java.util.Random;
 
 public abstract class LinearOpMode2026 extends LinearOpMode {
     public PositionGetter posGet;
+    /**BL BR FL FR*/
     public DcMotor[] mot;
     public String configPath = MiscUtils.dataFolder+"/config2026to2027.robocfg";
     public File loggerFile = new File(MiscUtils.dataFolder+"/log.robolog");
