@@ -30,6 +30,9 @@ public class AprilTagsTurretTarget {
 
     public double maxPosition = MiscUtils.getPositionFromDegrees(185, 537.7); //185
     public double minPosition = MiscUtils.getPositionFromDegrees(-185,537.7);
+    public boolean waitTillNotSee = false;
+
+    double newPosition = 0;
 
     public AprilTagsTurretTarget(DcMotorEx turretMotor){
         dcMotorEx = turretMotor;
@@ -93,7 +96,7 @@ public class AprilTagsTurretTarget {
             double newTx = Math.atan2(ny, nx);
 
             // Run update motor based on new tx value
-            UpdateMotor(newTx);
+            ChangeAngleSetPosition(newTx);
 
             return newTx;
         }else {
@@ -115,6 +118,7 @@ public class AprilTagsTurretTarget {
             double tx = limelightResult.getTx(); // Horizontal  0 is middle
             return tx;
         }else {
+            waitTillNotSee = false;
             return 0;
         }
     }
@@ -136,16 +140,25 @@ public class AprilTagsTurretTarget {
     }
 
 
-    public void SetTargetPosition(double newPosition){
-        double positionFromAllAround = MiscUtils.getPositionFromDegrees(360, 537.7);
+    public void SetTargetPosition(double position){
+        if (waitTillNotSee){
+            if (Math.abs(dcMotorEx.getCurrentPosition() - newPosition) < 400){
+                waitTillNotSee = false;
+            }
+        }else {
+            double positionFromAllAround = MiscUtils.getPositionFromDegrees(360, 537.7);
+            newPosition = position;
 
-        if (newPosition > maxPosition){
-            newPosition -= positionFromAllAround * (Math.floor((newPosition - maxPosition) / positionFromAllAround) + 1);
-        } else if (newPosition < minPosition) {
-            newPosition += positionFromAllAround * (Math.floor((newPosition + minPosition) / positionFromAllAround) + 1);
+            if (newPosition > maxPosition){
+                newPosition -= positionFromAllAround * (Math.floor((newPosition - maxPosition) / positionFromAllAround) + 1);
+                waitTillNotSee = true;
+            } else if (newPosition < minPosition) {
+                newPosition += positionFromAllAround * (Math.floor((newPosition - minPosition) / positionFromAllAround) + 1);
+                waitTillNotSee = true;
+            }
+
+            dcMotorEx.setTargetPosition((int) newPosition);
         }
-
-        dcMotorEx.setTargetPosition((int) newPosition);
     }
 
     private void SetPositionBasedOnPosition(double target){
