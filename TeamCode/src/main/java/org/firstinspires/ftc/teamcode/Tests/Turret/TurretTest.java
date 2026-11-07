@@ -26,9 +26,10 @@ public class TurretTest extends LinearOpMode2026 {
         waitForStart();
 
         while (opModeIsActive()){
+            turret.setPower(0.1);
             if (gamepad1.a){
 //                aprilTagsTurretTarget.Reset();
-                turret.setPower(0.1);
+
 
                 aprilTagsTurretTarget.SetTargetPosition(targetPosition);
 
@@ -90,11 +91,15 @@ public class TurretTest extends LinearOpMode2026 {
             }
 
             if (gamepad1.dpad_up){
-                targetPosition += 0.05;
+                targetPosition += 0.5;
+                aprilTagsTurretTarget.SetPositionBasedOnPosition(targetPosition);
+                sleep(100);
             }
 
             if (gamepad1.dpad_down){
-                targetPosition -= 0.05;
+                targetPosition -= 0.5;
+                aprilTagsTurretTarget.SetPositionBasedOnPosition(targetPosition);
+                sleep(100);
             }
 
             if (gamepad1.x){
@@ -111,6 +116,8 @@ public class TurretTest extends LinearOpMode2026 {
 
             telemetry.addData("Text TX", num);
             telemetry.addData("Target Position", targetPosition);
+            telemetry.addData("Max", aprilTagsTurretTarget.maxPosition);
+            telemetry.addData("Min", aprilTagsTurretTarget.minPosition);
             telemetry.addLine("Controls: \nA: Run test\nDPad up and down: Changes test rotation amount\nB: Run april tag");
             telemetry.update();
         }

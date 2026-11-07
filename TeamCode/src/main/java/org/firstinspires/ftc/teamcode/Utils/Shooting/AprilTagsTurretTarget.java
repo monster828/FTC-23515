@@ -25,8 +25,8 @@ public class AprilTagsTurretTarget {
 
     int limelightPipeline;
 
-    public double maxPosition = MiscUtils.getPositionFromDegrees(185, 537.7);
-    public double minPosition = MiscUtils.getPositionFromDegrees(-185,537.7);
+    public double maxPosition = MiscUtils.getPositionFromDegrees(90, 537.7); //185
+    public double minPosition = MiscUtils.getPositionFromDegrees(-90,537.7);
 
     public AprilTagsTurretTarget(DcMotorEx turretMotor){
         dcMotorEx = turretMotor;
@@ -97,9 +97,9 @@ public class AprilTagsTurretTarget {
 
     public void SetTargetPosition(double newPosition){
         if (newPosition > maxPosition){
-            newPosition -= MiscUtils.getPositionFromDegrees(360, 537.7);
+            newPosition -= MiscUtils.getPositionFromDegrees(360, 537.7) * Math.floor(newPosition / maxPosition);
         } else if (newPosition < minPosition) {
-            newPosition += MiscUtils.getPositionFromDegrees(360, 537.7);
+            newPosition += MiscUtils.getPositionFromDegrees(360, 537.7) * Math.floor(newPosition / maxPosition);
         }
 
         dcMotorEx.setTargetPosition((int) newPosition);
