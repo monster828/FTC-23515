@@ -98,10 +98,10 @@ public class Turret_Testing extends OpMode {
 
         } else if (selectedTune == 1) { // Hood
             if (dpadUp && !lastDpadUp) {
-                hoodAngle = Math.min(hoodAngle + servoIncrements[selectedIncrement], 0.8);
+                hoodAngle = Math.min(hoodAngle + servoIncrements[selectedIncrement], 0.37);
             }
             if (dpadDown && !lastDpadDown) {
-                hoodAngle = Math.max(hoodAngle - servoIncrements[selectedIncrement], 0);
+                hoodAngle = Math.max(hoodAngle - servoIncrements[selectedIncrement], 0.05);
             }
             lastDpadUp = dpadUp;
             lastDpadDown = dpadDown;
@@ -110,10 +110,10 @@ public class Turret_Testing extends OpMode {
 
         } else { //Camera
             if (dpadUp && !lastDpadUp) {
-                cameraAngle = Math.min(cameraAngle + servoIncrements[selectedIncrement], 0.8);
+                cameraAngle = Math.min(cameraAngle + servoIncrements[selectedIncrement], 0.69);
             }
             if (dpadDown && !lastDpadDown) {
-                cameraAngle = Math.max(cameraAngle - servoIncrements[selectedIncrement], 0.3);
+                cameraAngle = Math.max(cameraAngle - servoIncrements[selectedIncrement], 0.43);
             }
             lastDpadUp = dpadUp;
             lastDpadDown = dpadDown;
