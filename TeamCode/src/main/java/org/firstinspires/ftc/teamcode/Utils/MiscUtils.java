@@ -501,10 +501,10 @@ public class MiscUtils {
     }
 
     public static double getDegreesFromMotor(double currentPosition, double countsPerRevolution){
-        return currentPosition / countsPerRevolution * 360;
+        return (currentPosition / countsPerRevolution) * 360 * 43 / 14;
     }
 
     public static double getPositionFromDegrees(double degrees, double countsPerRevolution){
-        return (countsPerRevolution / 360) * degrees;
+        return (countsPerRevolution / 360) * degrees * 43 / 14;
     }
 }
