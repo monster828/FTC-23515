@@ -34,8 +34,6 @@ public class TurretTest extends LinearOpMode2026 {
 
         TeleopMovementUtil teleopMovementUtil = new TeleopMovementUtil(gamepad1, mot);
 
-        boolean isDrivingTrackingVelocity = false;
-
         waitForStart();
         aprilTagsTurretTarget.Reset(); // This isn't really needed any more unless if we do PID tuning for this
 
@@ -47,7 +45,6 @@ public class TurretTest extends LinearOpMode2026 {
             }
 
             if (isDrivingTracking){
-                isDrivingTrackingVelocity = false;
                 double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
 
                 aprilTagsTurretTarget.ChangeAngleSetPosition(tx, posGet.getVr());
@@ -91,7 +88,7 @@ public class TurretTest extends LinearOpMode2026 {
                 targetPosition = turret.getTargetPosition();
             }
 
-            telemetry.addLine("CURRENTLY DOING: " + (isDrivingTracking ? "Driving Tracking" : isDrivingTrackingVelocity ? "Driving Tracking Velocity" : "NONE"));
+            telemetry.addLine("CURRENTLY DOING: " + (isDrivingTracking ? "Driving Tracking" : "NONE"));
             telemetry.addData("Current Position", turret.getCurrentPosition());
             telemetry.addData("Text TX", num);
             telemetry.addData("Target Position", targetPosition);
