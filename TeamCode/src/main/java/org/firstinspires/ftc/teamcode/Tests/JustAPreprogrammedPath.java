@@ -19,8 +19,8 @@ public class JustAPreprogrammedPath extends LinearOpMode2026 {
     @Override
     public void runOpMode() throws InterruptedException {
         config();
-        mot[1].setDirection(DcMotorSimple.Direction.FORWARD); mot[3].setDirection(DcMotorSimple.Direction.FORWARD);
-        posGet.setSetup(RobotOdoSetup.PINPOINTSTARTER2026);
+        //mot[1].setDirection(DcMotorSimple.Direction.FORWARD); mot[3].setDirection(DcMotorSimple.Direction.FORWARD);
+        //posGet.setSetup(RobotOdoSetup.PINPOINTSTARTER2026);
         PosiBasedDriveThread dt = new PosiBasedDriveThread(this);
         File rp = new File(MiscUtils.dataFolder+"/preprogpath.robopath");
         byte[] dat = new byte[Math.toIntExact(rp.length())];

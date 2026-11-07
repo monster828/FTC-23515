@@ -26,6 +26,7 @@ public class PinpointPosGet extends PositionGetter {
         _pinpoint.resetPosAndIMU();
 
         _timeOfLastUpdate = System.currentTimeMillis();
+        setup = RobotOdoSetup.PINPOINT2026;
     }
 
     public PinpointPosGet(GoBildaPinpointDriver _pinpoint, RobotOdoSetup setup) {
