@@ -57,7 +57,7 @@ public class AprilTagsTurretTarget {
         LLResult limelightResult = limelight3A.getLatestResult();
 
         if (limelightResult != null && limelightResult.isValid()){
-            double tx = limelightResult.getTx(); // Horizontal  0 is middle
+            double tx = UpdateTxValue(limelight3A);
             double ty = limelightResult.getTy();
 
             Pose3D targetPos = limelightResult.getBotpose();

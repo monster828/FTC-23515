@@ -65,14 +65,26 @@ public class TurretTest extends LinearOpMode2026 {
 //                turret.setPower(0);
             }
 
-            if (gamepad1.b){
+            if (gamepad1.circle){
                 aprilTagsTurretTarget.Reset();
 
-                while (gamepad1.b){
-                    telemetry.addData("", aprilTagsTurretTarget.UpdateAprilTagsResults(limelight, posGet));
+                while (gamepad1.circle){
+                    double newTX = aprilTagsTurretTarget.UpdateAprilTagsResults(limelight, posGet);
+
+                    if (turret.getTargetPosition() > aprilTagsTurretTarget.maxPosition || turret.getTargetPosition() < aprilTagsTurretTarget.minPosition){
+                        turret.setPower(0);
+                        telemetry.addLine("WENT OVER!");
+                    }
+
+                    telemetry.addData("newTX", newTX);
+                    telemetry.addData("Current Position", turret.getCurrentPosition());
+                    telemetry.update();
                 }
 
                 turret.setPower(0);
+                if (turret.getTargetPosition() > aprilTagsTurretTarget.maxPosition || turret.getTargetPosition() < aprilTagsTurretTarget.minPosition){
+                    turret.setTargetPosition(0);
+                }
             }
 
             if (gamepad1.dpad_up){
