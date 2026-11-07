@@ -98,7 +98,7 @@ public class Turret_Testing extends OpMode {
 
         } else if (selectedTune == 1) { // Hood
             if (dpadUp && !lastDpadUp) {
-                hoodAngle = Math.min(hoodAngle + servoIncrements[selectedIncrement], 0.37);
+                hoodAngle = Math.min(hoodAngle + servoIncrements[selectedIncrement], 0.6);
             }
             if (dpadDown && !lastDpadDown) {
                 hoodAngle = Math.max(hoodAngle - servoIncrements[selectedIncrement], 0.05);
