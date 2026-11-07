@@ -135,7 +135,7 @@ public class AprilTagsTurretTarget {
     }
 
     public void ChangeAngleSetPosition(double tx, double rotationV){
-        SetTargetPosition (dcMotorEx.getCurrentPosition() - MiscUtils.getPositionFromDegrees(tx * 1.04 + rotationV * 1, 537.7));
+        SetTargetPosition (dcMotorEx.getCurrentPosition() - MiscUtils.getPositionFromDegrees(tx * 1.04 - rotationV * 0.05, 537.7));
     }
 
 

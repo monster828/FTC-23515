@@ -40,6 +40,8 @@ public class TurretTest extends LinearOpMode2026 {
         while (opModeIsActive()){
             boolean trig = triggerDrivingTracking.IsTriggered();
 
+            teleopMovementUtil.UpdateDrive();
+
             if (trig){
                 isDrivingTracking = !isDrivingTracking;
             }
@@ -51,12 +53,10 @@ public class TurretTest extends LinearOpMode2026 {
 
                 double positionChange = MiscUtils.getPositionFromDegrees(tx, 537.7);
 
-                teleopMovementUtil.UpdateDrive();
-
                 telemetry.addLine("tx: " + tx);
                 telemetry.addLine("Amount of Position changes: " + positionChange);
             }else {
-                teleopMovementUtil.DeadDrive();
+                //teleopMovementUtil.DeadDrive();
             }
 
             if (turret.getTargetPosition() > aprilTagsTurretTarget.maxPosition || turret.getTargetPosition() < aprilTagsTurretTarget.minPosition){
@@ -89,6 +89,7 @@ public class TurretTest extends LinearOpMode2026 {
             }
 
             telemetry.addLine("CURRENTLY DOING: " + (isDrivingTracking ? "Driving Tracking" : "NONE"));
+            telemetry.addData("Rotation V", posGet.getVr());
             telemetry.addData("Current Position", turret.getCurrentPosition());
             telemetry.addData("Text TX", num);
             telemetry.addData("Target Position", targetPosition);
