@@ -36,7 +36,10 @@ public class PosiBaseDriveThreadTest extends LinearOpMode2026 {
                 new Position(13,13,0)
         };
         dt.queuePath(startLaunch);
+        sleep(1000);
         while(!dt.idle());
+
+        int runs = 0;
 
         while(opModeIsActive()) {
             int x = -1; int y = -1;
@@ -59,11 +62,13 @@ public class PosiBaseDriveThreadTest extends LinearOpMode2026 {
                 );
                 telemetry.addData("Current pos",posGet.getPosi());
                 telemetry.addData("Target pos", x+","+y);
-                Pathfinder.saveI(1,40,"DriveThreadTest");
+                Pathfinder.saveI(1,40,"DriveThreadTest"+runs);
                 Position p = new Position(x,y,0);
                 dt.queuePath(Pathfinder.pos.toArray(new Position[0]));
-                while(posGet.getPosi().getDistTo(p) > 2 && opModeIsActive() && !gamepad1.a);
+                sleep(500);
+                while(!dt.idle() && opModeIsActive() && !gamepad1.a);
                 while(gamepad1.a);
+                runs++;
             }
 
         }
