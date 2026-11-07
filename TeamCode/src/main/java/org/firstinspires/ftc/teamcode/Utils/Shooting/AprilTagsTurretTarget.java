@@ -105,7 +105,7 @@ public class AprilTagsTurretTarget {
         dcMotorEx.setTargetPosition((int) newPosition);
     }
 
-    public void SetPositionBasedOnPosition(double target){
+    private void SetPositionBasedOnPosition(double target){
         dcMotorEx.setTargetPosition((int) target);
     }
 

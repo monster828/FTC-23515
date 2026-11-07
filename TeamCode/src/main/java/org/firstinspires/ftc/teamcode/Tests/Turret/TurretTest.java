@@ -91,14 +91,14 @@ public class TurretTest extends LinearOpMode2026 {
             }
 
             if (gamepad1.dpad_up){
-                targetPosition += 0.5;
-                aprilTagsTurretTarget.SetPositionBasedOnPosition(targetPosition);
+                targetPosition += 1;
+                aprilTagsTurretTarget.SetTargetPosition(targetPosition);
                 sleep(100);
             }
 
             if (gamepad1.dpad_down){
-                targetPosition -= 0.5;
-                aprilTagsTurretTarget.SetPositionBasedOnPosition(targetPosition);
+                targetPosition -= 1;
+                aprilTagsTurretTarget.SetTargetPosition(targetPosition);
                 sleep(100);
             }
 
@@ -112,7 +112,7 @@ public class TurretTest extends LinearOpMode2026 {
 
             }
 
-            turret.setPower(0);
+//            turret.setPower(0);
 
             telemetry.addData("Text TX", num);
             telemetry.addData("Target Position", targetPosition);
