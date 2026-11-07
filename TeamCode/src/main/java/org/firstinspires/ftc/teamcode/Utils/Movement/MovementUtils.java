@@ -45,4 +45,8 @@ public class MovementUtils {
             return (distance/v)+(v/(2*a));
         }
     }
+
+    public static float velocity(float angle, float time) {
+        return Math.min(v(angle),a(angle)*time);
+    }
 }

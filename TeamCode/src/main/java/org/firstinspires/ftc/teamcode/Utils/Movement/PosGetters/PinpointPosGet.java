@@ -11,7 +11,7 @@ public class PinpointPosGet extends PositionGetter {
     private long _timeOfLastUpdate;
     private GoBildaPinpointDriver _pinpoint;
     private float _pinpointUpdateWait = 3;
-    private RobotOdoSetup setup = RobotOdoSetup.PINPOINT2026;
+    //private RobotOdoSetup setup = RobotOdoSetup.PINPOINT2026;
 
     public PinpointPosGet(GoBildaPinpointDriver _pinpoint) {
         this._pinpoint = _pinpoint;

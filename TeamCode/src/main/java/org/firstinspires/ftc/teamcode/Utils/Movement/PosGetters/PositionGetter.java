@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
 
 public abstract class PositionGetter {
 
+    public RobotOdoSetup setup;
     public float xOffset = 0;
     public float yOffset = 0;
     /**
@@ -30,4 +31,8 @@ public abstract class PositionGetter {
     public float r() {
         return getPosi().r();
     }
+
+    public void setSetup(RobotOdoSetup setup) {this.setup = setup;}
+    public RobotOdoSetup getSetup() {return setup;}
+
 }

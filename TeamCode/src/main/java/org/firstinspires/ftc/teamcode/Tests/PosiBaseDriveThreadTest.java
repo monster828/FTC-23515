@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
+import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.RobotOdoSetup;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
 import org.firstinspires.ftc.teamcode.Utils.Threads.PosiBasedDriveThread;
 
@@ -15,6 +17,9 @@ public class PosiBaseDriveThreadTest extends LinearOpMode2026 {
     @Override
     public void runOpMode() throws InterruptedException {
         config();
+        //For starter bot
+        mot[0].setDirection(DcMotorSimple.Direction.FORWARD); mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
+        posGet.setSetup(RobotOdoSetup.PINPOINTSTARTER2026);
         Random random = new Random();
         PosiBasedDriveThread dt = new PosiBasedDriveThread(this);
         Pathfinder.compileDefaultObstaclesLC(11);
