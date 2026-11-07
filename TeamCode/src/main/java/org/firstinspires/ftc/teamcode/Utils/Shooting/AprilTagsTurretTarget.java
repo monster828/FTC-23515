@@ -5,8 +5,11 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
 
 public class AprilTagsTurretTarget {
     // Limelight Pipelines
@@ -25,8 +28,8 @@ public class AprilTagsTurretTarget {
 
     int limelightPipeline;
 
-    public double maxPosition = MiscUtils.getPositionFromDegrees(90, 537.7); //185
-    public double minPosition = MiscUtils.getPositionFromDegrees(-90,537.7);
+    public double maxPosition = MiscUtils.getPositionFromDegrees(185, 537.7); //185
+    public double minPosition = MiscUtils.getPositionFromDegrees(-185,537.7);
 
     public AprilTagsTurretTarget(DcMotorEx turretMotor){
         dcMotorEx = turretMotor;
@@ -44,7 +47,7 @@ public class AprilTagsTurretTarget {
      * @param limelight3A
      * Pass in the limelight
      * **/
-    public double UpdateAprilTagsResults(Limelight3A limelight3A){
+    public double UpdateAprilTagsResults(Limelight3A limelight3A, PositionGetter positionGetter){
         if (limelight3A.getStatus().getPipelineIndex() != limelightPipeline){
             limelight3A.pipelineSwitch(limelightPipeline);
         }
@@ -52,9 +55,47 @@ public class AprilTagsTurretTarget {
 
         if (limelightResult != null && limelightResult.isValid()){
             double tx = limelightResult.getTx(); // Horizontal  0 is middle
-            UpdateMotor(tx);
+            double ty = limelightResult.getTy();
 
-            return tx;
+            Pose3D targetPos = limelightResult.getBotpose();
+            Position position = targetPos.getPosition();
+            double limelightLatency = limelightResult.getCaptureLatency() * 1000.0;
+
+            // Get the x and y of the robot (based from the hive)
+            double x = position.x;
+            double y = position.z;
+
+            // Get velocity x and y
+            float[] velocity = positionGetter.getVxVy();
+            double vx = velocity[0];
+            double vy = velocity[1];
+
+            // Subtract the x and y by (velocity x and y multiplied by the speed we are moving the turret at)
+            double speedOfTurret = 120;  // Degrees per second
+            double currentTurretAngle = MiscUtils.getDegreesFromMotor(dcMotorEx.getCurrentPosition(), 537.7);
+            double desiredTurretAngle = tx + currentTurretAngle;
+            double angleError = Math.abs(desiredTurretAngle - currentTurretAngle);
+
+            double physicalMoveTime = 0;
+            if (speedOfTurret > 0){
+                physicalMoveTime = angleError / speedOfTurret;
+            }
+
+            double totalTimeDelay = limelightLatency + physicalMoveTime;
+
+            double nx = x - (vx * totalTimeDelay);
+            double ny = y - (vy * totalTimeDelay);
+
+            // Get distance (Pythagorean theorem)
+            double distance = Math.sqrt(nx * nx + ny * ny);
+
+            // Get the new angle
+            double newTx = Math.atan2(ny, nx);
+
+            // Run update motor based on new tx value
+            UpdateMotor(newTx);
+
+            return newTx;
         }else {
             dcMotorEx.setPower(0);
             dtTimer.reset();
@@ -96,10 +137,12 @@ public class AprilTagsTurretTarget {
 
 
     public void SetTargetPosition(double newPosition){
+        double positionFromAllAround = MiscUtils.getPositionFromDegrees(360, 537.7);
+
         if (newPosition > maxPosition){
-            newPosition -= MiscUtils.getPositionFromDegrees(360, 537.7) * Math.floor(newPosition / maxPosition);
+            newPosition -= positionFromAllAround * (Math.floor((newPosition - maxPosition) / positionFromAllAround) + 1);
         } else if (newPosition < minPosition) {
-            newPosition += MiscUtils.getPositionFromDegrees(360, 537.7) * Math.floor(newPosition / maxPosition);
+            newPosition += positionFromAllAround * (Math.floor((newPosition + minPosition) / positionFromAllAround) + 1);
         }
 
         dcMotorEx.setTargetPosition((int) newPosition);

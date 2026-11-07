@@ -26,7 +26,7 @@ public class TurretTest extends LinearOpMode2026 {
         waitForStart();
 
         while (opModeIsActive()){
-            turret.setPower(0.1);
+            turret.setPower(0.3);
             if (gamepad1.a){
 //                aprilTagsTurretTarget.Reset();
 
@@ -91,13 +91,13 @@ public class TurretTest extends LinearOpMode2026 {
             }
 
             if (gamepad1.dpad_up){
-                targetPosition += 1;
+                targetPosition += 10;
                 aprilTagsTurretTarget.SetTargetPosition(targetPosition);
                 sleep(100);
             }
 
             if (gamepad1.dpad_down){
-                targetPosition -= 1;
+                targetPosition -= 10;
                 aprilTagsTurretTarget.SetTargetPosition(targetPosition);
                 sleep(100);
             }
