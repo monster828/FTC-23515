@@ -137,7 +137,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
 
         if(!MiscUtils.checkBattery(hardwareMap)) {
             telemetry.addData("OH NO","THE BATTERY IS LOW ON JUICE!!!!!");
-            telemetry.speak("The battery is low, please fix it!");
+            telemetry.speak("The battery is low, please replace it!");
         }
         telemetry.update();
     }
