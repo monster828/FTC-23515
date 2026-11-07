@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.BioBuzz;
 
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,8 +9,12 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
+
+import java.util.Arrays;
+
 @TeleOp(name = "Turret_Testing")
-public class Turret_Testing extends OpMode {
+public class Turret_Testing extends LinearOpMode2026 {
 
     DcMotorEx flywheel, lift, intake;
     Servo hood;
@@ -36,7 +42,7 @@ public class Turret_Testing extends OpMode {
     int selectedIncrement = 0;
 
     @Override
-    public void init() {
+    public void runOpMode(){
         flywheel = hardwareMap.get(DcMotorEx.class, "FW");
         flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -45,95 +51,99 @@ public class Turret_Testing extends OpMode {
         lift = hardwareMap.get(DcMotorEx.class, "lift");
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
         intake = hardwareMap.get(DcMotorEx.class, "intake");
+
+        config();
+
+        waitForStart();
+
+        while(!isStopRequested()){
+            boolean dpadUp = gamepad1.dpad_up;
+            boolean dpadDown = gamepad1.dpad_down;
+            boolean dpadLeft = gamepad1.dpad_left;
+            boolean dpadRight = gamepad1.dpad_right;
+
+            //Changes what is tuned
+            if (gamepad1.cross && !wasCrossPressed) {
+                selectedTune += 1;
+                if (selectedTune > 2)
+                    selectedTune = 0;
+            }
+            wasCrossPressed = gamepad1.cross;
+
+            //Intake toggles on right bumper press
+            if (gamepad1.right_bumper && !wasRightBumperPressed) {
+                intakeOn = !intakeOn;
+            }
+            wasRightBumperPressed = gamepad1.right_bumper;
+
+            //Changes tuning increment
+            if (dpadRight && !lastDpadRight) {
+                selectedIncrement += 1;
+                if (selectedIncrement > 2)
+                    selectedIncrement = 0;
+            }
+            if (dpadLeft && !lastDpadLeft) {
+                selectedIncrement -= 1;
+                if (selectedIncrement < 0)
+                    selectedIncrement = 2;
+            }
+            lastDpadLeft = dpadLeft;
+            lastDpadRight = dpadRight;
+
+            //Tuning Math
+            if (selectedTune == 0) { //Flywheel
+                if (dpadUp && !lastDpadUp) {
+                    velocity = Math.min(velocity + velocityIncrements[selectedIncrement], MAX_RPM);
+                }
+                if (dpadDown && !lastDpadDown) {
+                    velocity = Math.max(velocity - velocityIncrements[selectedIncrement], 0);
+                }
+                lastDpadUp = dpadUp;
+                lastDpadDown = dpadDown;
+
+                telemetry.addLine("Flywheel Tuning");
+                telemetry.addData("Increment Value ", velocityIncrements[selectedIncrement]);
+
+            } else if (selectedTune == 1) { // Hood
+                if (dpadUp && !lastDpadUp) {
+                    hoodAngle = Math.min(hoodAngle + servoIncrements[selectedIncrement], 0.6);
+                }
+                if (dpadDown && !lastDpadDown) {
+                    hoodAngle = Math.max(hoodAngle - servoIncrements[selectedIncrement], 0.05);
+                }
+                lastDpadUp = dpadUp;
+                lastDpadDown = dpadDown;
+                telemetry.addLine("Hood Tuning");
+                telemetry.addData("Increment Value ", servoIncrements[selectedIncrement]);
+
+            } else { //Camera
+                if (dpadUp && !lastDpadUp) {
+                    cameraAngle = Math.min(cameraAngle + servoIncrements[selectedIncrement], 0.69);
+                }
+                if (dpadDown && !lastDpadDown) {
+                    cameraAngle = Math.max(cameraAngle - servoIncrements[selectedIncrement], 0.43);
+                }
+                lastDpadUp = dpadUp;
+                lastDpadDown = dpadDown;
+
+                telemetry.addLine("Camera Tuning");
+                telemetry.addData("Increment Value ", servoIncrements[selectedIncrement]);
+            }
+
+
+            // velocity is in RPM; setVelocity takes ticks per second
+            flywheel.setVelocity(velocity * TICKS_PER_REV / 60.0);
+            hood.setPosition(hoodAngle);
+            lla.setPosition(cameraAngle);
+            //Intake on toggle; loop is earlier
+            intake.setPower(intakeOn ? INTAKE_POWER : 0);
+            //Lift only runs while left bumper is held
+            lift.setPower(gamepad1.left_bumper ? LIFT_POWER : 0);
+
+            showTelemetry();
+        }
     }
 
-    @Override
-    public void loop() {
-        boolean dpadUp = gamepad1.dpad_up;
-        boolean dpadDown = gamepad1.dpad_down;
-        boolean dpadLeft = gamepad1.dpad_left;
-        boolean dpadRight = gamepad1.dpad_right;
-
-        //Changes what is tuned
-        if (gamepad1.cross && !wasCrossPressed) {
-            selectedTune += 1;
-            if (selectedTune > 2)
-                selectedTune = 0;
-        }
-        wasCrossPressed = gamepad1.cross;
-
-        //Intake toggles on right bumper press
-        if (gamepad1.right_bumper && !wasRightBumperPressed) {
-            intakeOn = !intakeOn;
-        }
-        wasRightBumperPressed = gamepad1.right_bumper;
-
-        //Changes tuning increment
-        if (dpadRight && !lastDpadRight) {
-            selectedIncrement += 1;
-            if (selectedIncrement > 2)
-                selectedIncrement = 0;
-        }
-        if (dpadLeft && !lastDpadLeft) {
-            selectedIncrement -= 1;
-            if (selectedIncrement < 0)
-                selectedIncrement = 2;
-        }
-        lastDpadLeft = dpadLeft;
-        lastDpadRight = dpadRight;
-
-        //Tuning Math
-        if (selectedTune == 0) { //Flywheel
-        if (dpadUp && !lastDpadUp) {
-            velocity = Math.min(velocity + velocityIncrements[selectedIncrement], MAX_RPM);
-        }
-        if (dpadDown && !lastDpadDown) {
-            velocity = Math.max(velocity - velocityIncrements[selectedIncrement], 0);
-        }
-        lastDpadUp = dpadUp;
-        lastDpadDown = dpadDown;
-
-        telemetry.addLine("Flywheel Tuning");
-        telemetry.addData("Increment Value ", velocityIncrements[selectedIncrement]);
-
-        } else if (selectedTune == 1) { // Hood
-            if (dpadUp && !lastDpadUp) {
-                hoodAngle = Math.min(hoodAngle + servoIncrements[selectedIncrement], 0.6);
-            }
-            if (dpadDown && !lastDpadDown) {
-                hoodAngle = Math.max(hoodAngle - servoIncrements[selectedIncrement], 0.05);
-            }
-            lastDpadUp = dpadUp;
-            lastDpadDown = dpadDown;
-            telemetry.addLine("Hood Tuning");
-            telemetry.addData("Increment Value ", servoIncrements[selectedIncrement]);
-
-        } else { //Camera
-            if (dpadUp && !lastDpadUp) {
-                cameraAngle = Math.min(cameraAngle + servoIncrements[selectedIncrement], 0.69);
-            }
-            if (dpadDown && !lastDpadDown) {
-                cameraAngle = Math.max(cameraAngle - servoIncrements[selectedIncrement], 0.43);
-            }
-            lastDpadUp = dpadUp;
-            lastDpadDown = dpadDown;
-
-            telemetry.addLine("Camera Tuning");
-            telemetry.addData("Increment Value ", servoIncrements[selectedIncrement]);
-        }
-
-
-        // velocity is in RPM; setVelocity takes ticks per second
-        flywheel.setVelocity(velocity * TICKS_PER_REV / 60.0);
-        hood.setPosition(hoodAngle);
-        lla.setPosition(cameraAngle);
-        //Intake on toggle; loop is earlier
-        intake.setPower(intakeOn ? INTAKE_POWER : 0);
-        //Lift only runs while left bumper is held
-        lift.setPower(gamepad1.left_bumper ? LIFT_POWER : 0);
-
-        showTelemetry();
-    }
     void showTelemetry() {
         telemetry.addData("Flywheel Wanted RPM ", velocity);
         telemetry.addData("Flywheel Current RPM ", flywheel.getVelocity() * 60.0 / TICKS_PER_REV);
@@ -141,6 +151,21 @@ public class Turret_Testing extends OpMode {
         telemetry.addData("Camera Angle","%.2f", cameraAngle);
         telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
         telemetry.addData("Lift", gamepad1.left_bumper ? "ON" : "OFF");
+
+        int pipeline = LinearOpMode2026.isCurrentAllienceRed ? 4 : 3;
+
+        if (limelight.getStatus().getPipelineIndex() != pipeline){
+            limelight.pipelineSwitch(LinearOpMode2026.isCurrentAllienceRed ? 4 : 3);
+        }
+
+        LLResult result = limelight.getLatestResult();
+
+        if (result != null && result.isValid()){
+            telemetry.addData("Limelight Tags", Arrays.toString(result.getBarcodeResults().toArray()));
+        }else {
+            telemetry.addData("Limelight Tags", "NO TAGS FOUND");
+        }
+
         telemetry.update();
     }
 }
