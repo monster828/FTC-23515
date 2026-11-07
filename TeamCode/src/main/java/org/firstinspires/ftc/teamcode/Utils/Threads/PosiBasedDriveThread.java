@@ -29,6 +29,7 @@ public class PosiBasedDriveThread extends Thread {
     public static float tolerance = 2;
     public static float rotTolerance = 10;
     public static int lookAhead = 3;
+    private boolean last = false;
 
     @Override
     public void run() {
@@ -36,8 +37,15 @@ public class PosiBasedDriveThread extends Thread {
         while(opMode.opModeIsActive()) {
             if(!path.isEmpty()) {
                 Position robot = posGet.getPosi();
-                float rD = MiscUtils.getAngleDifferenceDegrees(robot.r(),path.get(0).r());
-                float angle = (float) Math.atan2(path.get(0).x()-robot.x(),path.get(0).y()-robot.y());
+                float rD;
+                float angle;
+                if(last) {
+                    angle = (float) Math.atan2(path.get(1).x()-robot.x(),path.get(1).y()-robot.y());
+                    rD = MiscUtils.getAngleDifferenceDegrees(robot.r(),path.get(1).r());
+                } else {
+                    angle = (float) Math.atan2(path.get(0).x()-robot.x(),path.get(0).y()-robot.y());
+                    rD = MiscUtils.getAngleDifferenceDegrees(robot.r(),path.get(0).r());
+                }
                 float rP = 0;
                 if(rD > rotTolerance) {
                     rP = MiscUtils.Clamp((MiscUtils.getAngleDifferenceDegrees(robot.r(),path.get(0).r()) / 15),-1.0f,1.0f);
@@ -45,17 +53,28 @@ public class PosiBasedDriveThread extends Thread {
 
                 float transP = 0;
                 if(path.get(0).getDistTo(robot) > tolerance) {
-                    Position pos2 = path.get(0);
-                    transP = (
+                    Position pos2 = path.get(1);
+                    transP = Math.abs(
                             (path.get(0).getDistTo(pos2)/
                                     (path.get(0).getTimeStamp()-pos2.getTimeStamp()))/
                                     MovementUtils.v(MiscUtils.getAngleDifferenceDegrees(robot.r(),(float) Math.toDegrees(angle)))
                     );
                 }
 
-                float m = path.get(0).getDistTo(robot);
+                transP = MiscUtils.Clamp(transP,0.2f,1);
+
+                float m;
+                if(last) {
+                    m = path.get(1).getDistTo(robot);
+                } else {
+                    m = path.get(0).getDistTo(robot);
+                }
                 float p2 = MiscUtils.Clamp(transP*m,0.2f,transP);
-                DriveUtils.FieldDriveThing((float)Math.sin(angle)*p2,(float)Math.cos(angle)*p2,rP,1, (float) Math.toRadians(robot.r()),mot);
+                opMode.telemetry.addData("Power",p2);
+                opMode.telemetry.addData("Angle",angle);
+                opMode.telemetry.addData("rP",rP);
+                opMode.telemetry.addData("distance",m);
+                DriveUtils.FieldDriveThing((float)Math.sin(angle)*p2,(float)Math.cos(angle)*p2,rP,0.5f, (float) Math.toRadians(robot.r()),mot);
 
                 //check if the robot has passed the target point
                 int i = 1;
@@ -65,24 +84,38 @@ public class PosiBasedDriveThread extends Thread {
                         if (path.get(i).getDistTo(robot) < m) {
                             break;
                         }
-                    }
+                    } else break;
                     i++;
                 }
 
+                opMode.telemetry.addData("i",i);
+
+                if(i == path.size()-1) {last = true; i--;}
                 if(i < lookAhead && i < path.size()) {
                     for(int a = 0; a < i; a++) path.remove(0);
                 } else if(m < tolerance && (MiscUtils.getAngleDifferenceDegrees(path.get(0).r(),robot.r()) < rotTolerance || path.size() > 1)) {
-                    path.remove(0);
+                    if(!last && path.size() == 2) last = true;
+                    else path.remove(0);
+                    if(last) path.remove(0);
                 }
+            } else {
+                DriveUtils.stop(mot);
+                opMode.telemetry.addLine("IDLE");
             }
+            opMode.telemetry.addLine("PBDT is running");
+            opMode.telemetry.update();
         }
     }
 
     public synchronized void queuePath(Position[] path) {
         this.path.addAll(Arrays.asList(path));
+        last = false;
     }
     public synchronized void forcePath(Position[] path) {
         this.path = new ArrayList<>();
         this.path.addAll(Arrays.asList(path));
+        last = false;
     }
+
+    public synchronized boolean idle() {return path.isEmpty();}
 }
