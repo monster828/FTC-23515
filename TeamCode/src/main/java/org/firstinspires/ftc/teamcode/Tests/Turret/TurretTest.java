@@ -28,24 +28,40 @@ public class TurretTest extends LinearOpMode2026 {
         while (opModeIsActive()){
             if (gamepad1.a){
 //                aprilTagsTurretTarget.Reset();
-                turret.setPower(0.25);
+                turret.setPower(0.1);
+
+                aprilTagsTurretTarget.SetTargetPosition(targetPosition);
 
 //
-                while (gamepad1.a){
-                    double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
-
-                    if (gamepad1.right_trigger_pressed){
-                        aprilTagsTurretTarget.ChangeAngleSetPosition(tx);
-                    }
-
-                    telemetry.addLine("tx: " + tx);
-                    telemetry.addLine("Amount of Position changes: " +MiscUtils.getPositionFromDegrees(tx, 537.7));
-                    telemetry.update();
-                }
+//                while (gamepad1.a){
+//                    double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
 //
-//                sleep(1000);
-
-                num = aprilTagsTurretTarget.UpdateTxValue(limelight);
+//                    // Fixed physical constants (measure these on your robot/field in inches or cm)
+//                    final double h1_limelightHeight = 12.5;
+//                    final double h2_targetHeight = 20.0;
+//                    final double theta1_mountAngleDegrees = 15.0;
+//
+//                    // 1. Get 'ty' from the Limelight
+//                    double theta2_ty = limelight.getLatestResult().getTy();
+//
+//                    // 2. Convert total angle to radians for Java's Math.tan()
+//                    double totalAngleRadians = Math.toRadians(theta1_mountAngleDegrees + theta2_ty);
+//
+//                    // 3. Calculate distance
+//                    double distance = (h2_targetHeight - h1_limelightHeight) / Math.tan(totalAngleRadians);
+//
+//
+//                    aprilTagsTurretTarget.ChangeAngleSetPosition(tx);
+//
+//                    telemetry.addLine("tx: " + tx);
+//                    telemetry.addLine("Amount of Position changes: " +MiscUtils.getPositionFromDegrees(tx, 537.7));
+//
+//                    telemetry.update();
+//                }
+////
+////                sleep(1000);
+//
+//                num = aprilTagsTurretTarget.UpdateTxValue(limelight);
 
                 // aprilTagsTurretTarget.ChangeAngleSetPosition(turret.getCurrentPosition());
 
@@ -78,7 +94,7 @@ public class TurretTest extends LinearOpMode2026 {
             }
 
             if (gamepad1.dpad_down){
-                targetPosition += -0.05;
+                targetPosition -= 0.05;
             }
 
             if (gamepad1.x){
