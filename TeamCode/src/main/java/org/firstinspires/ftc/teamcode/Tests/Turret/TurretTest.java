@@ -84,7 +84,7 @@ public class TurretTest extends LinearOpMode2026 {
                 aprilTagsTurretTarget.Reset();
 
                 while (gamepad1.b){
-                    telemetry.addData("", aprilTagsTurretTarget.UpdateAprilTagsResults(limelight));
+                    telemetry.addData("", aprilTagsTurretTarget.UpdateAprilTagsResults(limelight, posGet));
                 }
 
                 turret.setPower(0);
