@@ -19,8 +19,8 @@ public class PosiBaseDriveThreadTest extends LinearOpMode2026 {
     public void runOpMode() throws InterruptedException {
         config();
         //For starter bot
-        mot[1].setDirection(DcMotorSimple.Direction.FORWARD); mot[3].setDirection(DcMotorSimple.Direction.FORWARD);
-        posGet.setSetup(RobotOdoSetup.PINPOINTSTARTER2026);
+        //mot[1].setDirection(DcMotorSimple.Direction.FORWARD); mot[3].setDirection(DcMotorSimple.Direction.FORWARD);
+        //posGet.setSetup(RobotOdoSetup.PINPOINTSTARTER2026);
         Random random = new Random();
         PosiBasedDriveThread dt = new PosiBasedDriveThread(this);
         Pathfinder.compileDefaultObstaclesLC(11);
