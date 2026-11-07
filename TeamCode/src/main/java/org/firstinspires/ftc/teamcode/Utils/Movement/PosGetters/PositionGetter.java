@@ -16,6 +16,9 @@ public abstract class PositionGetter {
 
     public abstract Position getPosi();
     public abstract float[] getVxVy();
+
+    public abstract double getVr();
+
     public abstract float getV();
 
     public void setOffset(float x, float y) {
