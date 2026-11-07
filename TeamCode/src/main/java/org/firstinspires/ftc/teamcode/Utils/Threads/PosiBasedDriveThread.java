@@ -9,7 +9,10 @@ import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.MovementUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
+import org.firstinspires.ftc.teamcode.Utils.RobofileUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -52,8 +55,9 @@ public class PosiBasedDriveThread extends Thread {
                     opMode.telemetry.addData("X diff",path.get(0).x()-robot.x());
                     opMode.telemetry.addData("Y diff",path.get(0).y()-robot.y());
                 }
+                opMode.telemetry.addData("R diff",rD);
                 float rP = 0;
-                if(rD > rotTolerance) {
+                if(Math.abs(rD) > rotTolerance) {
                     rP = MiscUtils.Clamp((rD / 15),-1.0f,1.0f);
                 }
 
@@ -83,7 +87,7 @@ public class PosiBasedDriveThread extends Thread {
                 opMode.telemetry.addData("last",last);
                 opMode.telemetry.addData("Points remaining",path.size());
 
-                DriveUtils.FieldDriveThing((float)Math.sin(angle)*p2,(float)Math.cos(angle)*p2,rP,0.5f, (float) Math.toRadians(robot.r()),mot);
+                DriveUtils.FieldDriveThing((float)Math.sin(angle)*p2,(float)Math.cos(angle)*p2,rP,0.7f, (float) Math.toRadians(robot.r()),mot);
 
                 //check if the robot has passed the target point
                 int i = 1;
@@ -125,6 +129,31 @@ public class PosiBasedDriveThread extends Thread {
     public synchronized void forcePath(Position[] path) {
         this.path = new ArrayList<>();
         this.path.addAll(Arrays.asList(path));
+        last = false;
+    }
+    public synchronized void queueRoboPath(File f) {
+        try {
+            FileInputStream fI = new FileInputStream(f);
+            byte[] dat = new byte[Math.toIntExact(f.length())];
+            fI.read(dat);
+            fI.close();
+            path.addAll(Arrays.asList(RobofileUtils.loadRobopathV1(dat)));
+        } catch (Exception e) {
+
+        }
+        last = false;
+    }
+    public synchronized void forceRoboPath(File f) {
+        path = new ArrayList<>();
+        try {
+            FileInputStream fI = new FileInputStream(f);
+            byte[] dat = new byte[Math.toIntExact(f.length())];
+            fI.read(dat);
+            fI.close();
+            path.addAll(Arrays.asList(RobofileUtils.loadRobopathV1(dat)));
+        } catch (Exception e) {
+
+        }
         last = false;
     }
 
