@@ -4,6 +4,7 @@ import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -87,5 +88,11 @@ public class PinpointPosGet extends PositionGetter {
     @Override
     public float getV() {
         return 0;
+    }
+
+    @Override
+    public double getVr(){
+        UpdatePinpoint();
+        return _pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
     }
 }
