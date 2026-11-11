@@ -18,6 +18,8 @@ public class Turret_Testing extends OpMode {
     static final int MAX_RPM = 6000;
     // goBILDA 6000 RPM (1:1) motor encoder
     static final double TICKS_PER_REV = 28;
+    static final double FLYWHEEL_P = 173.2;
+    static final double FLYWHEEL_F = 17.19;
 
     int velocity = 0;
     double hoodAngle = 0.1;
@@ -40,6 +42,7 @@ public class Turret_Testing extends OpMode {
         flywheel = hardwareMap.get(DcMotorEx.class, "FW");
         flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flywheel.setVelocityPIDFCoefficients(FLYWHEEL_P, 0, 0, FLYWHEEL_F);
         hood = hardwareMap.get(Servo.class, "Hood");
         lla = hardwareMap.get(Servo.class, "LLA");
         lift = hardwareMap.get(DcMotorEx.class, "lift");
