@@ -38,7 +38,9 @@ public class homemadeMoveCodeTest extends LinearOpMode {
 
 
         mot[0].setDirection(DcMotorSimple.Direction.REVERSE);
+        mot[1].setDirection(DcMotorSimple.Direction.REVERSE);
         mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
+        mot[3].setDirection(DcMotorSimple.Direction.REVERSE);
         GoBildaPinpointDriver pin = hardwareMap.get(GoBildaPinpointDriver.class,"POC");
         PinpointPosGet posGet = new PinpointPosGet(pin);
         String configPath = MiscUtils.dataFolder+"config2026.robocfg";

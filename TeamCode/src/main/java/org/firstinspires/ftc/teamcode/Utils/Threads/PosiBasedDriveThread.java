@@ -31,7 +31,7 @@ public class PosiBasedDriveThread extends Thread {
 
     public static float tolerance = 2;
     public static float rotTolerance = 10;
-    public static int lookAhead = 3;
+    public static int lookAhead = 18;
     private boolean last = false;
 
     @Override
@@ -58,7 +58,7 @@ public class PosiBasedDriveThread extends Thread {
                 opMode.telemetry.addData("R diff",rD);
                 float rP = 0;
                 if(Math.abs(rD) > rotTolerance) {
-                    rP = MiscUtils.Clamp((rD / 15),-1.0f,1.0f);
+                    rP = MiscUtils.Clamp((rD / 12),-1.0f,1.0f);
                 }
 
                 float transP = 0;
@@ -69,9 +69,8 @@ public class PosiBasedDriveThread extends Thread {
                                     (path.get(0).getTimeStamp()-pos2.getTimeStamp()))/
                                     MovementUtils.v(MiscUtils.getAngleDifferenceDegrees(robot.r(),(float) Math.toDegrees(angle)))
                     );
+                    transP = MiscUtils.Clamp(transP,0.15f,1);
                 }
-
-                transP = MiscUtils.Clamp(transP,0.2f,1);
 
                 float m;
                 if(last) {
@@ -79,7 +78,8 @@ public class PosiBasedDriveThread extends Thread {
                 } else {
                     m = path.get(0).getDistTo(robot);
                 }
-                float p2 = MiscUtils.Clamp(transP*m,0.2f,transP);
+                float p2 = 0;
+                if(transP > 0) p2 = MiscUtils.Clamp(transP*(m/5),0.15f,transP);
                 opMode.telemetry.addData("Power",p2);
                 opMode.telemetry.addData("Angle",angle);
                 opMode.telemetry.addData("rP",rP);
@@ -87,6 +87,7 @@ public class PosiBasedDriveThread extends Thread {
                 opMode.telemetry.addData("last",last);
                 opMode.telemetry.addData("Points remaining",path.size());
 
+                DriveUtils.setBiases(1,2f,1);
                 DriveUtils.FieldDriveThing((float)Math.sin(angle)*p2,(float)Math.cos(angle)*p2,rP,0.7f, (float) Math.toRadians(robot.r()),mot);
 
                 //check if the robot has passed the target point
