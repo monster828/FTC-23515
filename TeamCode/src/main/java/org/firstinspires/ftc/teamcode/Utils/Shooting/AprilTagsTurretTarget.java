@@ -4,7 +4,6 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
@@ -25,8 +24,12 @@ public class AprilTagsTurretTarget {
 
     int limelightPipeline;
 
-    public double maxPosition = MiscUtils.getPositionFromDegrees(90, 537.7); //185
-    public double minPosition = MiscUtils.getPositionFromDegrees(-90,537.7);
+    public double maxPosition = MiscUtils.getPositionFromDegrees(185, 537.7); //185
+    public double minPosition = MiscUtils.getPositionFromDegrees(-185,537.7);
+    public boolean waitTillNotSee = false;
+    public boolean canSee = false;
+
+    double newPosition = 0;
 
     public AprilTagsTurretTarget(DcMotorEx turretMotor){
         dcMotorEx = turretMotor;
@@ -37,32 +40,70 @@ public class AprilTagsTurretTarget {
 //        dcMotorEx = turretMotor;
 //    }
 
-    /**
-     * Run this about every loop
-     * This will do calculations and move motor to get limelight's tx (the amount offset in degrees) and get it to 0
-     *
-     * @param limelight3A
-     * Pass in the limelight
-     * **/
-    public double UpdateAprilTagsResults(Limelight3A limelight3A){
-        if (limelight3A.getStatus().getPipelineIndex() != limelightPipeline){
-            limelight3A.pipelineSwitch(limelightPipeline);
-        }
-        LLResult limelightResult = limelight3A.getLatestResult();
-
-        if (limelightResult != null && limelightResult.isValid()){
-            double tx = limelightResult.getTx(); // Horizontal  0 is middle
-            UpdateMotor(tx);
-
-            return tx;
-        }else {
-            dcMotorEx.setPower(0);
-            dtTimer.reset();
-            lastTx = 0;
-        }
-
-        return 0;
-    }
+//    /**
+//     * Run this about every loop
+//     * This will do calculations and move motor to get limelight's tx (the amount offset in degrees) and get it to 0
+//     *
+//     * @param limelight3A
+//     * Pass in the limelight
+//     * **/
+//    public double UpdateAprilTagsResults(Limelight3A limelight3A, PositionGetter positionGetter){
+//        if (limelight3A.getStatus().getPipelineIndex() != limelightPipeline){
+//            limelight3A.pipelineSwitch(limelightPipeline);
+//        }
+//        LLResult limelightResult = limelight3A.getLatestResult();
+//
+//        if (limelightResult != null && limelightResult.isValid()){
+//            double tx = UpdateTxValue(limelight3A);
+//            double ty = limelightResult.getTy();
+//
+//            Pose3D targetPos = limelightResult.getBotpose();
+//            Position position = targetPos.getPosition();
+//            double limelightLatency = limelightResult.getCaptureLatency() * 1000.0;
+//
+//            // Get the x and y of the robot (based from the hive)
+//            double x = position.x;
+//            double y = position.z;
+//
+//            // Get velocity x and y
+//            float[] velocity = positionGetter.getVxVy();
+//            double vx = velocity[0];
+//            double vy = velocity[1];
+//
+//            // Subtract the x and y by (velocity x and y multiplied by the speed we are moving the turret at)
+//            double speedOfTurret = 120;  // Degrees per second
+//            double currentTurretAngle = MiscUtils.getDegreesFromMotor(dcMotorEx.getCurrentPosition(), 537.7);
+//            double desiredTurretAngle = tx + currentTurretAngle;
+//            double angleError = Math.abs(desiredTurretAngle - currentTurretAngle);
+//
+//            double physicalMoveTime = 0;
+//            if (speedOfTurret > 0){
+//                physicalMoveTime = angleError / speedOfTurret;
+//            }
+//
+//            double totalTimeDelay = limelightLatency + physicalMoveTime;
+//
+//            double nx = x - (vx * totalTimeDelay);
+//            double ny = y - (vy * totalTimeDelay);
+//
+//            // Get distance (Pythagorean theorem)
+//            double distance = Math.sqrt(nx * nx + ny * ny);
+//
+//            // Get the new angle
+//            double newTx = Math.atan2(ny, nx);
+//
+//            // Run update motor based on new tx value
+//            ChangeAngleSetPosition(newTx);
+//
+//            return newTx;
+//        }else {
+//            dcMotorEx.setPower(0);
+//            dtTimer.reset();
+//            lastTx = 0;
+//        }
+//
+//        return 0;
+//    }
 
     public double UpdateTxValue(Limelight3A limelight3A){
         if (limelight3A.getStatus().getPipelineIndex() != limelightPipeline){
@@ -72,8 +113,11 @@ public class AprilTagsTurretTarget {
 
         if (limelightResult != null && limelightResult.isValid()){
             double tx = limelightResult.getTx(); // Horizontal  0 is middle
+            canSee = true;
             return tx;
         }else {
+            waitTillNotSee = false;
+            canSee = false;
             return 0;
         }
     }
@@ -90,19 +134,37 @@ public class AprilTagsTurretTarget {
         UpdateMotor(tx);
     }
 
-    public void ChangeAngleSetPosition(double tx){
-        SetTargetPosition (dcMotorEx.getCurrentPosition() - MiscUtils.getPositionFromDegrees(tx, 537.7));
+    public void ChangeAngleSetPosition(double tx, double rotationV){
+        SetTargetPosition (dcMotorEx.getCurrentPosition() - MiscUtils.getPositionFromDegrees(tx * 1.04 - rotationV * 0.05, 537.7));
     }
 
 
-    public void SetTargetPosition(double newPosition){
-        if (newPosition > maxPosition){
-            newPosition -= MiscUtils.getPositionFromDegrees(360, 537.7) * Math.floor(newPosition / maxPosition);
-        } else if (newPosition < minPosition) {
-            newPosition += MiscUtils.getPositionFromDegrees(360, 537.7) * Math.floor(newPosition / maxPosition);
-        }
+    public void SetTargetPosition(double position){
+        if (waitTillNotSee || !canSee){
+            if (Math.abs(dcMotorEx.getCurrentPosition() - newPosition) < 400){
+                waitTillNotSee = false;
+            }
+        }else {
+            double positionFromAllAround = MiscUtils.getPositionFromDegrees(360, 537.7);
+            newPosition = position;
 
-        dcMotorEx.setTargetPosition((int) newPosition);
+            double range = maxPosition - minPosition;
+
+            if (newPosition > maxPosition || newPosition < minPosition){
+                waitTillNotSee = true;
+                newPosition = minPosition + ((newPosition - minPosition) % range + range) % range;
+            }
+
+//            if (newPosition > maxPosition){
+//                newPosition -= positionFromAllAround * (Math.floor((newPosition - maxPosition) / positionFromAllAround) + 1);
+//                waitTillNotSee = true;
+//            } else if (newPosition < minPosition) {
+//                newPosition += positionFromAllAround * (Math.floor((newPosition - minPosition) / positionFromAllAround) + 1);
+//                waitTillNotSee = true;
+//            }
+
+            dcMotorEx.setTargetPosition((int) newPosition);
+        }
     }
 
     private void SetPositionBasedOnPosition(double target){

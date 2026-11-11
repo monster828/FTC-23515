@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PinpointPosGet;
+import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.RobotOdoSetup;
 
 @Autonomous
 public class PinpointTest extends LinearOpMode {
@@ -12,6 +13,7 @@ public class PinpointTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         GoBildaPinpointDriver pin = hardwareMap.get(GoBildaPinpointDriver.class,"POC");
         PinpointPosGet posGet = new PinpointPosGet(pin);
+        posGet.setSetup(RobotOdoSetup.PINPOINTSTARTER2026);
         waitForStart();
         while(opModeIsActive()) {
             telemetry.addData("Position",posGet.getPosi().toString());

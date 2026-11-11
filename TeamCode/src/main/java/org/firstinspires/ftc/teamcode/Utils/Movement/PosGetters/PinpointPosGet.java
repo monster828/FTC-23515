@@ -4,6 +4,7 @@ import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -11,7 +12,8 @@ public class PinpointPosGet extends PositionGetter {
     private long _timeOfLastUpdate;
     private GoBildaPinpointDriver _pinpoint;
     private float _pinpointUpdateWait = 3;
-    private RobotOdoSetup setup = RobotOdoSetup.PINPOINT2026;
+
+    //private RobotOdoSetup setup = RobotOdoSetup.PINPOINT2026;
 
     public PinpointPosGet(GoBildaPinpointDriver _pinpoint) {
         this._pinpoint = _pinpoint;
@@ -26,6 +28,7 @@ public class PinpointPosGet extends PositionGetter {
         _pinpoint.resetPosAndIMU();
 
         _timeOfLastUpdate = System.currentTimeMillis();
+        setup = RobotOdoSetup.PINPOINT2026;
     }
 
     public PinpointPosGet(GoBildaPinpointDriver _pinpoint, RobotOdoSetup setup) {
@@ -77,6 +80,7 @@ public class PinpointPosGet extends PositionGetter {
 
     @Override
     public float[] getVxVy() {
+        UpdatePinpoint();
         return new float[] {
                 -(float) _pinpoint.getVelX(DistanceUnit.INCH),
                 (float) _pinpoint.getVelY(DistanceUnit.INCH)
@@ -84,7 +88,8 @@ public class PinpointPosGet extends PositionGetter {
     }
 
     @Override
-    public float getV() {
-        return 0;
+    public double getVr(){
+        UpdatePinpoint();
+        return _pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
     }
 }

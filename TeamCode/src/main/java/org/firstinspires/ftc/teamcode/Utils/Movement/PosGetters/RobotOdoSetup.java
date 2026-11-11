@@ -4,7 +4,8 @@ public enum RobotOdoSetup implements RobotOdoOrientation {
     PINPOINT2025(-1,1,-1,true),
     SPARKFUNidk(-1,1,-1,true),
     PINPOINTPROTO2026(1,-1,-1,true),
-    PINPOINT2026(-1,-1,-1,true);
+    PINPOINTSTARTER2026(-1,-1,-1,true),
+    PINPOINT2026(-1,1,-1,true);
 
     private float xM, yM, rM, x, y, r;
     private boolean swapXY;

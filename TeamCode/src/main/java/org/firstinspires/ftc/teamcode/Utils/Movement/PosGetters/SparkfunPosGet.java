@@ -77,4 +77,12 @@ public class SparkfunPosGet extends PositionGetter{
     public float getV() {
         return (float) Math.sqrt(Math.pow(sparkfun.getVelocity().x,2)+Math.pow(sparkfun.getVelocity().y,2));
     }
+
+    /**
+     * DOES NOT WORK
+     * **/
+    @Override
+    public double getVr(){
+        return 0;
+    }
 }

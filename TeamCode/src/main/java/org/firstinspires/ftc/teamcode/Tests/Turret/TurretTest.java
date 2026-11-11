@@ -2,8 +2,11 @@ package org.firstinspires.ftc.teamcode.Tests.Turret;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Utils.Controls.ControlsTrigger;
+import org.firstinspires.ftc.teamcode.Utils.Controls.GamepadButton;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+import org.firstinspires.ftc.teamcode.Utils.Movement.TeleopMovementUtil;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagsTurretTarget;
 
 @TeleOp
@@ -17,54 +20,89 @@ public class TurretTest extends LinearOpMode2026 {
 
     double tolerance = 0.1;
 
+    ControlsTrigger triggerDrivingTracking;
+
+    boolean isDrivingTracking = false;
+
     @Override
     public void runOpMode(){
         config();
 
         AprilTagsTurretTarget aprilTagsTurretTarget = new AprilTagsTurretTarget(turret);
 
+        triggerDrivingTracking = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.a));
+
+        TeleopMovementUtil teleopMovementUtil = new TeleopMovementUtil(gamepad1, mot);
+
         waitForStart();
+        aprilTagsTurretTarget.Reset(); // This isn't really needed any more unless if we do PID tuning for this
 
         while (opModeIsActive()){
-            turret.setPower(0.1);
-            if (gamepad1.a){
-//                aprilTagsTurretTarget.Reset();
+            boolean trig = triggerDrivingTracking.IsTriggered();
 
+            teleopMovementUtil.UpdateDrive();
 
+            if (trig){
+                isDrivingTracking = !isDrivingTracking;
+            }
+
+            if (isDrivingTracking){
+                double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
+
+                aprilTagsTurretTarget.ChangeAngleSetPosition(tx, posGet.getVr());
+
+                double positionChange = MiscUtils.getPositionFromDegrees(tx, 537.7);
+
+                telemetry.addLine("tx: " + tx);
+                telemetry.addLine("Amount of Position changes: " + positionChange);
+            }else {
+                //teleopMovementUtil.DeadDrive();
+            }
+
+            if (turret.getTargetPosition() > aprilTagsTurretTarget.maxPosition || turret.getTargetPosition() < aprilTagsTurretTarget.minPosition){
+                turret.setPower(0);
+                telemetry.addLine("WENT OVER!");
+            }else {
+                turret.setPower(0.7);  // LLA max .69  min .43
+            }
+
+            if (gamepad1.dpad_up){
+                targetPosition += 10;
                 aprilTagsTurretTarget.SetTargetPosition(targetPosition);
+                sleep(100);
+            }
 
-//
-//                while (gamepad1.a){
-//                    double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
-//
-//                    // Fixed physical constants (measure these on your robot/field in inches or cm)
-//                    final double h1_limelightHeight = 12.5;
-//                    final double h2_targetHeight = 20.0;
-//                    final double theta1_mountAngleDegrees = 15.0;
-//
-//                    // 1. Get 'ty' from the Limelight
-//                    double theta2_ty = limelight.getLatestResult().getTy();
-//
-//                    // 2. Convert total angle to radians for Java's Math.tan()
-//                    double totalAngleRadians = Math.toRadians(theta1_mountAngleDegrees + theta2_ty);
-//
-//                    // 3. Calculate distance
-//                    double distance = (h2_targetHeight - h1_limelightHeight) / Math.tan(totalAngleRadians);
-//
-//
-//                    aprilTagsTurretTarget.ChangeAngleSetPosition(tx);
-//
-//                    telemetry.addLine("tx: " + tx);
-//                    telemetry.addLine("Amount of Position changes: " +MiscUtils.getPositionFromDegrees(tx, 537.7));
-//
-//                    telemetry.update();
-//                }
-////
-////                sleep(1000);
-//
-//                num = aprilTagsTurretTarget.UpdateTxValue(limelight);
+            if (gamepad1.dpad_down){
+                targetPosition -= 10;
+                aprilTagsTurretTarget.SetTargetPosition(targetPosition);
+                sleep(100);
+            }
 
-                // aprilTagsTurretTarget.ChangeAngleSetPosition(turret.getCurrentPosition());
+            if (gamepad1.x){
+                aprilTagsTurretTarget.Reset();
+
+                turret.setPower(0.05);
+
+                aprilTagsTurretTarget.ChangeAngleSetPosition(targetPosition, posGet.getVr());
+            }else {
+                targetPosition = turret.getTargetPosition();
+            }
+
+            telemetry.addLine("CURRENTLY DOING: " + (isDrivingTracking ? "Driving Tracking" : "NONE"));
+            telemetry.addData("Rotation V", posGet.getVr());
+            telemetry.addData("Current Position", turret.getCurrentPosition());
+            telemetry.addData("Text TX", num);
+            telemetry.addData("Target Position", targetPosition);
+            telemetry.addData("Max", aprilTagsTurretTarget.maxPosition);
+            telemetry.addData("Min", aprilTagsTurretTarget.minPosition);
+            telemetry.addLine("Controls: \nA: Run test\nDPad up and down: Changes test rotation amount\nB: Run april tag");
+            telemetry.update();
+        }
+    }
+
+    //                num = aprilTagsTurretTarget.UpdateTxValue(limelight);
+
+    // aprilTagsTurretTarget.ChangeAngleSetPosition(turret.getCurrentPosition());
 
 
 //                aprilTagsTurretTarget.Reset();
@@ -78,50 +116,6 @@ public class TurretTest extends LinearOpMode2026 {
 //                }
 //
 //                turret.setPower(0);
-            }
-
-            if (gamepad1.b){
-                aprilTagsTurretTarget.Reset();
-
-                while (gamepad1.b){
-                    telemetry.addData("", aprilTagsTurretTarget.UpdateAprilTagsResults(limelight));
-                }
-
-                turret.setPower(0);
-            }
-
-            if (gamepad1.dpad_up){
-                targetPosition += 1;
-                aprilTagsTurretTarget.SetTargetPosition(targetPosition);
-                sleep(100);
-            }
-
-            if (gamepad1.dpad_down){
-                targetPosition -= 1;
-                aprilTagsTurretTarget.SetTargetPosition(targetPosition);
-                sleep(100);
-            }
-
-            if (gamepad1.x){
-                aprilTagsTurretTarget.Reset();
-
-                turret.setPower(0.05);
-
-                aprilTagsTurretTarget.ChangeAngleSetPosition(targetPosition);
-
-
-            }
-
-//            turret.setPower(0);
-
-            telemetry.addData("Text TX", num);
-            telemetry.addData("Target Position", targetPosition);
-            telemetry.addData("Max", aprilTagsTurretTarget.maxPosition);
-            telemetry.addData("Min", aprilTagsTurretTarget.minPosition);
-            telemetry.addLine("Controls: \nA: Run test\nDPad up and down: Changes test rotation amount\nB: Run april tag");
-            telemetry.update();
-        }
-    }
 
     void SetCurrentPosition(){
         currentPosition = MiscUtils.getDegreesFromMotor(turret.getCurrentPosition(), 537.7) * 14 / 43;

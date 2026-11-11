@@ -11,9 +11,10 @@ public class MovementUtils {
         angle = Math.abs((Math.abs((angle+90.0f) % 180.0f))-90.0f);
         //return (float) sqrt(Math.pow((sin(angle)*StrafeA),2)+Math.pow((cos(angle)*ForwardBackA),2));
         //return Math.abs(((angle%180)/90)-1)*ForwardBackA+Math.abs((((angle+90)%180)/90)-1)*StrafeA;
-        return (0.0001f*angle*angle*angle)+(0.012f*angle*angle)-(2.3751f*angle)+160.75f;
+        //return (0.0001f*angle*angle*angle)+(0.012f*angle*angle)-(2.3751f*angle)+160.75f;
+        return (0.0004f*angle*angle*angle)-(0.048f*angle*angle)-(0.1616f*angle)+200.708f;
     }
-    public static float topA=159;
+    public static float topA=199; //159
 
     /**
      * Velocity calc
@@ -24,9 +25,10 @@ public class MovementUtils {
         float angle2 = Math.abs((Math.abs((angle+90.0f) % 180.0f))-90.0f);
         //return (float) sqrt(Math.pow((sin(angle)*StrafeV),2)+Math.pow((cos(angle)*ForwardBackV),2));
         //return Math.abs(((angle%180)/90)-1)*ForwardBackV+Math.abs((((angle+90)%180)/90)-1)*StrafeV;
-        return (0.00005f*angle2*angle2*angle2)+(0.0014f*angle2*angle2)-(0.6224f*angle2)+46.083f;
+        //return (0.00005f*angle2*angle2*angle2)+(0.0014f*angle2*angle2)-(0.6224f*angle2)+46.083f;
+        return (0.0001f*angle2*angle2*angle2)-(0.012f*angle2*angle2)-(0.0404f*angle2)+50.177f;
     }
-    public static final float topV=45.8f;
+    public static final float topV=49.6f; //45.8
 
     public static float distanceCovered(float angle, float time) {
         float v = v(angle); float a = a(angle);
@@ -44,5 +46,9 @@ public class MovementUtils {
         } else {
             return (distance/v)+(v/(2*a));
         }
+    }
+
+    public static float velocity(float angle, float time) {
+        return Math.min(v(angle),a(angle)*time);
     }
 }

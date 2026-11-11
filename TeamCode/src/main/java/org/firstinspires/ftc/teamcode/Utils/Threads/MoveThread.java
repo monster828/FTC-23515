@@ -52,10 +52,10 @@ public class MoveThread extends Thread {
         }
     }
 
-    float tolerance = 5f;
+    float tolerance = 4.25f;
     int lookAhead = 3;
     float rT = 5;
-    float antiJERK = 0.9f;
+    float antiJERK = 1f;
 
     //1 means it'll check every point.
     int skips = 3;
@@ -69,7 +69,7 @@ public class MoveThread extends Thread {
             long actualTime = 0;
             long lastTime = System.currentTimeMillis();
             int posNum = 1;
-            float tP = 1.0f;
+            float tP = 0.8f;
             long pauseTimeRemaining = 0;
             long logTime = System.currentTimeMillis();
 
@@ -87,7 +87,7 @@ public class MoveThread extends Thread {
                     angle = (float) Math.atan2(positions[posNum].x()-p.x(),positions[posNum].y()-p.y());
                     float rP = 0.0f;
                     if (Math.abs(positions[posNum].r() - p.r()) > rT) {
-                         rP = MiscUtils.Clamp((MiscUtils.getAngleDifferenceDegrees(p.r(),positions[posNum].r()) / 15),-1.0f,1.0f);
+                         rP = MiscUtils.Clamp((MiscUtils.getAngleDifferenceDegrees(p.r(),positions[posNum].r()) / 200),-1.0f,1.0f);
                     }
 
                     //Translation
@@ -98,6 +98,7 @@ public class MoveThread extends Thread {
                                         (positions[posNum].getTimeStamp()-positions[posNum-1].getTimeStamp()))/
                                         MovementUtils.v(MiscUtils.getAngleDifferenceDegrees(p.r(),(float) Math.toDegrees(angle)))
                         );
+                        transP = MiscUtils.Clamp(transP,0.15f,1);
                     }
 
                     float antiJ = positions[posNum].getType() > 0 ? antiJERK : 0;
@@ -126,13 +127,11 @@ public class MoveThread extends Thread {
                     if(i < lookAhead && !skip) {
                         moveTime = positions[posNum+1].getTimeStamp();
                         if(posNum+i < positions.length) posNum += i;
-                        tP = 1.0f;
                     }
 
                     //check if the robot is at the target point
                     if(positions[posNum].getDistTo(p) < tolerance && (MiscUtils.getAngleDifferenceDegrees(positions[posNum].r(),p.r()) < rT || positions[posNum].getType() == 0)) {
                         if(posNum < positions.length-skips) posNum += skips;
-                        tP = 1.0f;
                         if(positions[posNum].getType() == 1) {
                             DriveUtils.stop(mot);
                             sleep(10);

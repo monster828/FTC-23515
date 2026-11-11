@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.BioBuzz.RobotConfig;
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.NNFileReader;
@@ -24,6 +25,7 @@ import java.util.Random;
 
 public abstract class LinearOpMode2026 extends LinearOpMode {
     public PositionGetter posGet;
+    /**BL BR FL FR*/
     public DcMotor[] mot;
     public String configPath = MiscUtils.dataFolder+"/config2026to2027.robocfg";
     public File loggerFile = new File(MiscUtils.dataFolder+"/log.robolog");
@@ -38,6 +40,8 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
     public static boolean isCurrentAllienceRed = true;
 
     // public IMU imu;
+
+    public Servo lla;
 
 
     /**
@@ -93,6 +97,13 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
         } catch (Exception e) {
             telemetry.addData("Config error: ","Limelight not found");
         }
+
+        try {
+            lla = hardwareMap.get(Servo.class, "LLA");
+        }catch (Exception e){
+            telemetry.addData("Config error", "LLA not found");
+        }
+
         try {
             mot = new DcMotor[]{
                     hardwareMap.get(DcMotorEx.class, "BL"), //back left
