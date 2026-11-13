@@ -47,6 +47,8 @@ public class AprilTagsTurretTarget {
 
     public double offset;
 
+    public boolean rightSide = true;
+
     public AprilTagsTurretTarget(DcMotorEx turretMotor, PositionGetter positionGetter, double offset){
         dcMotorEx = turretMotor;
 
@@ -197,7 +199,22 @@ public class AprilTagsTurretTarget {
 
                 double positionDiff = MiscUtils.getPositionFromDegrees(headingDiff, 537.7);
 
-                SetTargetPositionOverrideAllAround(GetTurretTargetPosition(dcMotorEx) - positionDiff);
+                double yPosition = positionGetter.y();
+
+                double targetPosition = GetTurretTargetPosition(dcMotorEx) - positionDiff;
+
+                if (rightSide && yPosition > 64){
+                    rightSide = false;
+
+                    targetPosition += MiscUtils.getPositionFromDegrees(180, 537.7);
+                } else if (!rightSide && yPosition < 64) {
+                    rightSide = true;
+
+                    targetPosition += MiscUtils.getPositionFromDegrees(180, 537.7);
+                }
+
+
+                SetTargetPositionOverrideAllAround(targetPosition);
 
                 previousHeading = currentHeading;
             }else{
