@@ -28,7 +28,7 @@ public class TurretTest extends LinearOpMode2026 {
     public void runOpMode(){
         config();
 
-        AprilTagsTurretTarget aprilTagsTurretTarget = new AprilTagsTurretTarget(turret, posGet);
+        AprilTagsTurretTarget aprilTagsTurretTarget = new AprilTagsTurretTarget(turret, posGet, 0);
 
         triggerDrivingTracking = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.a));
 
@@ -50,6 +50,7 @@ public class TurretTest extends LinearOpMode2026 {
                 double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
 
                 aprilTagsTurretTarget.ChangeAngleSetPosition(tx, posGet.getVr());
+                aprilTagsTurretTarget.CheckPositionAndSetPower(telemetry);
 
                 double positionChange = MiscUtils.getPositionFromDegrees(tx, 537.7);
 

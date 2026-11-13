@@ -25,7 +25,7 @@ public class TurretPIDTuner extends LinearOpMode2026 {
     @Override
     public void runOpMode() throws InterruptedException {
         config();
-        attt = new AprilTagsTurretTarget(turret, posGet);
+        attt = new AprilTagsTurretTarget(turret, posGet, 0);
         attt.kp = P; attt.ki = I; attt.kd = D;
         loss = -1;
         if(MiscUtils.checkFile(path)) {

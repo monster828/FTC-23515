@@ -3,15 +3,12 @@ package org.firstinspires.ftc.teamcode.Utils;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.BioBuzz.RobotConfig;
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.NNFileReader;
 import org.firstinspires.ftc.teamcode.Utils.Detection.CheckedDistanceSensor;
 import org.firstinspires.ftc.teamcode.Utils.Detection.DistSensorObstacleDetector;
@@ -24,6 +21,7 @@ import java.io.File;
 import java.util.Random;
 
 public abstract class LinearOpMode2026 extends LinearOpMode {
+    public Servo lla;
     public PositionGetter posGet;
     /**BL BR FL FR*/
     public DcMotor[] mot;
@@ -41,7 +39,12 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
 
     // public IMU imu;
 
-    public Servo lla;
+    public DcMotorEx flywheel, lift, intake;
+
+    static final double FLYWHEEL_P = 173.2;
+    static final double FLYWHEEL_F = 17.19;
+
+    public Servo hood;
 
 
     /**
@@ -144,6 +147,34 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
             turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } catch (Exception e) {
             telemetry.addData("Config error: ","Turret motor not found");
+        }
+
+        try{
+            flywheel = hardwareMap.get(DcMotorEx.class, "FW");
+            flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            flywheel.setVelocityPIDFCoefficients(FLYWHEEL_P, 0, 0, FLYWHEEL_F);
+        }catch (Exception e){
+            telemetry.addData("Config error: ", "Flywheel not found");
+        }
+
+        try{
+            hood = hardwareMap.get(Servo.class, "Hood");
+        }catch (Exception e){
+            telemetry.addData("Config error: ", "Hood not found");
+        }
+
+        try{
+            lift = hardwareMap.get(DcMotorEx.class, "lift");
+            lift.setDirection(DcMotorSimple.Direction.REVERSE);
+        }catch (Exception e){
+            telemetry.addData("Config error: ", "Lift not found");
+        }
+
+        try{
+            intake = hardwareMap.get(DcMotorEx.class, "intake");
+        }catch (Exception e){
+            telemetry.addData("Config error: ", "Intake not found");
         }
 
         if(!MiscUtils.checkBattery(hardwareMap)) {

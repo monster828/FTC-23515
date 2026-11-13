@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode.BioBuzz;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
@@ -15,10 +11,6 @@ import java.util.Arrays;
 
 @TeleOp(name = "Turret_Testing")
 public class Turret_Testing extends LinearOpMode2026 {
-
-    DcMotorEx flywheel, lift, intake;
-    Servo hood;
-    Servo lla;
     static final double INTAKE_POWER = 0.8;
     static final double LIFT_POWER = 1.0;
     static final int MAX_RPM = 6000;
@@ -45,16 +37,6 @@ public class Turret_Testing extends LinearOpMode2026 {
 
     @Override
     public void runOpMode(){
-        flywheel = hardwareMap.get(DcMotorEx.class, "FW");
-        flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        flywheel.setVelocityPIDFCoefficients(FLYWHEEL_P, 0, 0, FLYWHEEL_F);
-        hood = hardwareMap.get(Servo.class, "Hood");
-        lla = hardwareMap.get(Servo.class, "LLA");
-        lift = hardwareMap.get(DcMotorEx.class, "lift");
-        lift.setDirection(DcMotorSimple.Direction.REVERSE);
-        intake = hardwareMap.get(DcMotorEx.class, "intake");
-
         config();
 
         waitForStart();
