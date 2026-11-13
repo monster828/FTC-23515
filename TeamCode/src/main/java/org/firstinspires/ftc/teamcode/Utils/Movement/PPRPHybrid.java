@@ -22,7 +22,7 @@ public class PPRPHybrid {
         ArrayList<Path> paths = new ArrayList<>();
         float timePerPoint = (path[1].getTimeStamp()-path[0].getTimeStamp())/1000.0f;
         int i = 0;
-        while(i < path.length) {
+        while(i < path.length-1) {
             int a = 0;
             while(a < timeDiff/timePerPoint && path[i+a].getType() == 0 && i+a < path.length-1)a++;
             Pose s = poseFromPosi(path[i]);
