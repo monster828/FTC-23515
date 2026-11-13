@@ -20,6 +20,9 @@ import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagsTurretTarget;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+import java.util.function.BooleanSupplier;
+
 @Autonomous(name = "AutoDriveMain", group = "Autonomous")
 public class AutoDriveMain extends LinearOpMode2026 {
     private Follower follower;
@@ -61,8 +64,8 @@ public class AutoDriveMain extends LinearOpMode2026 {
         follower.update();
 
         waitForStart();
-        flywheel.setVelocity(2170 * TICKS_PER_REV / 60.0);
-        hood.setPosition(0.23);
+        flywheel.setVelocity(2310 * TICKS_PER_REV / 60.0);
+        hood.setPosition(0.2);
         intake.setPower(INTAKE_POWER);
 
         while (Math.abs(flywheel.getVelocity() - (2170 * TICKS_PER_REV / 60.0)) > 40){
@@ -104,9 +107,15 @@ public class AutoDriveMain extends LinearOpMode2026 {
 
     public Command shoot(){
         return  sequential(
+            waitUntil(new BooleanSupplier() {
+                @Override
+                public boolean getAsBoolean() {
+                    return limelight.getLatestResult().getBarcodeResults().toArray().length > 0;
+                }
+            }),
             instant(() -> lift.setPower(LIFT_POWER)),
-                waitMs(1500),
-                instant(() -> lift.setPower(0))
+            waitMs(1500),
+            instant(() -> lift.setPower(0))
         );
     }
 
