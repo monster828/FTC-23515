@@ -28,7 +28,7 @@ public class TurretTest extends LinearOpMode2026 {
     public void runOpMode(){
         config();
 
-        AprilTagsTurretTarget aprilTagsTurretTarget = new AprilTagsTurretTarget(turret);
+        AprilTagsTurretTarget aprilTagsTurretTarget = new AprilTagsTurretTarget(turret, posGet);
 
         triggerDrivingTracking = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.a));
 
