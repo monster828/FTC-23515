@@ -1,0 +1,57 @@
+package org.firstinspires.ftc.teamcode.Utils.Movement;
+
+import static com.pedropathing.api.Paths.*;
+import static com.pedropathing.ivy.pedro.PedroCommands.follow;
+
+import com.pedropathing.api.Paths;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.Scheduler;
+import com.pedropathing.ivy.groups.Groups;
+import com.pedropathing.math.Pose;
+import com.pedropathing.paths.Path;
+
+import java.util.ArrayList;
+
+public class PPRPHybrid {
+
+    static float timeDiff = 0.5f;
+    static Follower follow;
+
+    public static Path path(Position[] path) {
+        ArrayList<Path> paths = new ArrayList<>();
+        float timePerPoint = (path[1].getTimeStamp()-path[0].getTimeStamp())/1000.0f;
+        int i = 0;
+        while(i < path.length) {
+            int a = 0;
+            while(a < timeDiff/timePerPoint && path[i+a].getType() == 0 && i+a < path.length-1)a++;
+            Pose s = poseFromPosi(path[i]);
+            Pose e = poseFromPosi(path[i+a]);
+            Position c0 = new Position(path[i+1].x()-path[i].x(),path[i+1].y()-path[i].y(),0);
+            c0 = c0.sized((timeDiff)*3.0f); c0 = c0.offset(path[i]);
+            Pose c0p = poseFromPosiNoR(c0);
+            Position c1 = new Position(path[i+a-1].x()-path[i+a].x(),path[i+a-1].y()-path[i+a].y(),0);
+            c1 = c1.sized((timeDiff)*3.0f); c1 = c1.offset(path[i+a]);
+            Pose c1p = poseFromPosiNoR(c1);
+            Path p = curve(s,e,c0p,c1p).linear(s,e);
+            paths.add(p);
+            i+=a;
+        }
+        return Paths.path(paths.toArray(new Path[0]));
+    }
+
+    public static void schedulePath(Position[] path) {
+        Scheduler.schedule(Groups.sequential(follow(follow,path(path))));
+    }
+
+    public static Pose poseFromPosi(Position p) {
+        return new Pose(p.x(),p.y(),Math.toRadians(-p.r()+90));
+    }
+    public static Pose poseFromPosiNoR(Position p) {
+        return new Pose(p.x(),p.y());
+    }
+
+    public static void setFollower(Follower follower) {follow = follower;}
+    public static Follower getFollower() {return follow;}
+
+}
