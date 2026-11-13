@@ -51,6 +51,8 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 follow(follower, corner()),
                 waitMs(500),
                 follow(follower, crossField()),
+//                waitForLimelight(),
+                waitMs(5000),
                 shoot(),
                 follow(follower, park())
         );
@@ -109,23 +111,20 @@ public class AutoDriveMain extends LinearOpMode2026 {
 
     public Command shoot(){
         return  sequential(
-            waitUntil(new BooleanSupplier() {
-                @Override
-                public boolean getAsBoolean() {
-                    LLResult result = limelight.getLatestResult();
-                    if (result != null && result.isValid()){
-                        telemetry.addData("ty", result.getTy());
-                        return result.getTy() > 5;
-                    }
-                    return gamepad1.cross;
-
-                }
-            }),
             instant(() -> lift.setPower(LIFT_POWER)),
             waitMs(1500),
             instant(() -> lift.setPower(0))
         );
     }
+
+//    public Command waitForLimelight() {
+//        return run(() -> {
+//            DoTurret();
+//        }).until(() -> {
+//            LLResult result = limelight.getLatestResult();
+//            return result != null && result.isValid();
+//        });
+//    }
 
     public void DoTurret(){
         // This will turn the turret to the april tags (if it sees it)
