@@ -179,7 +179,7 @@ public class AprilTagsTurretTarget {
     }
 
     public void CheckPositionAndSetPower(Telemetry telemetry){
-        if (dcMotorEx.getTargetPosition() > maxPosition || dcMotorEx.getTargetPosition() < minPosition){
+        if (GetTurretTargetPosition(dcMotorEx) > maxPosition || GetTurretTargetPosition(dcMotorEx) < minPosition){
             dcMotorEx.setPower(0);
             telemetry.addLine("WENT OVER!");
         }else {
@@ -197,7 +197,7 @@ public class AprilTagsTurretTarget {
 
                 double positionDiff = MiscUtils.getPositionFromDegrees(headingDiff, 537.7);
 
-                SetTargetPositionOverrideAllAround(dcMotorEx.getTargetPosition() - positionDiff);
+                SetTargetPositionOverrideAllAround(GetTurretTargetPosition(dcMotorEx) - positionDiff);
 
                 previousHeading = currentHeading;
             }else{
@@ -208,6 +208,10 @@ public class AprilTagsTurretTarget {
 
     private double GetTurretCurrentPosition(DcMotorEx motor){
         return motor.getCurrentPosition() + offset;
+    }
+
+    private double GetTurretTargetPosition(DcMotorEx motor){
+        return motor.getTargetPosition() + offset;
     }
 
     private void SetTurretTargetPosition(int targetPosition, DcMotorEx motor){

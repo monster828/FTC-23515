@@ -10,7 +10,13 @@ public class Autonomous extends LinearOpMode2026 {
 
     static final double INTAKE_POWER = 0.8;
     static final double LIFT_POWER = 1.0;
+
+    static final double TICKS_PER_REV = 28;
+
     AprilTagsTurretTarget aprilTagsTurretTarget;
+
+    boolean isIntakeOn = false;
+    boolean isLiftOn = false;
 
 
 
@@ -22,18 +28,30 @@ public class Autonomous extends LinearOpMode2026 {
 
         waitForStart();
 
+        flywheel.setVelocity(2170 * TICKS_PER_REV / 60.0);
+        hood.setPosition(0.24);
+
 
         while (opModeIsActive()){
             DoLoop(); // Do this every frame during auto
+
+            if (gamepad1.cross){
+                ShootAll();
+            }
         }
     }
 
     public void ShootAll(){
-        flywheel.setVelocity(2170);
-        hood.setPosition(0.24);
         intake.setPower(INTAKE_POWER);
         //Lift only runs while left bumper is held
         lift.setPower(LIFT_POWER);
+
+        sleep(2000);
+
+        flywheel.setVelocity(0);
+        intake.setPower(0);
+        //Lift only runs while left bumper is held
+        lift.setPower(0);
     }
 
     public void DoLoop(){
