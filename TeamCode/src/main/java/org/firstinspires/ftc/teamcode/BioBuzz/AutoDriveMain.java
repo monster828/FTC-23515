@@ -91,7 +91,9 @@ public class AutoDriveMain extends LinearOpMode2026 {
     }
 
     public Path corner() {
-        return Paths.path(Paths.line(start, point1).constant(point1));
+        return Paths.path(Paths.line(start, point1).constant(point1))
+                .with(Constants.foresightConfig.maxPathSpeed.at(.5))
+                .with(Constants.foresightConfig.maxDecelerationConstraint.at(.5));
     }
     public Path crossField() {
         return Paths.path(Paths.curve(point1, point2Control1, point2Control2, point2Control3, point2).heading(Interpolator.tangent.reverse()));
