@@ -4,8 +4,11 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
 
 public class AprilTagsTurretTarget {
     // Limelight Pipelines
@@ -31,10 +34,17 @@ public class AprilTagsTurretTarget {
 
     double newPosition = 0;
 
-    public AprilTagsTurretTarget(DcMotorEx turretMotor){
+    long seeTime;
+
+    double previousHeading;
+    PositionGetter positionGetter;
+
+    public AprilTagsTurretTarget(DcMotorEx turretMotor, PositionGetter positionGetter){
         dcMotorEx = turretMotor;
 
         limelightPipeline = LinearOpMode2026.isCurrentAllienceRed ? 4 : 3;
+
+        this.positionGetter = positionGetter;
     }
 //    public AprilTagsTurretTarget(DcMotorEx turretMotor, Limelight3A limelight3A){
 //        dcMotorEx = turretMotor;
@@ -145,13 +155,15 @@ public class AprilTagsTurretTarget {
                 waitTillNotSee = false;
             }
         }else {
-            double positionFromAllAround = MiscUtils.getPositionFromDegrees(360, 537.7);
+//            double positionFromAllAround = MiscUtils.getPositionFromDegrees(360, 537.7);
             newPosition = position;
+            previousHeading = positionGetter.r();
 
             double range = maxPosition - minPosition;
 
             if (newPosition > maxPosition || newPosition < minPosition){
                 waitTillNotSee = true;
+                seeTime = System.currentTimeMillis();
                 newPosition = minPosition + ((newPosition - minPosition) % range + range) % range;
             }
 
@@ -165,6 +177,22 @@ public class AprilTagsTurretTarget {
 
             dcMotorEx.setTargetPosition((int) newPosition);
         }
+    }
+
+    private void SetTargetPositionOverrideAllAround(double position){
+        newPosition = position;
+
+        double range = maxPosition - minPosition;
+
+        if (newPosition > maxPosition || newPosition < minPosition){
+            waitTillNotSee = true;
+            seeTime = System.currentTimeMillis();
+            newPosition = minPosition + ((newPosition - minPosition) % range + range) % range;
+
+            previousHeading = positionGetter.r();
+        }
+
+        dcMotorEx.setTargetPosition((int) newPosition);
     }
 
     private void SetPositionBasedOnPosition(double target){
@@ -207,5 +235,33 @@ public class AprilTagsTurretTarget {
         dcMotorEx.setPower(motorPower * -1);
 
         lastTx = tx;
+    }
+
+    public void CheckPositionAndSetPower(Telemetry telemetry){
+        if (dcMotorEx.getTargetPosition() > maxPosition || dcMotorEx.getTargetPosition() < minPosition){
+            dcMotorEx.setPower(0);
+            telemetry.addLine("WENT OVER!");
+        }else {
+
+            if (waitTillNotSee || !canSee) { // Rotate the 180 a little slower
+                dcMotorEx.setPower(0.5);
+
+                double timeDiff = (System.currentTimeMillis() - seeTime) / 1000.0;
+
+                double currentHeading = positionGetter.r();
+
+                seeTime = System.currentTimeMillis();
+
+                double headingDiff = currentHeading - previousHeading;
+
+                double positionDiff = MiscUtils.getPositionFromDegrees(headingDiff, 537.7);
+
+                SetTargetPositionOverrideAllAround(dcMotorEx.getTargetPosition() - positionDiff);
+
+                previousHeading = currentHeading;
+            }else{
+                dcMotorEx.setPower(0.7);  // LLA max .69  min .43
+            }
+        }
     }
 }

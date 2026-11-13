@@ -45,7 +45,7 @@ public class CompBotPedroTest extends LinearOpMode {
     // Autonomous routine: each "Path" is a stretch between two points, movement heading determined per "Path"
     public Path fieldCross() {
         return Paths.path(Paths.curve(start, point1Control1, point1Control2, point1).heading(Interpolator.piecewise().until(0.3, Interpolator.linear(point1Segment2Start, point1Segment2End)).until(1, Interpolator.tangent.reverse())), Paths.curve(point2Start, point2Control1, point2Control2, point2).linear(point2Start, point2));
-    }.
+    }
 
     public Command autoRoutine() {
         return sequential(
