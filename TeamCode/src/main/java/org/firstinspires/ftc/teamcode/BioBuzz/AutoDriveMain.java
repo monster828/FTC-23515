@@ -15,10 +15,13 @@ import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.pedropathing.paths.interpolator.Interpolator;
+
+import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
+import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagsTurretTarget;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 @Autonomous(name = "AutoDriveMain", group = "Autonomous")
-public class AutoDriveMain extends LinearOpMode {
-
+public class AutoDriveMain extends LinearOpMode2026 {
     private Follower follower;
 
     private final PoseFactory poseFactory = PoseFactory.degrees();
@@ -34,25 +37,38 @@ public class AutoDriveMain extends LinearOpMode {
     private final Pose point3Control1 = poseFactory.of(64.8796, 98.922, 0);
     private final Pose point3Control2 = poseFactory.of(42.9879, 107.3295, 0);
 
+    public AprilTagsTurretTarget aprilTagsTurretTarget;
+
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
+                shoot(),
                 follow(follower, corner()),
                 waitMs(500),
                 follow(follower, crossField()),
-                waitMs(2000),
+                shoot(),
                 follow(follower, park())
         );
     }
 
     @Override
     public void runOpMode() {
+        config();
+        aprilTagsTurretTarget = new AprilTagsTurretTarget(turret, posGet, MiscUtils.getPositionFromDegrees(90, 537.7));
         Scheduler.reset();
         follower = Constants.create(hardwareMap);
         follower.setPose(start);
         follower.update();
 
         waitForStart();
+        flywheel.setVelocity(2170 * TICKS_PER_REV / 60.0);
+        hood.setPosition(0.23);
+        intake.setPower(INTAKE_POWER);
+
+        while (Math.abs(flywheel.getVelocity() - (2170 * TICKS_PER_REV / 60.0)) > 40){
+            DoTurret();
+        }
+
         schedule(autoRoutine());
 
         while (opModeIsActive()) {
@@ -68,6 +84,8 @@ public class AutoDriveMain extends LinearOpMode {
                 telemetry.addData("Path number", follower.pathIndex());
             }
 
+            DoTurret();
+
             telemetry.update();
         }
     }
@@ -80,5 +98,28 @@ public class AutoDriveMain extends LinearOpMode {
     }
     public Path park() {
         return Paths.path(Paths.curve(point2, point3Control1, point3Control2, point3).tangent());
+    }
+
+    public Command shoot(){
+        return  sequential(
+            instant(() -> lift.setPower(LIFT_POWER)),
+                waitMs(1500),
+                instant(() -> lift.setPower(0))
+        );
+    }
+
+    public void DoTurret(){
+        // This will turn the turret to the april tags (if it sees it)
+
+        double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
+
+        aprilTagsTurretTarget.ChangeAngleSetPosition(tx, posGet.getVr());
+
+        double positionChange = MiscUtils.getPositionFromDegrees(tx, 537.7);
+
+        telemetry.addLine("tx: " + tx);
+        telemetry.addLine("Amount of Position changes: " + positionChange);
+
+        aprilTagsTurretTarget.CheckPositionAndSetPower(telemetry);
     }
 }

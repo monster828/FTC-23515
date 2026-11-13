@@ -28,8 +28,7 @@ public class Autonomous extends LinearOpMode2026 {
 
         waitForStart();
 
-        flywheel.setVelocity(2170 * TICKS_PER_REV / 60.0);
-        hood.setPosition(0.24);
+
 
 
         while (opModeIsActive()){
