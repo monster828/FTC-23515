@@ -12,6 +12,8 @@ import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.commands.Commands.*;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
+
+import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.pedropathing.paths.interpolator.Interpolator;
@@ -110,7 +112,13 @@ public class AutoDriveMain extends LinearOpMode2026 {
             waitUntil(new BooleanSupplier() {
                 @Override
                 public boolean getAsBoolean() {
-                    return limelight.getLatestResult().getBarcodeResults().toArray().length > 0;
+                    LLResult result = limelight.getLatestResult();
+                    if (result != null && result.isValid()){
+                        telemetry.addData("ty", result.getTy());
+                        return result.getTy() > 5;
+                    }
+                    return gamepad1.cross;
+
                 }
             }),
             instant(() -> lift.setPower(LIFT_POWER)),
