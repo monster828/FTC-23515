@@ -49,7 +49,9 @@ public class PathfindingTest extends LinearOpMode2026 {
         //dt.queuePath(startLaunch);
         sleep(1000);
         //while(!dt.idle());
-        while(!follower.idle()) {follower.update(); Scheduler.execute();};
+        while(!follower.idle()) {
+            follower.update();
+            Scheduler.execute();}
 
         int runs = 0;
 
@@ -82,7 +84,9 @@ public class PathfindingTest extends LinearOpMode2026 {
                 Scheduler.execute();
                 sleep(500);
                 //while(!dt.idle() && opModeIsActive() && !gamepad1.a);
-                while(!follower.idle() && opModeIsActive() && !gamepad1.a){follower.update(); Scheduler.execute();}
+                while(!follower.idle() && opModeIsActive() && !gamepad1.a){
+                    follower.update();
+                    Scheduler.execute();}
                 while(gamepad1.a);
                 runs++;
             }
