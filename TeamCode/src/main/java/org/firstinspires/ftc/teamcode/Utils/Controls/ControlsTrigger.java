@@ -54,6 +54,7 @@ public class ControlsTrigger {
      * This will just return if the triggered button was pressed
      * **/
     public Boolean IsButtonPressed(){
+        _buttonPressed = button.isPressed();
         return _buttonPressed;
     }
 }

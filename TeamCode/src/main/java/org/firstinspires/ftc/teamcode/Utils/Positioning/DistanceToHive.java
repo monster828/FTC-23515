@@ -24,16 +24,36 @@ public class DistanceToHive {
             // Down hive
 
             double xdist = positionGetter.x() - downHiveX;
-            double ydist = positionGetter.y() - downHiveY;
+            double ydist = yPosition - downHiveY;
 
             return Math.sqrt(xdist * xdist + ydist * ydist);
         } else {
             // Up hive
 
             double xdist = positionGetter.x() - upHiveX;
-            double ydist = positionGetter.y() - upHiveY;
+            double ydist = yPosition - upHiveY;
 
             return Math.sqrt(xdist * xdist + ydist * ydist);
+        }
+    }
+
+    public double GetEstimatedTx(){
+        double yPosition = positionGetter.y();
+
+        if (yPosition > 64){
+            // Down hive
+
+            double xdist = positionGetter.x() - downHiveX;
+            double ydist = yPosition - downHiveY;
+
+            return Math.atan2(ydist, xdist);
+        } else {
+            // Up hive
+
+            double xdist = positionGetter.x() - upHiveX;
+            double ydist = yPosition - upHiveY;
+
+            return Math.atan2(ydist, xdist);
         }
     }
 

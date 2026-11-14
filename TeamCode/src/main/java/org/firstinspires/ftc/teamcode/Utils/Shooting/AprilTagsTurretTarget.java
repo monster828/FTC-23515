@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
+import org.firstinspires.ftc.teamcode.Utils.Positioning.DistanceToHive;
 
 
 /** In April tags turret target you are most likely going to be using:
@@ -46,6 +47,8 @@ public class AprilTagsTurretTarget {
 
     public boolean rightSide = true;
 
+    DistanceToHive distanceToHive;
+
     public AprilTagsTurretTarget(DcMotorEx turretMotor, PositionGetter positionGetter, double offset){
         dcMotorEx = turretMotor;
 
@@ -53,6 +56,7 @@ public class AprilTagsTurretTarget {
 
         this.positionGetter = positionGetter;
         this.offset = offset;
+        this.distanceToHive = new DistanceToHive(positionGetter);
     }
 
     public double UpdateTxValue(Limelight3A limelight3A){
