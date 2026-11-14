@@ -26,20 +26,15 @@ public class BiobuzzPedroPaths extends LinearOpMode {
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
     private final Pose start = poseFactory.of(59, 9, 90);
-    private final Pose point1 = poseFactory.of(59.1496, 33.4897, 89.6501);
-    private final Pose point2 = poseFactory.of(14.6793, 39.3369, 125.0921);
-    private final Pose point2Control1 = poseFactory.of(28.5751, 19.5594, 0);
-    private final Pose point3 = poseFactory.of(9.9325, 90.1566, 95.3362);
-    private final Pose point4 = poseFactory.of(9.9325, 108.4935, 90);
+    private final Pose point1 = poseFactory.of(47.6356, 18.3398, 180);
+    private final Pose point2 = poseFactory.of(4.9995, 37.5717, 178.9391);
+    private final Pose point2Control1 = poseFactory.of(21.3613, 37.2687, 0);
 
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
                 follow(follower, path1()),
-                follow(follower, path2()),
-                waitMs(1000),
-                follow(follower, path3()),
-                follow(follower, path4())
+                follow(follower, path2())
         );
     }
 
@@ -71,20 +66,10 @@ public class BiobuzzPedroPaths extends LinearOpMode {
     }
 
     public Path path1() {
-        return Paths.line(start, point1).tangent();
+        return Paths.line(start, point1).constant(point1);
     }
 
     public Path path2() {
-        return Paths.curve(point1, point2Control1, point2).tangent()
-                .with(Constants.foresightConfig.maxPathSpeed.at(.5))
-                .with(Constants.foresightConfig.maxDecelerationConstraint.at(.5));
-    }
-
-    public Path path3() {
-        return Paths.line(point2, point3).tangent();
-    }
-
-    public Path path4() {
-        return Paths.line(point3, point4).tangent();
+        return Paths.curve(point1, point2Control1, point2).tangent();
     }
 }
