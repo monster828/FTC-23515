@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.Utils.GUI;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Utils.Controls.ControlsTrigger;
+import org.firstinspires.ftc.teamcode.Utils.Controls.GamepadButton;
 
 import java.util.ArrayList;
 
@@ -13,6 +17,8 @@ public class RoGUI {
     private ArrayList<RoGraphic> graphics = new ArrayList<RoGraphic>();
     private int selected = 0;
     private boolean captive = false;
+    private Gamepad c;
+    private ControlsTrigger up, down, left, right, interact;
 
     /**
      * Create a UI in the telemetry.
@@ -21,6 +27,21 @@ public class RoGUI {
      */
     public RoGUI(Telemetry tem) {
         telemetry = tem;
+    }
+
+    /**
+     * Create a UI in the telemetry.
+     * You must run {@link Telemetry#update()} after running {@link RoGUI#render()} in your loop.
+     * This constructor allows for using default loop.
+     * @param tem telemetry to write to.
+     */
+    public RoGUI(Telemetry tem, Gamepad controller) {
+        telemetry = tem; c = controller;
+        up = new ControlsTrigger(controller, GamepadButton.GButton.dpad_up);
+        down = new ControlsTrigger(controller, GamepadButton.GButton.dpad_down);
+        left = new ControlsTrigger(controller, GamepadButton.GButton.dpad_left);
+        right = new ControlsTrigger(controller, GamepadButton.GButton.dpad_right);
+        interact = new ControlsTrigger(controller, GamepadButton.GButton.left_bumper);
     }
 
     /**
@@ -68,6 +89,18 @@ public class RoGUI {
      */
     public void interact() {
         graphics.get(selected).interact();
+    }
+
+    /**
+     * Does loop stuff, doesn't include
+     */
+    public void defaultLoop() {
+        if(up.IsTriggered()) up();
+        if(down.IsTriggered()) down();
+        if(left.IsTriggered()) left();
+        if(right.IsTriggered()) right();
+        if(interact.IsTriggered()) interact();
+        render();
     }
 
     /**

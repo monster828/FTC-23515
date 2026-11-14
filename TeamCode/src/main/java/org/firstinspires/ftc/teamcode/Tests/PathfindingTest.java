@@ -74,12 +74,14 @@ public class PathfindingTest extends LinearOpMode2026 {
                         x,
                         y
                 );
-                telemetry.addData("Current pos",posGet.getPosi());
+                //telemetry.addData("Current pos",);
                 telemetry.addData("Target pos", x+","+y);
                 Pathfinder.saveI(1,40,"DriveThreadTest"+runs);
                 Position p = new Position(x,y,0);
                 //dt.queuePath(Pathfinder.pos.toArray(new Position[0]));
+                Scheduler.reset();
                 PPRPHybrid.schedulePath(startLaunch);
+                follower.update();
                 Scheduler.execute();
                 sleep(500);
                 //while(!dt.idle() && opModeIsActive() && !gamepad1.a);

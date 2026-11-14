@@ -21,6 +21,8 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
     boolean isIntakeReversed = false;
 
+    boolean isIntakeOn = true;
+
 
     @Override
     public void runOpMode(){
@@ -29,7 +31,8 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
         aprilTagsTurretTarget = new AprilTagsTurretTarget(turret, posGet, 0);
 
         ControlsTrigger shootTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.dpad_right));
-        ControlsTrigger intakeTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.a));
+        ControlsTrigger intakeReverseTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.circle));
+        ControlsTrigger intakeTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.cross));
 
         startShot = -1;
 
@@ -37,6 +40,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
         flywheel.setVelocity(2310 * TICKS_PER_REV / 60.0);
         hood.setPosition(0.2);
+        intake.setPower(INTAKE_POWER);
 
         while (opModeIsActive()){
             teleopMovementUtil.UpdateDrive();
@@ -48,14 +52,24 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
             DoShoot();
 
             if (intakeTrigger.IsTriggered()){
-                if (isIntakeReversed){
-                    isIntakeReversed = false;
-                    intake.setPower(-INTAKE_POWER);
-                }else {
-                    isIntakeReversed = true;
-                    intake.setPower(INTAKE_POWER);
-                }
+                isIntakeOn = !isIntakeOn;
             }
+
+            if (intakeReverseTrigger.IsTriggered()){
+                isIntakeReversed = !isIntakeReversed;
+            }
+        }
+    }
+
+    private void DoIntake(){
+        if (isIntakeOn){
+            if (isIntakeReversed){
+                intake.setPower(INTAKE_POWER);
+            }else {
+                intake.setPower(-INTAKE_POWER);
+            }
+        }else {
+            intake.setPower(0);
         }
     }
 

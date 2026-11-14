@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Utils.Controls;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
+
 public class ControlsTrigger {
     private Boolean _triggered = false;
 
@@ -14,6 +16,10 @@ public class ControlsTrigger {
      * Creates an instance of the trigger with a specific button
      **/
     public ControlsTrigger(GamepadButton b){button = b;}
+    /**
+     * Creates an instance of the trigger with a specific button
+     **/
+    public ControlsTrigger(Gamepad gamepad, GamepadButton.GButton button){this.button = new GamepadButton(gamepad,button);}
 
     public void UpdateTrigger(Boolean _pressed) {
         if (_pressed && !_buttonPressed){
