@@ -163,23 +163,55 @@ public class AutoDriveMain extends LinearOpMode2026 {
         });
     }
 
+//    public Command goBackIfHiveIsNotDown() {
+//        return infinite(() -> {
+//            LLResult result = limelight.getLatestResult();
+//            if (result != null && result.isValid()) {
+//                double currentTy = result.getTy();
+//                telemetry.addData("Checked ty", currentTy);
+//
+//                schedule(sequential(
+//                        follow(follower, backToStart()),
+//                        shoot()
+//                ));
+//
+////                if (currentTy > HIVE_TY_THRESHOLD) {
+////                    // If ty is higher than expected, schedule the return path and shooting sequence
+////
+////                }
+//            }
+//        }).until(() -> true); // Runs once to evaluate the condition and trigger the fallback if needed
+//    }
+
     public Command goBackIfHiveIsNotDown() {
+        long[] startTime = {System.currentTimeMillis()};
+        int[] validFrames = {0};
+        double timeoutMs = 1000.0; // Check for up to 1 second
+        int requiredValidFrames = 5; // Must see the tag valid for at least 5 frames
+
         return infinite(() -> {
             LLResult result = limelight.getLatestResult();
             if (result != null && result.isValid()) {
-                double currentTy = result.getTy();
-                telemetry.addData("Checked ty", currentTy);
-
+                validFrames[0]++;
+                telemetry.addData("Valid Tag Frames", validFrames[0]);
+            }
+            DoTurret(); // Keep updating the turret while waiting/checking
+        }).until(() -> {
+            // If we've accumulated enough valid frames, trigger the return and shoot
+            if (validFrames[0] >= requiredValidFrames) {
                 schedule(sequential(
                         follow(follower, backToStart()),
                         shoot()
                 ));
-
-//                if (currentTy > HIVE_TY_THRESHOLD) {
-//                    // If ty is higher than expected, schedule the return path and shooting sequence
-//
-//                }
+                return true; // Finish command
             }
-        }).until(() -> true); // Runs once to evaluate the condition and trigger the fallback if needed
+
+            // If time expires without stable detection, move on
+            if (System.currentTimeMillis() - startTime[0] > timeoutMs) {
+                return true; // Finish command
+            }
+
+            return false; // Keep checking
+        });
     }
 }
