@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Prototype;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Utils.Timeout.FrameRateCounter;
 import org.firstinspires.ftc.teamcode.Utils.Timeout.Timeout;
 import org.firstinspires.ftc.teamcode.Utils.Timeout.TypeOfTimeout;
 
+@Disabled
 @TeleOp(name = "fullPrototype1")
 public class fullPrototype1 extends OpMode {
 

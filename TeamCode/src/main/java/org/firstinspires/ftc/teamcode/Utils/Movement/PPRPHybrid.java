@@ -5,7 +5,6 @@ import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.api.Paths;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.ivy.groups.Groups;
 import com.pedropathing.math.Pose;

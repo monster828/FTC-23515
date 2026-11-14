@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Tests.DriveTests_2026;
 
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
 
+@Disabled
 @TeleOp
 public class MoveRotTest extends LinearOpMode {
 
