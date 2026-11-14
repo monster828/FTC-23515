@@ -27,6 +27,7 @@ public class Scoreboard extends LinearOpMode2026 {
         RoNumInput scoreIn = new RoNumInput("Score",5,0,telemetry);
         RoButton addScore = new RoButton(telemetry,"Add Score");
         gui.add(P1); gui.add(P2); gui.add(scoreIn); gui.add(addScore);
+        waitForStart();
         while(opModeIsActive()) {
             gui.defaultLoop();
             int[][] leaderboard = scores.getLeaderboard(15,true);

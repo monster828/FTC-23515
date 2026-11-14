@@ -18,6 +18,7 @@ import com.pedropathing.paths.interpolator.Interpolator;
 
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+import org.firstinspires.ftc.teamcode.Utils.Movement.MovementUtils;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagsTurretTarget;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -75,7 +76,10 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 conditional( () -> !isCompetition, //when thing is set in config to return home
                         follow(follower, toStart()),
                         instant(() -> {}) // runs if the condition is false (does nothing)
-                )
+                ),
+                instant(() -> {
+                    MovementUtils.autoEndPose = follower.pose();
+                })
         );
     }
 
