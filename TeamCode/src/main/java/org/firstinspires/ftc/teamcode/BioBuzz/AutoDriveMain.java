@@ -93,12 +93,16 @@ public class AutoDriveMain extends LinearOpMode2026 {
         follower.update();
 
         waitForStart();
-        flywheel.setVelocity(2480 * TICKS_PER_REV / 60.0); // 2400 was really good
+        flywheel.setVelocity(2200 * TICKS_PER_REV / 60.0); // 2400 was really good
         hood.setPosition(0.2);
         intake.setPower(0);
 
-        while (Math.abs(flywheel.getVelocity() - (2200 * TICKS_PER_REV / 60.0)) > 40){
+        while (Math.abs(flywheel.getVelocity() - (2100 * TICKS_PER_REV / 60.0)) > 80){
+            telemetry.addData("Flywheel velocity", flywheel.getVelocity());
+            telemetry.addData("Wanted velocity", (2100 * TICKS_PER_REV / 60.0));
             DoTurret();
+
+            telemetry.update();
         }
 
         schedule(autoRoutine());
