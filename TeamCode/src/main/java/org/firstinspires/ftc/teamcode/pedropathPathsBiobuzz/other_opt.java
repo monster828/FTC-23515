@@ -26,7 +26,7 @@ public class other_opt extends LinearOpMode {
 
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose start = poseFactory.of(60, 132, 90);
+    private final Pose start = poseFactory.of(60, 132, 270);
     private final Pose point1 = poseFactory.of(17.7869, 124.0861, 180);
     private final Pose point1Control1 = poseFactory.of(46.2072, 113.3212, 0);
 
