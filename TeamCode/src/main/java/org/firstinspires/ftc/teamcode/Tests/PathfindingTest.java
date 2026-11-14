@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.Utils.MatrixDrawer;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PPRPHybrid;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
-import org.firstinspires.ftc.teamcode.Utils.Threads.PosiBasedDriveThread;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import java.util.Random;
@@ -69,9 +68,9 @@ public class PathfindingTest extends LinearOpMode2026 {
             }
             if(x > 0) {
                 Pathfinder.pathfind(
-                        (int) posGet.getPosi().x(),
-                        (int) posGet.getPosi().y(),
-                        (int) posGet.getPosi().r(),
+                        (int) follower.pose().y(),
+                        (int) follower.pose().x(),
+                        (int) (90-Math.toDegrees(follower.pose().heading())),
                         x,
                         y
                 );

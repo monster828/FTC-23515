@@ -60,10 +60,10 @@ public class PPRPHybrid {
     }
 
     public static Pose poseFromPosi(Position p) {
-        return new Pose(p.x(),p.y(),Math.toRadians(-p.r()+90));
+        return new Pose(p.y(),p.x(),Math.toRadians(-p.r()+90));
     }
     public static Pose poseFromPosiNoR(Position p) {
-        return new Pose(p.x(),p.y());
+        return new Pose(p.y(),p.x());
     }
 
     public static void setFollower(Follower follower) {follow = follower;}

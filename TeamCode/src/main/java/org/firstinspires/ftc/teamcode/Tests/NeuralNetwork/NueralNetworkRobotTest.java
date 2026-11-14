@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.Tests.NeuralNetwork;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.Network;
@@ -6,6 +7,7 @@ import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 @TeleOp
+@Disabled
 public class NueralNetworkRobotTest extends LinearOpMode2026 {
     public double positionX = 0;
     public double positionY = 0;

@@ -21,7 +21,7 @@ public class AprilTagsTurretTarget {
     // 3 Blue
     // 4 Red
 
-    private ElapsedTime dtTimer = new ElapsedTime();
+    private final ElapsedTime dtTimer = new ElapsedTime();
     double lastTx = 0;
 
     DcMotorEx dcMotorEx;
@@ -32,6 +32,8 @@ public class AprilTagsTurretTarget {
     public double minPosition = MiscUtils.getPositionFromDegrees(-185,537.7);
     public boolean waitTillNotSee = false;
     public boolean canSee = false;
+
+    boolean didLastTX = false;
 
     double newPosition = 0;
 
@@ -62,6 +64,7 @@ public class AprilTagsTurretTarget {
         if (limelightResult != null && limelightResult.isValid()){
             double tx = limelightResult.getTx(); // Horizontal  0 is middle
             canSee = true;
+            didLastTX = false;
             return tx;
         }else {
             waitTillNotSee = false;
@@ -91,6 +94,31 @@ public class AprilTagsTurretTarget {
         if (waitTillNotSee || !canSee){
             if (Math.abs(GetTurretCurrentPosition(dcMotorEx) - newPosition) < 400){
                 waitTillNotSee = false;
+                didLastTX = true;
+            }
+
+            if (!canSee && !didLastTX && !waitTillNotSee){
+//                didLastTX = true;
+//
+//                newPosition = GetTurretTargetPosition(dcMotorEx) + lastTx;
+//
+//                double range = maxPosition - minPosition;
+//
+//                if (newPosition > maxPosition || newPosition < minPosition){
+//                    waitTillNotSee = true;
+//                    seeTime = System.currentTimeMillis();
+//                    newPosition = minPosition + ((newPosition - minPosition) % range + range) % range;
+//                }
+
+//            if (newPosition > maxPosition){
+//                newPosition -= positionFromAllAround * (Math.floor((newPosition - maxPosition) / positionFromAllAround) + 1);
+//                waitTillNotSee = true;
+//            } else if (newPosition < minPosition) {
+//                newPosition += positionFromAllAround * (Math.floor((newPosition - minPosition) / positionFromAllAround) + 1);
+//                waitTillNotSee = true;
+//            }
+
+                SetTurretTargetPosition((int) newPosition, dcMotorEx);
             }
         }else {
 //            double positionFromAllAround = MiscUtils.getPositionFromDegrees(360, 537.7);
