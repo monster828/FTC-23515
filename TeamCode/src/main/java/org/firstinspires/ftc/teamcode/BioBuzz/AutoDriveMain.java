@@ -42,6 +42,8 @@ public class AutoDriveMain extends LinearOpMode2026 {
     private final Pose point3Control1 = poseFactory.of(64.8796, 98.922, 0);
     private final Pose point3Control2 = poseFactory.of(42.9879, 107.3295, 0);
 
+    private static final double HIVE_TY_THRESHOLD = 5.0;
+
     public AprilTagsTurretTarget aprilTagsTurretTarget;
 
     // Autonomous routine
@@ -50,6 +52,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 waitMs(500),
                 shoot(),
                 follow(follower, corner()),
+                goBackIfHiveIsNotDown(),
                 waitMs(500),
                 follow(follower, crossField()),
 //                waitForLimelight(),
@@ -120,6 +123,10 @@ public class AutoDriveMain extends LinearOpMode2026 {
         );
     }
 
+    public Path backToStart(){
+        return Paths.path(Paths.line(point1, start).constant(start));
+    }
+
 //    public Command waitForLimelight() {
 //        return run(() -> {
 //            DoTurret();
@@ -153,5 +160,23 @@ public class AutoDriveMain extends LinearOpMode2026 {
             // Ensure the result is valid and tx is within ±0.5 degrees of center
             return result != null && result.isValid() && Math.abs(tx) < 0.5;
         });
+    }
+
+    public Command goBackIfHiveIsNotDown() {
+        return infinite(() -> {
+            LLResult result = limelight.getLatestResult();
+            if (result != null && result.isValid()) {
+                double currentTy = result.getTy();
+                telemetry.addData("Checked ty", currentTy);
+
+                if (currentTy > HIVE_TY_THRESHOLD) {
+                    // If ty is higher than expected, schedule the return path and shooting sequence
+                    schedule(sequential(
+                            follow(follower, backToStart()),
+                            shoot()
+                    ));
+                }
+            }
+        }).until(() -> true); // Runs once to evaluate the condition and trigger the fallback if needed
     }
 }

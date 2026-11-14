@@ -146,7 +146,10 @@ public class AprilTagsTurretTarget {
     public void CheckPositionAndSetPower(Telemetry telemetry){
         if (GetTurretTargetPosition(dcMotorEx) > maxPosition || GetTurretTargetPosition(dcMotorEx) < minPosition){
             dcMotorEx.setPower(0);
-            telemetry.addLine("WENT OVER!");
+            if (telemetry != null){
+                telemetry.addLine("WENT OVER!");
+            }
+
         }else {
 
             if (waitTillNotSee || !canSee) { // Rotate the 180 a little slower
@@ -212,6 +215,39 @@ public class AprilTagsTurretTarget {
         }
 
         motor.setTargetPosition((int) (targetPosition - offset));
+    }
+
+    /**
+     * RUNS EVERYTHING
+     * **/
+    public void DoTurret(Limelight3A limelight, Telemetry telemetry){
+        // This will turn the turret to the april tags (if it sees it)
+
+        double tx = UpdateTxValue(limelight);
+
+        ChangeAngleSetPosition(tx, positionGetter.getVr());
+
+        double positionChange = MiscUtils.getPositionFromDegrees(tx, 537.7);
+
+        telemetry.addLine("tx: " + tx);
+        telemetry.addLine("Amount of Position changes: " + positionChange);
+
+        CheckPositionAndSetPower(telemetry);
+    }
+
+    /**
+     * RUNS EVERYTHING - NO TELEMETRY
+     * **/
+    public void DoTurret(Limelight3A limelight){
+        // This will turn the turret to the april tags (if it sees it)
+
+        double tx = UpdateTxValue(limelight);
+
+        ChangeAngleSetPosition(tx, positionGetter.getVr());
+
+        double positionChange = MiscUtils.getPositionFromDegrees(tx, 537.7);
+
+        CheckPositionAndSetPower(null);
     }
 
 
