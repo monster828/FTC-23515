@@ -75,7 +75,9 @@ public class BiobuzzPedroPaths extends LinearOpMode {
     }
 
     public Path path2() {
-        return Paths.curve(point1, point2Control1, point2).tangent();
+        return Paths.curve(point1, point2Control1, point2).tangent()
+                .with(Constants.foresightConfig.maxPathSpeed.at(.5))
+                .with(Constants.foresightConfig.maxDecelerationConstraint.at(.5));
     }
 
     public Path path3() {

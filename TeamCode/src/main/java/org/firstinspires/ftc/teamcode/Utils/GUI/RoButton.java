@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.Utils.GUI;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+/**
+ * A button. Outputs a boolean.
+ */
 public class RoButton extends RoGraphic{
 
     private String label;
@@ -10,6 +13,9 @@ public class RoButton extends RoGraphic{
     private long delay = 0;
     private long delaytick;
 
+    /**
+     * A button. Outputs a boolean.
+     */
     public RoButton(Telemetry tem, String label) {
         this.label = label;
         telemetry = tem;

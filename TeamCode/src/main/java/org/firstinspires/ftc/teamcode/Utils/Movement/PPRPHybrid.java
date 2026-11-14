@@ -51,6 +51,7 @@ public class PPRPHybrid {
                                 ", e "+poses.get(a+3)
                 );
             }
+            tem.update();
         }
         return Paths.path(paths.toArray(new Path[0]));
     }

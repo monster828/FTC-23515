@@ -5,7 +5,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.ArrayList;
 
 /**
- * The primary class for RoGraphics. Create one of these to use RoGraphics.
+ * Create a UI in the telemetry. You must run {@link Telemetry#update()} after running {@link RoGUI#render()} in your loop.
  */
 public class RoGUI {
 
@@ -16,6 +16,7 @@ public class RoGUI {
 
     /**
      * Create a UI in the telemetry.
+     * You must run {@link Telemetry#update()} after running {@link RoGUI#render()} in your loop.
      * @param tem telemetry to write to.
      */
     public RoGUI(Telemetry tem) {
@@ -93,7 +94,7 @@ public class RoGUI {
     }
 
     /**
-     * Displays the UI
+     * Displays the UI, run this in your loop before updating telemetry.
      */
     public void render() {
         captive = graphics.get(selected).takeControls();

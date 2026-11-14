@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.BioBuzz;
-import static com.pedropathing.api.Paths.*;
 import com.pedropathing.api.Paths;
 
 import com.pedropathing.api.PoseFactory;
@@ -15,15 +14,12 @@ import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.pedropathing.paths.interpolator.Interpolator;
 
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagsTurretTarget;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-
-import java.util.function.BooleanSupplier;
 
 @Autonomous(name = "AutoDriveMain", group = "Autonomous")
 public class AutoDriveMain extends LinearOpMode2026 {
@@ -57,6 +53,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 follow(follower, corner()),
                 waitMs(500),
                 goBackIfHiveIsNotDown(),
+                turnIntakeOff(),
                 waitMs(500),
                 follow(follower, crossField()),
 //                waitForLimelight(),
@@ -83,7 +80,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
         waitForStart();
         flywheel.setVelocity(2310 * TICKS_PER_REV / 60.0);
         hood.setPosition(0.2);
-        intake.setPower(INTAKE_POWER);
+        intake.setPower(0);
 
         while (Math.abs(flywheel.getVelocity() - (2170 * TICKS_PER_REV / 60.0)) > 40){
             DoTurret();
@@ -111,6 +108,10 @@ public class AutoDriveMain extends LinearOpMode2026 {
         }
     }
 
+    public Command turnIntakeOff(){
+        return instant(() -> intake.setPower(0));
+    }
+
     public Path corner() {
         return Paths.path(Paths.line(start, point1).constant(point1))
                 .with(Constants.foresightConfig.maxPathSpeed.at(.5))
@@ -128,6 +129,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
 
     public Command shoot(){
         return  sequential(
+            instant(() -> intake.setPower(INTAKE_POWER)),
             instant(() -> lift.setPower(LIFT_POWER)),
             waitMs(1500),
             instant(() -> lift.setPower(0))
