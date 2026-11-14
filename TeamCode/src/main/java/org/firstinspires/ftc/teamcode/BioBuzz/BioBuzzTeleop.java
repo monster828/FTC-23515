@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.BioBuzz;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.Utils.Controls.ControlsTrigger;
 import org.firstinspires.ftc.teamcode.Utils.Controls.GamepadButton;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
@@ -7,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.TeleopMovementUtil;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagsTurretTarget;
 
+@TeleOp
 public class BioBuzzTeleop extends LinearOpMode2026 {
 
     TeleopMovementUtil teleopMovementUtil;
@@ -16,6 +19,8 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
     boolean shooting = false;
 
+    boolean isIntakeReversed = false;
+
 
     @Override
     public void runOpMode(){
@@ -24,6 +29,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
         aprilTagsTurretTarget = new AprilTagsTurretTarget(turret, posGet, 0);
 
         ControlsTrigger shootTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.dpad_right));
+        ControlsTrigger intakeTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.a));
 
         startShot = -1;
 
@@ -40,6 +46,16 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
                 startShot = System.currentTimeMillis();
             }
             DoShoot();
+
+            if (intakeTrigger.IsTriggered()){
+                if (isIntakeReversed){
+                    isIntakeReversed = false;
+                    intake.setPower(-INTAKE_POWER);
+                }else {
+                    isIntakeReversed = true;
+                    intake.setPower(INTAKE_POWER);
+                }
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Tests.Turret;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Utils.Controls.ControlsTrigger;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Utils.Movement.TeleopMovementUtil;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagsTurretTarget;
 
 @TeleOp
+@Disabled
 public class TurretTest extends LinearOpMode2026 {
 
     double num = 0;

@@ -24,8 +24,8 @@ import java.util.Random;
 public abstract class LinearOpMode2026 extends LinearOpMode {
 
     public final double TICKS_PER_REV = 28;
-    public final double INTAKE_POWER = 0.8;
-    public final double LIFT_POWER = 0.6; //Was better at 0.7 but trying 0.6 // Was 1 but missed when shooting 4
+    public final double INTAKE_POWER = 0.7; // was 0.8
+    public final double LIFT_POWER = 0.7; //Was better at 0.7 but trying 0.6 // Was 1 but missed when shooting 4
     public Servo lla;
     public PositionGetter posGet;
     /**BL BR FL FR*/

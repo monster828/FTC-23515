@@ -1,16 +1,14 @@
 package org.firstinspires.ftc.teamcode.DriveTests_2026;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.Movement.DriveUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
-import org.firstinspires.ftc.teamcode.Utils.Threads.PosiBasedDriveThread;
-
-import java.util.ArrayList;
 
 @TeleOp
+@Disabled
 public class SpeedInDirTest extends LinearOpMode2026 {
 
     @Override
