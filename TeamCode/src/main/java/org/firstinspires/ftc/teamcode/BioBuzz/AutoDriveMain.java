@@ -12,6 +12,8 @@ import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.commands.Commands.*;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
+
+import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.pedropathing.paths.interpolator.Interpolator;
@@ -20,6 +22,9 @@ import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagsTurretTarget;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+import java.util.function.BooleanSupplier;
+
 @Autonomous(name = "AutoDriveMain", group = "Autonomous")
 public class AutoDriveMain extends LinearOpMode2026 {
     private Follower follower;
@@ -46,6 +51,9 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 follow(follower, corner()),
                 waitMs(500),
                 follow(follower, crossField()),
+//                waitForLimelight(),
+                waitMs(100),
+                waitForLimelightTx(),
                 shoot(),
                 follow(follower, park())
         );
@@ -61,8 +69,8 @@ public class AutoDriveMain extends LinearOpMode2026 {
         follower.update();
 
         waitForStart();
-        flywheel.setVelocity(2170 * TICKS_PER_REV / 60.0);
-        hood.setPosition(0.23);
+        flywheel.setVelocity(2310 * TICKS_PER_REV / 60.0);
+        hood.setPosition(0.2);
         intake.setPower(INTAKE_POWER);
 
         while (Math.abs(flywheel.getVelocity() - (2170 * TICKS_PER_REV / 60.0)) > 40){
@@ -105,10 +113,19 @@ public class AutoDriveMain extends LinearOpMode2026 {
     public Command shoot(){
         return  sequential(
             instant(() -> lift.setPower(LIFT_POWER)),
-                waitMs(1500),
-                instant(() -> lift.setPower(0))
+            waitMs(1500),
+            instant(() -> lift.setPower(0))
         );
     }
+
+//    public Command waitForLimelight() {
+//        return run(() -> {
+//            DoTurret();
+//        }).until(() -> {
+//            LLResult result = limelight.getLatestResult();
+//            return result != null && result.isValid();
+//        });
+//    }
 
     public void DoTurret(){
         // This will turn the turret to the april tags (if it sees it)
@@ -123,5 +140,16 @@ public class AutoDriveMain extends LinearOpMode2026 {
         telemetry.addLine("Amount of Position changes: " + positionChange);
 
         aprilTagsTurretTarget.CheckPositionAndSetPower(telemetry);
+    }
+
+    public Command waitForLimelightTx() {
+        // Keeps updating the turret position while waiting
+        return infinite(this::DoTurret).until(() -> {
+            double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
+            LLResult result = limelight.getLatestResult();
+
+            // Ensure the result is valid and tx is within ±0.5 degrees of center
+            return result != null && result.isValid() && Math.abs(tx) < 0.5;
+        });
     }
 }

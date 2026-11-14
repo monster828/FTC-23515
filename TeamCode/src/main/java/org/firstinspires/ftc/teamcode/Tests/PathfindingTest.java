@@ -24,7 +24,7 @@ public class PathfindingTest extends LinearOpMode2026 {
     public void runOpMode() throws InterruptedException {
         config();
         follower = Constants.create(hardwareMap);
-        follower.setPose(new Pose(9,9,0));
+        follower.setPose(new Pose(9,9,90));
         follower.update();
         PPRPHybrid.setFollower(follower);
         //For starter bot
@@ -49,7 +49,9 @@ public class PathfindingTest extends LinearOpMode2026 {
         //dt.queuePath(startLaunch);
         sleep(1000);
         //while(!dt.idle());
-        while(!follower.idle()) {Scheduler.execute(); follower.update();};
+        while(!follower.idle()) {
+            follower.update();
+            Scheduler.execute();}
 
         int runs = 0;
 
@@ -82,7 +84,9 @@ public class PathfindingTest extends LinearOpMode2026 {
                 Scheduler.execute();
                 sleep(500);
                 //while(!dt.idle() && opModeIsActive() && !gamepad1.a);
-                while(!follower.idle() && opModeIsActive() && !gamepad1.a){Scheduler.execute(); follower.update();}
+                while(!follower.idle() && opModeIsActive() && !gamepad1.a){
+                    follower.update();
+                    Scheduler.execute();}
                 while(gamepad1.a);
                 runs++;
             }
