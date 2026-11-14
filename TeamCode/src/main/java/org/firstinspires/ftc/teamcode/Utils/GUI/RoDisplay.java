@@ -5,6 +5,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * A display for displaying stuff, useful for Pong.
+ */
 public class RoDisplay extends RoGraphic {
 
     String[] display;
@@ -13,6 +16,9 @@ public class RoDisplay extends RoGraphic {
     Telemetry tem;
     Random rand = new Random();
 
+    /**
+     * A display for displaying stuff, useful for Pong.
+     */
     public RoDisplay(int sizeX, int sizeY, Telemetry tem) {
         this.tem = tem;
         this.sizeX = sizeX;
