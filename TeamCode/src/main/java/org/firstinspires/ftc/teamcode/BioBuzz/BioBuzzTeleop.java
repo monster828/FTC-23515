@@ -29,16 +29,17 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
         waitForStart();
 
+        flywheel.setVelocity(2310 * TICKS_PER_REV / 60.0);
+        hood.setPosition(0.2);
+
         while (opModeIsActive()){
             teleopMovementUtil.UpdateDrive();
             DoTurret();
-            DoShoot();
 
             if (shootTrigger.IsTriggered()){
                 startShot = System.currentTimeMillis();
             }
-
-
+            DoShoot();
         }
     }
 

@@ -52,7 +52,8 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 waitMs(500),
                 follow(follower, crossField()),
 //                waitForLimelight(),
-                waitMs(5000),
+                waitMs(100),
+                waitForLimelightTx(),
                 shoot(),
                 follow(follower, park())
         );
@@ -139,5 +140,16 @@ public class AutoDriveMain extends LinearOpMode2026 {
         telemetry.addLine("Amount of Position changes: " + positionChange);
 
         aprilTagsTurretTarget.CheckPositionAndSetPower(telemetry);
+    }
+
+    public Command waitForLimelightTx() {
+        // Keeps updating the turret position while waiting
+        return infinite(this::DoTurret).until(() -> {
+            double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
+            LLResult result = limelight.getLatestResult();
+
+            // Ensure the result is valid and tx is within ±0.5 degrees of center
+            return result != null && result.isValid() && Math.abs(tx) < 0.5;
+        });
     }
 }

@@ -24,7 +24,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
 
     public final double TICKS_PER_REV = 28;
     public final double INTAKE_POWER = 0.8;
-    public final double LIFT_POWER = 1.0;
+    public final double LIFT_POWER = 0.7; // Was 1 but missed when shooting 4
     public Servo lla;
     public PositionGetter posGet;
     /**BL BR FL FR*/
@@ -59,7 +59,8 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
                                 "Hello?",
                                 "I've been alone with you inside my mind, And in my dreams, I've kissed your lips a thousand times, I sometimes see you pass outside my door, Hello, is it me you're looking for? I can see it in your eyes, I can see it in your smile, You're all I've ever wanted, And my arms are open wide, 'Cause you know just what to say, And you know just what to do, And I want to tell you so much, I love you... I long to see the sunlight in your hair, And tell you time and time again how much I care, Sometimes, I feel my heart will overflow... Hello, I've just got to let you know, 'Cause I wonder where you are, And I wonder what you do, Are you somewhere feeling lonely? Or is someone loving you? Tell me how to win your heart, For I haven't got a clue, But let me start by saying, I love you... Hello, is it me you're looking for? 'Cause I wonder where you are, And I wonder what you do, Are you somewhere feeling lonely? Or is someone loving you, Tell me how to win your heart, For I haven't got a clue, But let me start by saying, I love you...",
                                 "Where do you live?",
-                                "THIS IS NO EASTER EGG, THIS IS A BUG!"
+                                "THIS IS NO EASTER EGG, THIS IS A BUG!",
+                                "Are you a true Hammerhead?",
         };
 
         NNFileReader.telemetry = telemetry;
