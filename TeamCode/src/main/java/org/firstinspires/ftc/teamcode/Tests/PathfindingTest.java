@@ -43,14 +43,14 @@ public class PathfindingTest extends LinearOpMode2026 {
                 new Position(12,12,0),
                 new Position(13,13,0)
         };
-        PPRPHybrid.schedulePath(startLaunch);
-        Scheduler.execute();
+        PPRPHybrid.runPath(startLaunch);
+        follower.update();
         //dt.queuePath(startLaunch);
         sleep(1000);
         //while(!dt.idle());
         while(!follower.holding()) {
             follower.update();
-            Scheduler.execute();}
+        }
 
         int runs = 0;
 
@@ -80,14 +80,13 @@ public class PathfindingTest extends LinearOpMode2026 {
                 Position p = new Position(x,y,0);
                 //dt.queuePath(Pathfinder.pos.toArray(new Position[0]));
                 Scheduler.reset();
-                PPRPHybrid.schedulePath(startLaunch);
+                PPRPHybrid.runPath(startLaunch);
                 follower.update();
-                Scheduler.execute();
                 sleep(500);
                 //while(!dt.idle() && opModeIsActive() && !gamepad1.a);
                 while(!follower.holding() && opModeIsActive() && !gamepad1.a){
                     follower.update();
-                    Scheduler.execute();}
+                    }
                 while(gamepad1.a);
                 runs++;
             }
