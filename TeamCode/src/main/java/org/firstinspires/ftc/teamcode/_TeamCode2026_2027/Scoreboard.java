@@ -33,16 +33,17 @@ public class Scoreboard extends LinearOpMode2026 {
             int[][] leaderboard = scores.getLeaderboard(15,true);
             telemetry.addLine();
             for(int i = 0; i < leaderboard.length; i++) {
+                if(leaderboard[i][0] == 0) break;
                 telemetry.addData(String.valueOf(i+1),
-                        people.values()[leaderboard[i][0]].toString()
+                        people.values()[leaderboard[i][0]-1].toString()
                                 +" and "+
-                                people.values()[leaderboard[i][1]].toString()
+                                people.values()[leaderboard[i][1]-1].toString()
                                 +" "+leaderboard[i][2]
                         );
             }
             telemetry.update();
             if((boolean) addScore.getOutput()) {
-                scores.addScore((Integer) P1.getOutput(),(Integer) P2.getOutput(),(Integer) scoreIn.getOutput());
+                scores.addScore((Integer) P1.getOutput()+1,(Integer) P2.getOutput()+1,(int)((float)((Float) scoreIn.getOutput())));
             }
             sleep(10);
         }
