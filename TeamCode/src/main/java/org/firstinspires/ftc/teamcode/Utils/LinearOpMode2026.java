@@ -37,9 +37,8 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
     public CheckedDistanceSensor dslC, dsrC;
     public SensingThread sensing = new SensingThread(this);
     public DcMotorEx turret;
-
-    // THIS DOESN'T WORK YET
     public static boolean isCurrentAllienceRed = true;
+    public static boolean isCompetition = true;
 
     // public IMU imu;
 
@@ -72,6 +71,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
 
         try {
             isCurrentAllienceRed = MiscUtils.readConfig(configPath, (byte) 2) == 0;
+            isCompetition = MiscUtils.readConfig(configPath, (byte) 3) == 0;
         } catch (Exception e) {}
 
         telemetry.addLine("Current Alliance: " + (isCurrentAllienceRed ? "Red" : "Blue"));

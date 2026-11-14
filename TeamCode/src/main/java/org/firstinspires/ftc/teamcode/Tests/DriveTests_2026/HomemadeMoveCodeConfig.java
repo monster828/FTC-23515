@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Utils.GUI.RoFileSelector;
 import org.firstinspires.ftc.teamcode.Utils.GUI.RoGUI;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
+import org.firstinspires.ftc.teamcode.Utils.RobopathFilter;
 
 @TeleOp
 public class HomemadeMoveCodeConfig extends LinearOpMode {
@@ -14,7 +15,7 @@ public class HomemadeMoveCodeConfig extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         RoGUI gui = new RoGUI(telemetry);
         String path = MiscUtils.dataFolder;
-        RoFileSelector fileSelect = new RoFileSelector("Move: ",telemetry,path);
+        RoFileSelector fileSelect = new RoFileSelector("Move: ",telemetry,path,new RobopathFilter());
         String configPath = MiscUtils.dataFolder+"config2026.robocfg";
         gui.add(fileSelect);
         if(MiscUtils.checkFile(configPath)) {

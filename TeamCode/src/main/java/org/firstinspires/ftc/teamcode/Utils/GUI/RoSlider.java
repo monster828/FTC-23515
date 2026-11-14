@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.Utils.GUI;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+/**
+ * Slider for picking integer values.
+ */
 public class RoSlider extends RoGraphic {
 
     private Telemetry telemetry = null;
@@ -9,6 +12,9 @@ public class RoSlider extends RoGraphic {
     private int max;
     public int Number;
 
+    /**
+     * Slider for picking integer values.
+     */
     public RoSlider(int min, int max, Telemetry tem) {
         telemetry = tem;
         this.min = min;

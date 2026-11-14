@@ -2,11 +2,18 @@ package org.firstinspires.ftc.teamcode.Utils.GUI;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+/**
+ * A switch for switching things, outputs a boolean.
+ */
 public class RoSwitch extends RoGraphic {
 
     private Telemetry telemetry;
     private String label;
     private boolean switchiness = false;
+
+    /**
+     * A switch for switching things, outputs a boolean.
+     */
     public RoSwitch(String label, Telemetry telemetry) {
         this.label = label;
         this.telemetry = telemetry;

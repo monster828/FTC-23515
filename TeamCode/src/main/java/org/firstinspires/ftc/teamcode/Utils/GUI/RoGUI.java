@@ -4,6 +4,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
 
+/**
+ * The primary class for RoGraphics. Create one of these to use RoGraphics.
+ */
 public class RoGUI {
 
     private Telemetry telemetry;
