@@ -53,7 +53,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
             }
             if (inverseLiftTrigger.IsButtonPressed()){
                 lift.setPower(-0.2);
-            }else {
+            } else if (!shooting) {
                 lift.setPower(0);
             }
             DoShoot();
