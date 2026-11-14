@@ -69,9 +69,9 @@ public class PathfindingTest extends LinearOpMode2026 {
             }
             if(x > 0) {
                 Pathfinder.pathfind(
-                        (int) posGet.getPosi().x(),
-                        (int) posGet.getPosi().y(),
-                        (int) posGet.getPosi().r(),
+                        (int) follower.pose().x(),
+                        (int) follower.pose().y(),
+                        (int) (90-Math.toDegrees(follower.pose().heading())),
                         x,
                         y
                 );

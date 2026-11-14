@@ -34,7 +34,16 @@ public class GamepadButton {
         start,
         back,
         left_bumper,
-        right_bumper
+        right_bumper,
+        square,
+        cross,
+        circle,
+        triangle,
+        right_trigger_pressed,
+        left_trigger_pressed,
+        share,
+        options,
+        ps
     }
 
     /**
