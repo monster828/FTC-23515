@@ -24,7 +24,7 @@ public class PathfindingTest extends LinearOpMode2026 {
     public void runOpMode() throws InterruptedException {
         config();
         follower = Constants.create(hardwareMap);
-        follower.setPose(new Pose(9,9,90));
+        follower.setPose(new Pose(9,9,Math.toRadians(90)));
         follower.update();
         PPRPHybrid.setFollower(follower);
         //For starter bot
