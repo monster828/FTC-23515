@@ -41,7 +41,10 @@ public class AutoDriveMain extends LinearOpMode2026 {
     private final Pose point3 = poseFactory.of(10, 106.6598, -178.837);
     private final Pose point3Control1 = poseFactory.of(64.8796, 98.922, 0);
     private final Pose point3Control2 = poseFactory.of(42.9879, 107.3295, 0);
-
+    private final Pose path4 = poseFactory.of(57, 10, -178.9092);
+    private final Pose path4Control1 = poseFactory.of(28.8077, 106.8628, 0);
+    private final Pose path4Control2 = poseFactory.of(44.3732, 62.4997, 0);
+    private final Pose path4Control3 = poseFactory.of(7.1052, 9.05, 0);
 //    private static final double HIVE_TY_THRESHOLD = 5.0;
 
     public AprilTagsTurretTarget aprilTagsTurretTarget;
@@ -60,7 +63,11 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 waitMs(100),
                 waitForLimelightTx(),
                 shoot(),
-                follow(follower, park())
+                follow(follower, park()),
+                conditional( () -> isCompetition, //when thing is set in config to return home
+                        follow(follower, toStart()),
+                        instant(() -> {}) // runs if the condition is false (does nothing)
+                )
         );
     }
 
@@ -114,6 +121,9 @@ public class AutoDriveMain extends LinearOpMode2026 {
     }
     public Path park() {
         return Paths.path(Paths.curve(point2, point3Control1, point3Control2, point3).tangent());
+    }
+    public Path toStart() {
+        return Paths.curve(point3, path4Control1, path4Control2, path4Control3, path4).reverseTangent();
     }
 
     public Command shoot(){
