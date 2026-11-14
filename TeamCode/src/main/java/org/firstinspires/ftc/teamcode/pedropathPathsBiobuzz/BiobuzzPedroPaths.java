@@ -18,8 +18,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "AutoPath", group = "Autonomous")
-public class AutoPath extends LinearOpMode {
+@Autonomous(name = "BiobuzzPedroPaths", group = "Autonomous")
+public class BiobuzzPedroPaths extends LinearOpMode {
 
     private Follower follower;
 
