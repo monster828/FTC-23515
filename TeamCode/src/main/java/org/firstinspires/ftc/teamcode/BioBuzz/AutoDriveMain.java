@@ -41,6 +41,11 @@ public class AutoDriveMain extends LinearOpMode2026 {
     private final Pose path4Control1 = poseFactory.of(28.8077, 106.8628, 0);
     private final Pose path4Control2 = poseFactory.of(44.3732, 62.4997, 0);
     private final Pose path4Control3 = poseFactory.of(7.1052, 9.05, 0);
+    private final Pose path5 = poseFactory.of(60.5, 132, -90);
+    private final Pose path5Control1 = poseFactory.of(60.8783, 65.7508, 0);
+    private final Pose path5Segment1Heading = poseFactory.of(60.5, 132, 180);
+    private final Pose path5Segment3Start = poseFactory.of(60.5, 132, -89.8912);
+    private final Pose path5Segment3End = poseFactory.of(60.5, 132, 270);
 //    private static final double HIVE_TY_THRESHOLD = 5.0;
 
     public AprilTagsTurretTarget aprilTagsTurretTarget;
@@ -56,6 +61,10 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 waitMs(2000),
                 goBackIfHiveIsNotDown(),
                 waitMs(500),
+                conditional( () -> isBackAtStart,
+                        follow(follower, startToFlower()),
+                        instant(() -> {})
+                ),
                 follow(follower, crossField()),
                 turnIntakeOff(),
 //                waitForLimelight(),
@@ -128,7 +137,9 @@ public class AutoDriveMain extends LinearOpMode2026 {
     public Path toStart() {
         return Paths.curve(point3, path4Control1, path4Control2, path4Control3, path4).reverseTangent();
     }
-
+    public Path startToFlower() {
+        return Paths.curve(start, path5Control1, path5).heading(Interpolator.piecewise().until(0.01, Interpolator.constant(path5Segment1Heading)).until(0.9361, Interpolator.tangent.reverse()).until(1, Interpolator.linear(path5Segment3Start, path5Segment3End)));
+    }
     public Command shoot(){
         return  sequential(
             instant(() -> intake.setPower(INTAKE_POWER)),
