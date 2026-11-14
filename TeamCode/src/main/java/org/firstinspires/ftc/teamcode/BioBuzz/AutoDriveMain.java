@@ -64,9 +64,8 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 waitMs(500),
                 conditional( () -> isBackAtStart,
                         follow(follower, startToFlower()),
-                        instant(() -> {})
+                        follow(follower, crossField())
                 ),
-                follow(follower, crossField()),
                 turnIntakeOff(),
 //                waitForLimelight(),
                 waitMs(100),
