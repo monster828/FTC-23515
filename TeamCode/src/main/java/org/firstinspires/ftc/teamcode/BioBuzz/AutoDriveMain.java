@@ -52,6 +52,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 waitMs(500),
                 shoot(),
                 follow(follower, corner()),
+                waitMs(500),
                 goBackIfHiveIsNotDown(),
                 waitMs(500),
                 follow(follower, crossField()),
@@ -73,7 +74,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
         follower.update();
 
         waitForStart();
-        flywheel.setVelocity(2320 * TICKS_PER_REV / 60.0); // was 2310
+        flywheel.setVelocity(2310 * TICKS_PER_REV / 60.0);
         hood.setPosition(0.2);
         intake.setPower(INTAKE_POWER);
 
