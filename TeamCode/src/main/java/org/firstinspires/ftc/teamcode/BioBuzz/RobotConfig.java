@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 
 import java.io.File;
-import java.io.IOException;
 
 @TeleOp(name=" Configure Robot")
 public class RobotConfig extends LinearOpMode2026 {
