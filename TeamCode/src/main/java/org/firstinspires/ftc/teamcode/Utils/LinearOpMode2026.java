@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.NueralNetworks.Classes.NNFileReader;
 import org.firstinspires.ftc.teamcode.Utils.Detection.CheckedDistanceSensor;
 import org.firstinspires.ftc.teamcode.Utils.Detection.DistSensorObstacleDetector;
+import org.firstinspires.ftc.teamcode.Utils.Movement.PPRPHybrid;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PinpointPosGet;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PositionGetter;
@@ -65,6 +66,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
         NNFileReader.telemetry = telemetry;
         Pathfinder.telemetry = telemetry;
         DistSensorObstacleDetector.telemetry = telemetry;
+        PPRPHybrid.tem = telemetry;
 
         Random random = new Random();
         boolean doMessage = random.nextFloat() > 0.9;
