@@ -73,7 +73,7 @@ public class AprilTagsTurretTarget {
         }else {
             waitTillNotSee = false;
             canSee = false;
-            return 0;
+            return distanceToHive.GetEstimatedTx();  // Either keep at 0 or add the pinpoint
         }
     }
 
