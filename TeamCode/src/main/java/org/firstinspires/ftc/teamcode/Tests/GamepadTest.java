@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Utils.Controls.ControlsTrigger;
 import org.firstinspires.ftc.teamcode.Utils.Controls.GamepadButton;
+@Disabled
 @TeleOp
 public class GamepadTest extends LinearOpMode {
 

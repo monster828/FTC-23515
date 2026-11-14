@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Pathfinder;
 
+@Disabled
 @Autonomous
 public class PathfinderSPEEEDtest extends LinearOpMode {
 

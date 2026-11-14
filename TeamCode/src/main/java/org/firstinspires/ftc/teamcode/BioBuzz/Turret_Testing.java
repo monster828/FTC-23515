@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.BioBuzz;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 

@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 
+@Disabled
 @TeleOp
 public class LimelightPipelineSwitchSpeedTest extends LinearOpMode2026 {
 

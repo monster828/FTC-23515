@@ -5,7 +5,6 @@ import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.api.Paths;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.ivy.groups.Groups;
 import com.pedropathing.math.Pose;
@@ -19,7 +18,7 @@ public class PPRPHybrid {
 
     static float timeDiff = 0.5f;
     static Follower follow;
-    static Telemetry tem = null;
+    public static Telemetry tem = null;
 
     public static Path path(Position[] path) {
         ArrayList<Path> paths = new ArrayList<>();
@@ -37,7 +36,7 @@ public class PPRPHybrid {
             Position c1 = new Position(path[i+a-1].x()-path[i+a].x(),path[i+a-1].y()-path[i+a].y(),0);
             c1 = c1.sized((timeDiff)*3.0f); c1 = c1.offset(path[i+a]);
             Pose c1p = poseFromPosiNoR(c1);
-            Path p = curve(s,e,c0p,c1p).linear(s,e);
+            Path p = curve(s,c0p,c1p,e).linear(s,e);
             paths.add(p);
             poses.add(s); poses.add(c0p); poses.add(c1p); poses.add(e);
             i+=a;
@@ -51,6 +50,7 @@ public class PPRPHybrid {
                                 ", e "+poses.get(a+3)
                 );
             }
+            tem.update();
         }
         return Paths.path(paths.toArray(new Path[0]));
     }
