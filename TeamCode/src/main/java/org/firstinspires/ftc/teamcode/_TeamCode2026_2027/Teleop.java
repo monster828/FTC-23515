@@ -6,9 +6,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.Utils.Controls.ControlsTrigger;
-import org.firstinspires.ftc.teamcode.Utils.Controls.GamepadButton;
-
 @TeleOp
 public class Teleop extends OpMode {
 
