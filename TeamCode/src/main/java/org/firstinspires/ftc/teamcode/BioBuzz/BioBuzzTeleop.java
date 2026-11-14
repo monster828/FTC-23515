@@ -34,7 +34,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
         distanceToHive = new DistanceToHive(posGet);
 
         ControlsTrigger shootTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.right_bumper));
-        ControlsTrigger intakeTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.a));
+        ControlsTrigger intakeTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.cross));
         ControlsTrigger inverseLiftTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.left_bumper));
 
         startShot = -1;
@@ -48,7 +48,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
             teleopMovementUtil.UpdateDrive();
             DoTurret();
 
-            if (shootTrigger.IsButtonPressed()){
+            if (shootTrigger.IsTriggered()){
                 startShot = System.currentTimeMillis();
             }
             if (inverseLiftTrigger.IsButtonPressed()){
@@ -73,7 +73,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
     }
 
     public void DoShoot(){
-        if (startShot != -1 && System.currentTimeMillis() - startShot < 500){ // This should be 1500 if button is trigger
+        if (startShot != -1 && System.currentTimeMillis() - startShot < 1500){ // This should be 1500 if button is trigger
             if (!shooting){
                 shooting = true;
                 lift.setPower(LIFT_POWER);
