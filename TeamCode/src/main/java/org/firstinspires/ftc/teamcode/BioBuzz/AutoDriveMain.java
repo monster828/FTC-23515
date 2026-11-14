@@ -42,7 +42,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
     private final Pose point3Control1 = poseFactory.of(64.8796, 98.922, 0);
     private final Pose point3Control2 = poseFactory.of(42.9879, 107.3295, 0);
 
-    private static final double HIVE_TY_THRESHOLD = 5.0;
+//    private static final double HIVE_TY_THRESHOLD = 5.0;
 
     public AprilTagsTurretTarget aprilTagsTurretTarget;
 
@@ -169,13 +169,15 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 double currentTy = result.getTy();
                 telemetry.addData("Checked ty", currentTy);
 
-                if (currentTy > HIVE_TY_THRESHOLD) {
-                    // If ty is higher than expected, schedule the return path and shooting sequence
-                    schedule(sequential(
-                            follow(follower, backToStart()),
-                            shoot()
-                    ));
-                }
+                schedule(sequential(
+                        follow(follower, backToStart()),
+                        shoot()
+                ));
+
+//                if (currentTy > HIVE_TY_THRESHOLD) {
+//                    // If ty is higher than expected, schedule the return path and shooting sequence
+//
+//                }
             }
         }).until(() -> true); // Runs once to evaluate the condition and trigger the fallback if needed
     }
