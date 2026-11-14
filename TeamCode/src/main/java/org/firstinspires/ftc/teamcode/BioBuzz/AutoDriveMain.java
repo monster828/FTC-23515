@@ -45,17 +45,19 @@ public class AutoDriveMain extends LinearOpMode2026 {
 
     public AprilTagsTurretTarget aprilTagsTurretTarget;
 
+    boolean isBackAtStart = false;
+
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
                 waitMs(500),
                 shoot(),
                 follow(follower, corner()),
-                waitMs(500),
+                waitMs(2000),
                 goBackIfHiveIsNotDown(),
-                turnIntakeOff(),
                 waitMs(500),
                 follow(follower, crossField()),
+                turnIntakeOff(),
 //                waitForLimelight(),
                 waitMs(100),
                 waitForLimelightTx(),
@@ -78,11 +80,11 @@ public class AutoDriveMain extends LinearOpMode2026 {
         follower.update();
 
         waitForStart();
-        flywheel.setVelocity(2310 * TICKS_PER_REV / 60.0);
+        flywheel.setVelocity(2480 * TICKS_PER_REV / 60.0); // 2400 was really good
         hood.setPosition(0.2);
         intake.setPower(0);
 
-        while (Math.abs(flywheel.getVelocity() - (2170 * TICKS_PER_REV / 60.0)) > 40){
+        while (Math.abs(flywheel.getVelocity() - (2200 * TICKS_PER_REV / 60.0)) > 40){
             DoTurret();
         }
 
@@ -175,55 +177,48 @@ public class AutoDriveMain extends LinearOpMode2026 {
         });
     }
 
-//    public Command goBackIfHiveIsNotDown() {
-//        return infinite(() -> {
+    public Command goBackIfHiveIsNotDown() {
+        return sequential(
+                follow(follower, backToStart()),
+                conditional(() -> limelight.getLatestResult().isValid(), shoot(), instant(() -> {isBackAtStart = true;}))
+        );
+
+
+//        long startTime = System.currentTimeMillis();
+//        int[] validFrames = {0};
+//        boolean[] shouldGoBack = {false};
+//        double timeoutMs = 800.0; // Check for up to 0.8 seconds
+//
+//        // Step 1: Observation phase to check for the April tag stably
+//        Command observation = infinite(() -> {
 //            LLResult result = limelight.getLatestResult();
 //            if (result != null && result.isValid()) {
-//                double currentTy = result.getTy();
-//                telemetry.addData("Checked ty", currentTy);
-//
-//                schedule(sequential(
-//                        follow(follower, backToStart()),
-//                        shoot()
-//                ));
-//
-////                if (currentTy > HIVE_TY_THRESHOLD) {
-////                    // If ty is higher than expected, schedule the return path and shooting sequence
-////
-////                }
+//                validFrames[0]++;
+//                telemetry.addData("Valid Tag Frames", validFrames[0]);
 //            }
-//        }).until(() -> true); // Runs once to evaluate the condition and trigger the fallback if needed
-//    }
-
-    public Command goBackIfHiveIsNotDown() {
-        long[] startTime = {System.currentTimeMillis()};
-        int[] validFrames = {0};
-        double timeoutMs = 1000.0; // Check for up to 1 second
-        int requiredValidFrames = 5; // Must see the tag valid for at least 5 frames
-
-        return infinite(() -> {
-            LLResult result = limelight.getLatestResult();
-            if (result != null && result.isValid()) {
-                validFrames[0]++;
-                telemetry.addData("Valid Tag Frames", validFrames[0]);
-            }
-            DoTurret(); // Keep updating the turret while waiting/checking
-        }).until(() -> {
-            // If we've accumulated enough valid frames, trigger the return and shoot
-            if (validFrames[0] >= requiredValidFrames) {
-                schedule(sequential(
-                        follow(follower, backToStart()),
-                        shoot()
-                ));
-                return true; // Finish command
-            }
-
-            // If time expires without stable detection, move on
-            if (System.currentTimeMillis() - startTime[0] > timeoutMs) {
-                return true; // Finish command
-            }
-
-            return false; // Keep checking
-        });
+//            DoTurret(); // Keep updating turret while looking
+//        }).until(() -> {
+//            if (validFrames[0] >= 7) { // Seen stably for at least 7 frames
+//                shouldGoBack[0] = true;
+//                return true;
+//            }
+//            if (System.currentTimeMillis() - startTime > timeoutMs) {
+//                return true; // Timeout reached without stable detection
+//            }
+//            return false;
+//        });
+//
+//        // Step 2: Sequentially run observation, then conditionally go back and shoot if seen
+//        return sequential(
+//                observation,
+//                conditional(
+//                        () -> shouldGoBack[0],
+//                        sequential(
+//                                follow(follower, backToStart()),
+//                                shoot()
+//                        ),
+//                        instant(() -> {}) // Do nothing if tag wasn't seen, proceed with routine
+//                )
+//        );
     }
 }

@@ -1,18 +1,15 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
-import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.RobotOdoSetup;
 import org.firstinspires.ftc.teamcode.Utils.Movement.Position;
 import org.firstinspires.ftc.teamcode.Utils.RobofileUtils;
 import org.firstinspires.ftc.teamcode.Utils.Threads.PosiBasedDriveThread;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Arrays;
 
 @Autonomous
 public class JustAPreprogrammedPath extends LinearOpMode2026 {
