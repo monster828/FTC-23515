@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.Utils.GUI;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+/**
+ * UI component for selecting non-integer values.
+ */
 public class RoNumInput extends RoGraphic {
 
     /*
@@ -16,6 +19,11 @@ public class RoNumInput extends RoGraphic {
     Telemetry tem;
     String label;
 
+    /**
+     * UI component for selecting non-integer values.
+     * @param integers is the amount of digits left of the .
+     * @param decimals is the amount of digits right of the .
+     */
     public RoNumInput(String label, int integers, int decimals, Telemetry telemetry) {
         ints = integers;
         this.decimals = decimals;

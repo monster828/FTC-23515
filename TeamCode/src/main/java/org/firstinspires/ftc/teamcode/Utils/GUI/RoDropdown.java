@@ -2,10 +2,16 @@ package org.firstinspires.ftc.teamcode.Utils.GUI;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+/**
+ * A menu for selecting between specified options. Use {@link RoDropdown#addOption(String)} to add an option.
+ */
 public class RoDropdown extends RoTab {
 
     int selected = -1;
 
+    /**
+     * A menu for selecting between specified options. Use {@link RoDropdown#addOption(String)} to add an option.
+     */
     public RoDropdown(String label, Telemetry telemetry) {
         super(label, telemetry);
         this.tem = telemetry;
@@ -13,6 +19,9 @@ public class RoDropdown extends RoTab {
         this.gui = new RoGUI(tem);
     }
 
+    /**
+     * Outputs the index of the selected option.
+     */
     @Override
     public Object getOutput() {
         return selected;

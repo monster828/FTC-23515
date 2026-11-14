@@ -2,10 +2,17 @@ package org.firstinspires.ftc.teamcode.Utils.GUI;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+/**
+ * Literally just a label. No functionality.
+ */
 public class RoLabel extends RoGraphic {
 
     private Telemetry telemetry;
     private String label;
+
+    /**
+     * Literally just a label. No functionality.
+     */
     public RoLabel(String label, Telemetry telemetry) {
         this.label = label;
         this.telemetry = telemetry;

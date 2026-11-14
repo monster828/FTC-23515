@@ -28,18 +28,27 @@ public class RobotConfig extends LinearOpMode2026 {
         RoLabel turretALabel = new RoLabel("Turret Angle x10 (OBDT)",telemetry);
         RoSlider turretA = new RoSlider(-18,18,telemetry);
         RoSwitch isRedAlliance = new RoSwitch("Is Red",telemetry);
-        tests.add(turretALabel); tests.add(turretA);
+        RoSwitch isComp = new RoSwitch("Is Competition",telemetry);
+        //Add new UI components here
+        tests.add(turretALabel); tests.add(turretA); tests.add(isComp);
         gui.add(isRedAlliance);
         File f = new File(path);
         try {
             if (!f.exists()) f.createNewFile();
             else {
+                /*Read values from the configuration file.
+                For switches use:
+                d = MiscUtils.readConfig(path,(byte) ID);
+                SWITCH.setOutput(d==0);
+                 */
                 byte d = MiscUtils.readConfig(path,(byte) 0);
                 s.setOutput(d==0);
                 d = MiscUtils.readConfig(path,(byte) 1);
                 turretA.setOutput((int)d);
                 d = MiscUtils.readConfig(path,(byte) 2);
                 isRedAlliance.setOutput(d==0);
+                d = MiscUtils.readConfig(path,(byte) 3);
+                isComp.setOutput(d==0);
             }
         } catch (Exception e) {
             telemetry.update();
@@ -67,9 +76,15 @@ public class RobotConfig extends LinearOpMode2026 {
         try {
             if (!f.exists()) f.createNewFile();
             else {
+                /*
+                Write to configuration,
+                For switches use:
+                MiscUtils.writeToConfig(path, (byte) ID, (byte) ((boolean) SWITCH.getOutput() ? 0 : 1));
+                 */
                 MiscUtils.writeToConfig(path, (byte)0, (byte) ((boolean) s.getOutput() ? 0 : 1));
                 MiscUtils.writeToConfig(path, (byte)1, (byte) ((int) turretA.getOutput()));
                 MiscUtils.writeToConfig(path, (byte)2, (byte) ((boolean) isRedAlliance.getOutput() ? 0 : 1));
+                MiscUtils.writeToConfig(path, (byte)3, (byte) ((boolean) isComp.getOutput() ? 0 : 1));
             }
         } catch (Exception e) {
             telemetry.update();

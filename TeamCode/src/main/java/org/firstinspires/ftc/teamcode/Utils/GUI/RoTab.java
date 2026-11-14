@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.Utils.GUI;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+/**
+ * A tab that contains other components, use {@link RoTab#add(RoGraphic)} to add things to the tab.
+ */
 public class RoTab extends RoGraphic {
 
     public boolean open = false;
@@ -10,6 +13,9 @@ public class RoTab extends RoGraphic {
     public String label;
     public RoGUI gui;
 
+    /**
+     * A tab that contains other components, use {@link RoTab#add(RoGraphic)} to add things to the tab.
+     */
     public RoTab(String label, Telemetry telemetry) {
         this.label = label;
         tem = telemetry;
@@ -93,6 +99,10 @@ public class RoTab extends RoGraphic {
         return open;
     }
 
+    /**
+     * Add a RoGraphic (any UI component) to this tab.
+     * @param g the UI component.
+     */
     public void add(RoGraphic g) {
         gui.add(g);
     }
