@@ -37,6 +37,7 @@ public class BiobuzzPedroPaths extends LinearOpMode {
         return sequential(
                 follow(follower, path1()),
                 follow(follower, path2()),
+                waitMs(1000),
                 follow(follower, path3()),
                 follow(follower, path4())
         );
