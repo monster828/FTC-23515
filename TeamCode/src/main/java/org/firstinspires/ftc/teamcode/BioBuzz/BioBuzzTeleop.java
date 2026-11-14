@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.TeleopMovementUtil;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagsTurretTarget;
+import org.firstinspires.ftc.teamcode.Utils.Shooting.LimelightAngle;
 
 @TeleOp
 public class BioBuzzTeleop extends LinearOpMode2026 {
@@ -21,8 +22,6 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
     boolean isIntakeReversed = false;
 
-    boolean isIntakeOn = true;
-
 
     @Override
     public void runOpMode(){
@@ -31,8 +30,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
         aprilTagsTurretTarget = new AprilTagsTurretTarget(turret, posGet, 0);
 
         ControlsTrigger shootTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.dpad_right));
-        ControlsTrigger intakeReverseTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.circle));
-        ControlsTrigger intakeTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.cross));
+        ControlsTrigger intakeTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.a));
 
         startShot = -1;
 
@@ -40,7 +38,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
         flywheel.setVelocity(2310 * TICKS_PER_REV / 60.0);
         hood.setPosition(0.2);
-        intake.setPower(INTAKE_POWER);
+        lla.setPosition(LimelightAngle(DistanceToHive()));
 
         while (opModeIsActive()){
             teleopMovementUtil.UpdateDrive();
@@ -52,24 +50,14 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
             DoShoot();
 
             if (intakeTrigger.IsTriggered()){
-                isIntakeOn = !isIntakeOn;
+                if (isIntakeReversed){
+                    isIntakeReversed = false;
+                    intake.setPower(-INTAKE_POWER);
+                }else {
+                    isIntakeReversed = true;
+                    intake.setPower(INTAKE_POWER);
+                }
             }
-
-            if (intakeReverseTrigger.IsTriggered()){
-                isIntakeReversed = !isIntakeReversed;
-            }
-        }
-    }
-
-    private void DoIntake(){
-        if (isIntakeOn){
-            if (isIntakeReversed){
-                intake.setPower(INTAKE_POWER);
-            }else {
-                intake.setPower(-INTAKE_POWER);
-            }
-        }else {
-            intake.setPower(0);
         }
     }
 
