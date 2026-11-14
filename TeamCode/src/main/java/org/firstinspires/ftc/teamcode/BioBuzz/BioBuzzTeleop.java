@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.TeleopMovementUtil;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagsTurretTarget;
-import org.firstinspires.ftc.teamcode.Utils.Shooting.LimelightAngle;
 
 @TeleOp
 public class BioBuzzTeleop extends LinearOpMode2026 {
@@ -38,7 +37,6 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
         flywheel.setVelocity(2310 * TICKS_PER_REV / 60.0);
         hood.setPosition(0.2);
-        lla.setPosition(LimelightAngle.getAngle(DistanceToHive()));
 
         while (opModeIsActive()){
             teleopMovementUtil.UpdateDrive();
@@ -90,5 +88,4 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
         aprilTagsTurretTarget.CheckPositionAndSetPower(telemetry);
     }
-
 }
