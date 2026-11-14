@@ -61,7 +61,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 waitForLimelightTx(),
                 shoot(),
                 follow(follower, park()),
-                conditional( () -> isCompetition, //when thing is set in config to return home
+                conditional( () -> !isCompetition, //when thing is set in config to return home
                         follow(follower, toStart()),
                         instant(() -> {}) // runs if the condition is false (does nothing)
                 )
