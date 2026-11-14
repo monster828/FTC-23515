@@ -47,6 +47,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
+                waitMs(500),
                 shoot(),
                 follow(follower, corner()),
                 waitMs(500),
@@ -69,7 +70,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
         follower.update();
 
         waitForStart();
-        flywheel.setVelocity(2310 * TICKS_PER_REV / 60.0);
+        flywheel.setVelocity(2320 * TICKS_PER_REV / 60.0); // was 2310
         hood.setPosition(0.2);
         intake.setPower(INTAKE_POWER);
 
@@ -86,6 +87,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
             telemetry.addData("x", follower.pose().x());
             telemetry.addData("y", follower.pose().y());
             telemetry.addData("heading", follower.pose().heading());
+            telemetry.addData("ty", limelight.getLatestResult().getTy());
 
             if (follower.currentPath() != null) {
                 telemetry.addData("Current path distance remaining", follower.distanceToEndpoint());

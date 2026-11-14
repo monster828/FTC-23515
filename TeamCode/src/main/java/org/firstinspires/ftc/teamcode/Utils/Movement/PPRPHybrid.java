@@ -11,15 +11,19 @@ import com.pedropathing.ivy.groups.Groups;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import java.util.ArrayList;
 
 public class PPRPHybrid {
 
     static float timeDiff = 0.5f;
     static Follower follow;
+    static Telemetry tem = null;
 
     public static Path path(Position[] path) {
         ArrayList<Path> paths = new ArrayList<>();
+        ArrayList<Pose> poses = new ArrayList<>();
         float timePerPoint = (path[1].getTimeStamp()-path[0].getTimeStamp())/1000.0f;
         int i = 0;
         while(i < path.length-1) {
@@ -35,7 +39,18 @@ public class PPRPHybrid {
             Pose c1p = poseFromPosiNoR(c1);
             Path p = curve(s,e,c0p,c1p).linear(s,e);
             paths.add(p);
+            poses.add(s); poses.add(c0p); poses.add(c1p); poses.add(e);
             i+=a;
+        }
+        if(tem != null) {
+            for (int a = 0; a < poses.size(); a+=4) {
+                tem.addData("path "+(a/4),
+                        "s "+poses.get(a).toString()+
+                                ", c0 "+poses.get(a+1)+
+                                ", c1 "+poses.get(a+2)+
+                                ", e "+poses.get(a+3)
+                );
+            }
         }
         return Paths.path(paths.toArray(new Path[0]));
     }
