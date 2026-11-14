@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.Utils.Controls.GamepadButton;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.TeleopMovementUtil;
+import org.firstinspires.ftc.teamcode.Utils.Positioning.DistanceToHive;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagsTurretTarget;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.LimelightAngle;
 
@@ -22,12 +23,15 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
     boolean isIntakeReversed = false;
 
+    DistanceToHive distanceToHive;
+
 
     @Override
     public void runOpMode(){
         config();
         teleopMovementUtil = new TeleopMovementUtil(gamepad1, mot);
         aprilTagsTurretTarget = new AprilTagsTurretTarget(turret, posGet, 0);
+        distanceToHive = new DistanceToHive(posGet);
 
         ControlsTrigger shootTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.dpad_right));
         ControlsTrigger intakeTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.a));
@@ -36,9 +40,8 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
         waitForStart();
 
-        flywheel.setVelocity(2310 * TICKS_PER_REV / 60.0);
+        flywheel.setVelocity(2200 * TICKS_PER_REV / 60.0);
         hood.setPosition(0.2);
-        lla.setPosition(LimelightAngle(DistanceToHive()));
 
         while (opModeIsActive()){
             teleopMovementUtil.UpdateDrive();
@@ -58,6 +61,8 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
                     intake.setPower(INTAKE_POWER);
                 }
             }
+
+            lla.setPosition(LimelightAngle.getAngle(distanceToHive.GetDistance()));
         }
     }
 
