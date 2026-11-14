@@ -190,6 +190,8 @@ public class AutoDriveMain extends LinearOpMode2026 {
             double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
             LLResult result = limelight.getLatestResult();
 
+            DoTurret();
+
             // Ensure the result is valid and tx is within ±0.5 degrees of center
             return result != null && result.isValid() && Math.abs(tx) < 0.5;
         });
@@ -198,6 +200,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
     public Command goBackIfHiveIsNotDown() {
         return sequential(
                 follow(follower, backToStart()),
+                waitForLimelightTx(),
                 conditional(() -> limelight.getLatestResult().isValid(), shoot(), instant(() -> {isBackAtStart = true;}))
         );
 
