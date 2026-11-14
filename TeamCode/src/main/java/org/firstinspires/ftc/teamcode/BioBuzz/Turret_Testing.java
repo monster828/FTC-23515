@@ -147,6 +147,8 @@ public class Turret_Testing extends LinearOpMode2026 {
 
         if (result != null && result.isValid()){
             telemetry.addData("Limelight Tags", Arrays.toString(result.getBarcodeResults().toArray()));
+            telemetry.addData("ty", result.getTy());
+            telemetry.addData("tx", result.getTx());
         }else {
             telemetry.addData("Limelight Tags", "NO TAGS FOUND");
         }
