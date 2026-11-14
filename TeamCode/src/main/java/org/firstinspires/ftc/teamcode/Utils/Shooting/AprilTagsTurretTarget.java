@@ -184,7 +184,7 @@ public class AprilTagsTurretTarget {
 
                 previousHeading = currentHeading;
             }else{
-                dcMotorEx.setPower(0.7);  // LLA max .69  min .43
+                dcMotorEx.setPower(Math.max(0.7, Math.abs(GetTurretTargetPosition(dcMotorEx) - GetTurretCurrentPosition(dcMotorEx)) / 1000));  // LLA max .69  min .43
             }
         }
     }
