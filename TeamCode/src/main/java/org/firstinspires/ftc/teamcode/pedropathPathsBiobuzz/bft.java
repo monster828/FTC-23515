@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.pedropathPathsBiobuzz;
 
-import com.pedropathing.api.Paths;
-import com.pedropathing.paths.Path;
 
 import static com.pedropathing.api.Paths.*;
 import com.pedropathing.api.Paths;
@@ -76,7 +74,3 @@ public class bft extends LinearOpMode {
         return Paths.curve(point1, point2Control1, point2).tangent();
     }
 }
-
-
-
-
