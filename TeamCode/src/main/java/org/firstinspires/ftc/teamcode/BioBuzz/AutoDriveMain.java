@@ -31,8 +31,8 @@ public class AutoDriveMain extends LinearOpMode2026 {
 
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose start = poseFactory.of(59, 9, 180);
-    private final Pose point1 = poseFactory.of(10, 9.5, 180);
+    private final Pose start = poseFactory.of(57, 9, 180);
+    private final Pose point1 = poseFactory.of(9.75, 9.5, 180);
     private final Pose point2 = poseFactory.of(64.9433, 131.1091, -90.8781);
     private final Pose point2Control1 = poseFactory.of(30.0, 29.9094, 0);
     private final Pose point2Control2 = poseFactory.of(0, 125.7339, 0);
