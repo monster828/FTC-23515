@@ -55,8 +55,8 @@ public class PPRPHybrid {
         return Paths.path(paths.toArray(new Path[0]));
     }
 
-    public static void schedulePath(Position[] path) {
-        Scheduler.schedule(Groups.sequential(follow(follow,path(path))));
+    public static void runPath(Position[] path) {
+        follow.follow(path(path));
     }
 
     public static Pose poseFromPosi(Position p) {
