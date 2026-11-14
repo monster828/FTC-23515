@@ -105,7 +105,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
             limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
             limelight.start(); // DO THIS RIGHT HERE? Possibly Do this at start
         } catch (Exception e) {
-            telemetry.addData("Config error: ","Limelight not found");
+            telemetry.addData("Config error","Limelight not found");
         }
 
         try {
@@ -131,13 +131,13 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
             mot[2].setDirection(DcMotorSimple.Direction.REVERSE);
             mot[3].setDirection(DcMotorSimple.Direction.REVERSE);
         } catch (Exception e) {
-            telemetry.addData("Config error: ","Motors not found");
+            telemetry.addData("Config error","Motors not found");
         }
         try {
             GoBildaPinpointDriver pin = hardwareMap.get(GoBildaPinpointDriver.class, "POC");
             posGet = new PinpointPosGet(pin);
         } catch (Exception e) {
-            telemetry.addData("Config error: ","Pinpoint not found");
+            telemetry.addData("Config error","Pinpoint not found");
         }
         try {
             dsl = hardwareMap.get(DistanceSensor.class,"DSL");
@@ -145,7 +145,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
             dslC = new CheckedDistanceSensor(dsl,3);
             dsrC = new CheckedDistanceSensor(dsr,3);
         } catch (Exception e) {
-            telemetry.addData("Config error: ","Obstacle dist sensors not found");
+            telemetry.addData("Config error","Obstacle dist sensors not found");
         }
         try {
             turret = hardwareMap.get(DcMotorEx.class,"TR");
@@ -153,7 +153,7 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
             turret.setTargetPosition(0);
             turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } catch (Exception e) {
-            telemetry.addData("Config error: ","Turret motor not found");
+            telemetry.addData("Config error","Turret motor not found");
         }
 
         try{
@@ -162,26 +162,26 @@ public abstract class LinearOpMode2026 extends LinearOpMode {
             flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             flywheel.setVelocityPIDFCoefficients(FLYWHEEL_P, 0, 0, FLYWHEEL_F);
         }catch (Exception e){
-            telemetry.addData("Config error: ", "Flywheel not found");
+            telemetry.addData("Config error", "Flywheel not found");
         }
 
         try{
             hood = hardwareMap.get(Servo.class, "Hood");
         }catch (Exception e){
-            telemetry.addData("Config error: ", "Hood not found");
+            telemetry.addData("Config error", "Hood not found");
         }
 
         try{
             lift = hardwareMap.get(DcMotorEx.class, "lift");
             lift.setDirection(DcMotorSimple.Direction.REVERSE);
         }catch (Exception e){
-            telemetry.addData("Config error: ", "Lift not found");
+            telemetry.addData("Config error", "Lift not found");
         }
 
         try{
             intake = hardwareMap.get(DcMotorEx.class, "intake");
         }catch (Exception e){
-            telemetry.addData("Config error: ", "Intake not found");
+            telemetry.addData("Config error", "Intake not found");
         }
 
         if(!MiscUtils.checkBattery(hardwareMap)) {
