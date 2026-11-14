@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Utils.Movement;
 
+import com.pedropathing.math.Pose;
+
 public class MovementUtils {
 
     /**
@@ -51,4 +53,6 @@ public class MovementUtils {
     public static float velocity(float angle, float time) {
         return Math.min(v(angle),a(angle)*time);
     }
+
+    public static Pose autoEndPose = null;
 }
