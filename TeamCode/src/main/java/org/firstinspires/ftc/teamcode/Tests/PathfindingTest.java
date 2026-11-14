@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
+import com.pedropathing.api.Paths;
+import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.math.Pose;
@@ -18,6 +20,10 @@ import java.util.Random;
 public class PathfindingTest extends LinearOpMode2026 {
 
     public Follower follower;
+    private final PoseFactory poseFactory = PoseFactory.degrees();
+
+    private final Pose start = poseFactory.of(9, 9, 90);
+    private final Pose path1 = poseFactory.of(13, 13, 90);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -36,14 +42,16 @@ public class PathfindingTest extends LinearOpMode2026 {
         //posGet.setOffset(9,9);
         waitForStart();
         //dt.start();
-        Position[] startLaunch = new Position[] {
+        /*Position[] startLaunch = new Position[] {
                 new Position(9,9,0),
-                new Position(10,10,0),
-                new Position(11,11,0),
-                new Position(12,12,0),
+                //new Position(10,10,0),
+                //new Position(11,11,0),
+                //new Position(12,12,0),
                 new Position(13,13,0)
         };
-        PPRPHybrid.runPath(startLaunch);
+        PPRPHybrid.runPath(startLaunch);*/
+        follower.follow(Paths.line(start, path1).constant(path1));
+        PPRPHybrid.lastPose = path1;
         follower.update();
         //dt.queuePath(startLaunch);
         sleep(1000);
@@ -51,6 +59,7 @@ public class PathfindingTest extends LinearOpMode2026 {
         while(!follower.holding()) {
             follower.update();
         }
+        follower.hold(path1);
 
         int runs = 0;
 
@@ -68,24 +77,26 @@ public class PathfindingTest extends LinearOpMode2026 {
             }
             if(x > 0) {
                 Pathfinder.pathfind(
-                        (int) follower.pose().y(),
-                        (int) follower.pose().x(),
-                        (int) (90-Math.toDegrees(follower.pose().heading())),
+                        (int) PPRPHybrid.lastPose.x(),
+                        (int) PPRPHybrid.lastPose.y(),
+                        (int) (90-Math.toDegrees(PPRPHybrid.lastPose.heading())),
                         x,
                         y
                 );
                 //telemetry.addData("Current pos",);
                 telemetry.addData("Target pos", x+","+y);
-                Pathfinder.saveI(1,40,"DriveThreadTest"+runs);
+                Pathfinder.saveI(1,50,"PathfinderTest"+runs);
                 Position p = new Position(x,y,0);
                 //dt.queuePath(Pathfinder.pos.toArray(new Position[0]));
+                if(Pathfinder.pos.size() < 2) continue;
                 PPRPHybrid.runPath(Pathfinder.pos.toArray(new Position[0]));
                 follower.update();
-                sleep(500);
+                //sleep(500);
                 //while(!dt.idle() && opModeIsActive() && !gamepad1.a);
                 while(!follower.holding() && opModeIsActive() && !gamepad1.a){
                     follower.update();
-                    }
+                }
+                follower.hold(PPRPHybrid.lastPose);
                 while(gamepad1.a);
                 runs++;
             }

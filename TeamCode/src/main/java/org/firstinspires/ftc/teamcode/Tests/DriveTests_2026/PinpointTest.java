@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.Tests.DriveTests_2026;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.PinpointPosGet;
 import org.firstinspires.ftc.teamcode.Utils.Movement.PosGetters.RobotOdoSetup;
 
+@Disabled
 @Autonomous
 public class PinpointTest extends LinearOpMode {
     @Override

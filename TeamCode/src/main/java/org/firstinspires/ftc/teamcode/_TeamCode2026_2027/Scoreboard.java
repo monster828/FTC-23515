@@ -50,8 +50,6 @@ public class Scoreboard extends LinearOpMode2026 {
     }
 
     enum people {
-        NOBODY,
-        NOBODY2,
-        NOBODY3
+        NOBODY
     }
 }

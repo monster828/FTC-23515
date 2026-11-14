@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class PPRPHybrid {
 
+    public static Pose lastPose;
     static float timeDiff = 0.5f;
     static Follower follow;
     public static Telemetry tem = null;
@@ -52,6 +53,7 @@ public class PPRPHybrid {
             }
             tem.update();
         }
+        lastPose = poses.get(poses.size()-1);
         return Paths.path(paths.toArray(new Path[0]));
     }
 
@@ -60,10 +62,10 @@ public class PPRPHybrid {
     }
 
     public static Pose poseFromPosi(Position p) {
-        return new Pose(p.y(),p.x(),Math.toRadians(-p.r()+90));
+        return new Pose(p.x(),p.y(),Math.toRadians(-p.r()+90));
     }
     public static Pose poseFromPosiNoR(Position p) {
-        return new Pose(p.y(),p.x());
+        return new Pose(p.x(),p.y());
     }
 
     public static void setFollower(Follower follower) {follow = follower;}
