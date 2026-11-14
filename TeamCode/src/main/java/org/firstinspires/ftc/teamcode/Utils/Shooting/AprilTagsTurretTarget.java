@@ -21,13 +21,8 @@ public class AprilTagsTurretTarget {
     // 3 Blue
     // 4 Red
 
-    public double kp = 0.035; // Ramps the speed
-    public double ki = 0.000; // Removes error
-    public double kd = 0.0015; // Damps movement
-
     private ElapsedTime dtTimer = new ElapsedTime();
     double lastTx = 0;
-    double integralSum = 0;
 
     DcMotorEx dcMotorEx;
 
@@ -83,9 +78,9 @@ public class AprilTagsTurretTarget {
      * @param tx
      * This value is for the amount the turret is off-set in degrees
      * **/
-    public void ChangeAngle(double tx){
-        UpdateMotor(tx);
-    }
+//    public void ChangeAngle(double tx){
+//        UpdateMotor(tx);
+//    }
 
     public void ChangeAngleSetPosition(double tx, double rotationV){
         SetTargetPosition (GetTurretCurrentPosition(dcMotorEx) - MiscUtils.getPositionFromDegrees(tx * 1.04 - rotationV * 0.05, 537.7));
@@ -148,38 +143,6 @@ public class AprilTagsTurretTarget {
 
     }
 
-    private void UpdateMotor(double tx){
-        double dt = dtTimer.seconds();
-        dtTimer.reset();
-
-        double targetVelocity = 0;
-        if (dt > 0){
-            targetVelocity = (tx - lastTx) / dt;
-        }
-
-        integralSum += tx * dt;
-
-        integralSum = Math.max(-0.2 / ki, Math.min(-0.2 / ki, integralSum));
-
-        double pTerm = kp * tx;
-        double iTerm = ki * integralSum;
-        double dTerm = kd * targetVelocity;
-
-        double motorPower = pTerm + iTerm + dTerm;
-
-
-        double kf = 0.03;
-        if (Math.abs(tx) > 0.5){
-            motorPower += Math.signum(tx) * kf;
-        }
-
-        motorPower = MiscUtils.Clamp(motorPower, -0.05, 0.05);
-
-        dcMotorEx.setPower(motorPower * -1);
-
-        lastTx = tx;
-    }
-
     public void CheckPositionAndSetPower(Telemetry telemetry){
         if (GetTurretTargetPosition(dcMotorEx) > maxPosition || GetTurretTargetPosition(dcMotorEx) < minPosition){
             dcMotorEx.setPower(0);
@@ -224,14 +187,63 @@ public class AprilTagsTurretTarget {
     }
 
     private double GetTurretCurrentPosition(DcMotorEx motor){
+
+        if (motor == null){
+            return 0;
+        }
+
+
         return motor.getCurrentPosition() + offset;
     }
 
     private double GetTurretTargetPosition(DcMotorEx motor){
+
+        if (motor == null){
+            return 0;
+        }
+
         return motor.getTargetPosition() + offset;
     }
 
     private void SetTurretTargetPosition(int targetPosition, DcMotorEx motor){
+
+        if (motor == null){
+            return;
+        }
+
         motor.setTargetPosition((int) (targetPosition - offset));
     }
+
+
+    //    private void UpdateMotor(double tx){
+//        double dt = dtTimer.seconds();
+//        dtTimer.reset();
+//
+//        double targetVelocity = 0;
+//        if (dt > 0){
+//            targetVelocity = (tx - lastTx) / dt;
+//        }
+//
+//        integralSum += tx * dt;
+//
+//        integralSum = Math.max(-0.2 / ki, Math.min(-0.2 / ki, integralSum));
+//
+//        double pTerm = kp * tx;
+//        double iTerm = ki * integralSum;
+//        double dTerm = kd * targetVelocity;
+//
+//        double motorPower = pTerm + iTerm + dTerm;
+//
+//
+//        double kf = 0.03;
+//        if (Math.abs(tx) > 0.5){
+//            motorPower += Math.signum(tx) * kf;
+//        }
+//
+//        motorPower = MiscUtils.Clamp(motorPower, -0.05, 0.05);
+//
+//        dcMotorEx.setPower(motorPower * -1);
+//
+//        lastTx = tx;
+//    }
 }

@@ -31,10 +31,10 @@ public class AutoDriveMain extends LinearOpMode2026 {
 
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose start = poseFactory.of(59, 9, 180);
-    private final Pose point1 = poseFactory.of(10, 9.5, 180);
+    private final Pose start = poseFactory.of(57, 9, 180);
+    private final Pose point1 = poseFactory.of(9.75, 9.5, 180);
     private final Pose point2 = poseFactory.of(64.9433, 131.1091, -90.8781);
-    private final Pose point2Control1 = poseFactory.of(21.6987, 29.9094, 0);
+    private final Pose point2Control1 = poseFactory.of(30.0, 29.9094, 0);
     private final Pose point2Control2 = poseFactory.of(0, 125.7339, 0);
     private final Pose point2Control3 = poseFactory.of(64.5333, 104.3615, 0);
     private final Pose point2Segment1Heading = poseFactory.of(64.9433, 131.1091, 180);
@@ -47,10 +47,14 @@ public class AutoDriveMain extends LinearOpMode2026 {
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
+                waitMs(500),
                 shoot(),
                 follow(follower, corner()),
                 waitMs(500),
                 follow(follower, crossField()),
+//                waitForLimelight(),
+                waitMs(100),
+                waitForLimelightTx(),
                 shoot(),
                 follow(follower, park())
         );
@@ -66,7 +70,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
         follower.update();
 
         waitForStart();
-        flywheel.setVelocity(2310 * TICKS_PER_REV / 60.0);
+        flywheel.setVelocity(2320 * TICKS_PER_REV / 60.0); // was 2310
         hood.setPosition(0.2);
         intake.setPower(INTAKE_POWER);
 
@@ -83,6 +87,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
             telemetry.addData("x", follower.pose().x());
             telemetry.addData("y", follower.pose().y());
             telemetry.addData("heading", follower.pose().heading());
+            telemetry.addData("ty", limelight.getLatestResult().getTy());
 
             if (follower.currentPath() != null) {
                 telemetry.addData("Current path distance remaining", follower.distanceToEndpoint());
@@ -109,23 +114,20 @@ public class AutoDriveMain extends LinearOpMode2026 {
 
     public Command shoot(){
         return  sequential(
-            waitUntil(new BooleanSupplier() {
-                @Override
-                public boolean getAsBoolean() {
-                    LLResult result = limelight.getLatestResult();
-                    if (result != null && result.isValid()){
-                        telemetry.addData("ty", result.getTy());
-                        return result.getTy() > 5;
-                    }
-                    return gamepad1.cross;
-
-                }
-            }),
             instant(() -> lift.setPower(LIFT_POWER)),
             waitMs(1500),
             instant(() -> lift.setPower(0))
         );
     }
+
+//    public Command waitForLimelight() {
+//        return run(() -> {
+//            DoTurret();
+//        }).until(() -> {
+//            LLResult result = limelight.getLatestResult();
+//            return result != null && result.isValid();
+//        });
+//    }
 
     public void DoTurret(){
         // This will turn the turret to the april tags (if it sees it)
@@ -140,5 +142,16 @@ public class AutoDriveMain extends LinearOpMode2026 {
         telemetry.addLine("Amount of Position changes: " + positionChange);
 
         aprilTagsTurretTarget.CheckPositionAndSetPower(telemetry);
+    }
+
+    public Command waitForLimelightTx() {
+        // Keeps updating the turret position while waiting
+        return infinite(this::DoTurret).until(() -> {
+            double tx = aprilTagsTurretTarget.UpdateTxValue(limelight);
+            LLResult result = limelight.getLatestResult();
+
+            // Ensure the result is valid and tx is within ±0.5 degrees of center
+            return result != null && result.isValid() && Math.abs(tx) < 0.5;
+        });
     }
 }
