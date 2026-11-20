@@ -108,7 +108,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
         while (Math.abs(flywheel.getVelocity() - (2100 * TICKS_PER_REV / 60.0)) > 80){
             telemetry.addData("Flywheel velocity", flywheel.getVelocity());
             telemetry.addData("Wanted velocity", (2100 * TICKS_PER_REV / 60.0));
-            DoTurret();
+            if(notBailed) DoTurret();
 
             telemetry.update();
         }
