@@ -16,6 +16,9 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.pedropathing.paths.interpolator.Interpolator;
 
+import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagClusterTargeting;
+import org.firstinspires.ftc.teamcode.Utils.Shooting.LimelightMotionCompensator;
+import org.firstinspires.ftc.teamcode.Utils.Shooting.LimelightMotionCompensator.ShotSolution;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.Turret;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
@@ -36,7 +39,6 @@ public class AutoDriveMain extends LinearOpMode2026 {
     private final Pose point2Control1 = poseFactory.of(30.0, 29.9094, 0);
     private final Pose point2Control2 = poseFactory.of(0, 125.7339, 0);
     private final Pose point2Control3 = poseFactory.of(64.5333, 104.3615, 0);
-    private final Pose point2Segment1Heading = poseFactory.of(64.9433, 131.1091, 180);
     private final Pose point3 = poseFactory.of(10.5, 120.6598, -178.837);
     private final Pose point3Control1 = poseFactory.of(64.8796, 98.922, 0);
     private final Pose point3Control2 = poseFactory.of(42.9879, 107.3295, 0);
@@ -49,10 +51,12 @@ public class AutoDriveMain extends LinearOpMode2026 {
     private final Pose path5Segment1Heading = poseFactory.of(60.5, 132, 180);
     private final Pose path5Segment3Start = poseFactory.of(60.5, 132, -89.8912);
     private final Pose path5Segment3End = poseFactory.of(60.5, 132, 270);
-//    private static final double HIVE_TY_THRESHOLD = 5.0;
 
     public Turret turretAimer;
     DistanceToHive distanceToHive;
+    AprilTagClusterTargeting hiveTargeting;
+    LimelightMotionCompensator motionCompensator;
+    ShotSolution currentSolution;
 
     boolean isBackAtStart = false;
     boolean notBailed = true;
@@ -73,14 +77,13 @@ public class AutoDriveMain extends LinearOpMode2026 {
                         follow(follower, crossField())
                 ),
                 turnIntakeOff(),
-//                waitForLimelight(),
                 waitMs(100),
                 waitForLimelightTx(),
                 shoot(),
                 follow(follower, park()),
-                conditional( () -> !isCompetition, //when thing is set in config to return home
+                conditional( () -> !isCompetition,
                         follow(follower, toStart()),
-                        instant(() -> {}) // runs if the condition is false (does nothing)
+                        instant(() -> {})
                 ),
                 instant(() -> {
                     MovementUtils.autoEndPose = follower.pose();
@@ -98,10 +101,18 @@ public class AutoDriveMain extends LinearOpMode2026 {
         follower.update();
         turretConfigurator = new TurretConfigurator(this);
         distanceToHive = new DistanceToHive(posGet);
+        motionCompensator = new LimelightMotionCompensator(posGet, distanceToHive);
+
+        hiveTargeting = new AprilTagClusterTargeting();
+        hiveTargeting.setTiltServo(lla);
+        hiveTargeting.setDistanceToHive(distanceToHive);
+        hiveTargeting.allowedHives.add(isCurrentAllienceRed
+                ? AprilTagClusterTargeting.RED_SCORING
+                : AprilTagClusterTargeting.BLUE_SCORING);
 
         waitForStart();
         long start = System.currentTimeMillis();
-        flywheel.setVelocity(2200 * TICKS_PER_REV / 60.0); // 2400 was really good
+        flywheel.setVelocity(2200 * TICKS_PER_REV / 60.0);
         hood.setPosition(0.2);
         intake.setPower(0);
         lift.setPower(-0.1);
@@ -123,7 +134,10 @@ public class AutoDriveMain extends LinearOpMode2026 {
             telemetry.addData("x", follower.pose().x());
             telemetry.addData("y", follower.pose().y());
             telemetry.addData("heading", follower.pose().heading());
-            telemetry.addData("ty", limelight.getLatestResult().getTy());
+            LLResult latestResult = limelight.getLatestResult();
+            if (latestResult != null) {
+                telemetry.addData("ty", latestResult.getTy());
+            }
 
             if (follower.currentPath() != null) {
                 telemetry.addData("Current path distance remaining", follower.distanceToEndpoint());
@@ -133,7 +147,8 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 bail();
             }
 
-            turretConfigurator.runTurret(distanceToHive.GetDistance());
+            double shotDist = (currentSolution != null) ? currentSolution.virtualDistance : distanceToHive.GetDistance();
+            turretConfigurator.runTurret(shotDist);
 
             if (notBailed){
                 DoTurret();
@@ -177,39 +192,25 @@ public class AutoDriveMain extends LinearOpMode2026 {
         return Paths.path(Paths.line(point1, start).constant(start));
     }
 
-//    public Command waitForLimelight() {
-//        return run(() -> {
-//            DoTurret();
-//        }).until(() -> {
-//            LLResult result = limelight.getLatestResult();
-//            return result != null && result.isValid();
-//        });
-//    }
-
     public void DoTurret(){
-        // This will turn the turret to the april tags (if it sees it)
+        currentSolution = motionCompensator.calculateSolution(hiveTargeting, turretAimer, limelight);
 
-        double tx = turretAimer.UpdateTxValue(limelight);
+        turretAimer.ChangeAngleSetPosition(currentSolution.compensatedTx, (posGet != null) ? posGet.getVr() : 0);
 
-        turretAimer.ChangeAngleSetPosition(tx, posGet.getVr());
+        double positionChange = MiscUtils.getMotorPositionFromDegrees(currentSolution.compensatedTx, 537.7);
 
-        double positionChange = MiscUtils.getMotorPositionFromDegrees(tx, 537.7);
-
-        telemetry.addLine("tx: " + tx);
+        telemetry.addLine("tx: " + currentSolution.compensatedTx);
         telemetry.addLine("Amount of Position changes: " + positionChange);
 
         turretAimer.CheckPositionAndSetPower(telemetry);
     }
 
     public Command waitForLimelightTx() {
-        // Keeps updating the turret position while waiting
         return infinite(this::DoTurret).until(() -> {
-            double tx = turretAimer.UpdateTxValue(limelight);
-            LLResult result = limelight.getLatestResult();
-
             DoTurret();
+            LLResult result = limelight.getLatestResult();
+            double tx = (currentSolution != null) ? currentSolution.compensatedTx : turretAimer.UpdateTxValue(limelight);
 
-            // Ensure the result is valid and tx is within ±0.5 degrees of center
             return result != null && result.isValid() && Math.abs(tx) < 0.5;
         });
     }
@@ -235,43 +236,5 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 waitForLimelightTx(),
                 conditional(() -> limelight.getLatestResult().isValid(), shoot(), instant(() -> {isBackAtStart = true;}))
         );
-
-
-//        long startTime = System.currentTimeMillis();
-//        int[] validFrames = {0};
-//        boolean[] shouldGoBack = {false};
-//        double timeoutMs = 800.0; // Check for up to 0.8 seconds
-//
-//        // Step 1: Observation phase to check for the April tag stably
-//        Command observation = infinite(() -> {
-//            LLResult result = limelight.getLatestResult();
-//            if (result != null && result.isValid()) {
-//                validFrames[0]++;
-//                telemetry.addData("Valid Tag Frames", validFrames[0]);
-//            }
-//            DoTurret(); // Keep updating turret while looking
-//        }).until(() -> {
-//            if (validFrames[0] >= 7) { // Seen stably for at least 7 frames
-//                shouldGoBack[0] = true;
-//                return true;
-//            }
-//            if (System.currentTimeMillis() - startTime > timeoutMs) {
-//                return true; // Timeout reached without stable detection
-//            }
-//            return false;
-//        });
-//
-//        // Step 2: Sequentially run observation, then conditionally go back and shoot if seen
-//        return sequential(
-//                observation,
-//                conditional(
-//                        () -> shouldGoBack[0],
-//                        sequential(
-//                                follow(follower, backToStart()),
-//                                shoot()
-//                        ),
-//                        instant(() -> {}) // Do nothing if tag wasn't seen, proceed with routine
-//                )
-//        );
     }
 }

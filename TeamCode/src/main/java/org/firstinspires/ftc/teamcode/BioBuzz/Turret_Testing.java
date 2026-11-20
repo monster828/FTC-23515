@@ -10,7 +10,7 @@ import java.util.Arrays;
 @TeleOp(name = "Turret_Testing")
 public class Turret_Testing extends LinearOpMode2026 {
     static final double INTAKE_POWER = 0.8;
-    static final double LIFT_POWER = 1.0;
+    static double LIFT_POWER = 1.0;
     static final int MAX_RPM = 6000;
     // goBILDA 6000 RPM (1:1) motor encoder
     static final double TICKS_PER_REV = 28;
@@ -120,8 +120,17 @@ public class Turret_Testing extends LinearOpMode2026 {
             lla.setPosition(cameraAngle);
             //Intake on toggle; loop is earlier
             intake.setPower(intakeOn ? INTAKE_POWER : 0);
+
             //Lift only runs while left bumper is held
-            lift.setPower(gamepad1.left_bumper ? LIFT_POWER : 0);
+            if (gamepad1.circle){
+                LIFT_POWER = 0.5;
+            }
+
+            if (gamepad1.triangle){
+                LIFT_POWER = 0.7;
+            }
+
+            lift.setPower(gamepad1.left_bumper ? LIFT_POWER : -0.1);
 
             showTelemetry();
         }

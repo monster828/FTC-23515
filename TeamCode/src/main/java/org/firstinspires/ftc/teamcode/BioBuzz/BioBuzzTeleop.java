@@ -35,6 +35,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
     ControlsTrigger toggleClusterTelem; // created in runOpMode, gamepad1 is still null here
     boolean showClusterTelem = false;
+    boolean liftHighReverse = false;
 
     double tx = 0;
 
@@ -51,6 +52,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
         ControlsTrigger intakeTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.cross));
         ControlsTrigger inverseLiftTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.left_bumper));
         ControlsTrigger resetPositon = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.left_stick_button));
+        ControlsTrigger controlTurret = new ControlsTrigger(new GamepadButton(gamepad2, GamepadButton.GButton.cross));
         toggleClusterTelem = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.triangle));
 
 
@@ -83,7 +85,16 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
                 if (inverseLiftTrigger.IsButtonPressed()){
                     lift.setPower(-0.2);
                 } else if (!shooting) {
-                    lift.setPower(-0.1);
+
+                    if (isIntakeReversed){
+                        lift.setPower(-0.1);
+                        liftHighReverse = true;
+                    }else {
+                        if (liftHighReverse){
+                            lift.setPower(-1.0);
+                        }
+                    }
+
                 }
                 DoShoot();
 
@@ -143,7 +154,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
     }
 
     public void DoShoot(){
-        if (startShot != -1 && System.currentTimeMillis() - startShot < 1500){ // This should be 1500 if button is trigger
+        if (startShot != -1 && System.currentTimeMillis() - startShot < 10){ // This should be 1500 if button is trigger
             if (!shooting){
                 shooting = true;
                 lift.setPower(LIFT_POWER);
@@ -151,7 +162,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
         }else {
             if (shooting){
                 shooting = false;
-                lift.setPower(0);
+//                lift.setPower(0);
             }
         }
     }

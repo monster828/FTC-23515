@@ -6,55 +6,66 @@ public class DistanceToHive {
 
     PositionGetter positionGetter;
 
-    float upHiveX, upHiveY;
-    float downHiveX, downHiveY;
+    public float upHiveX = 57.5f;
+    public float upHiveY = 59.5f;
+    public float downHiveX = 57.5f;
+    public float downHiveY = 83.5f;
 
     public DistanceToHive(PositionGetter positionGetter){
         this.positionGetter = positionGetter;
-        upHiveX = 57.5f;
-        upHiveY = 59.5f;
-        downHiveX = 57.5f;
-        downHiveY = 83.5f;
+    }
+
+    public double GetTargetX() {
+        return (positionGetter != null && positionGetter.y() > 64) ? downHiveX : upHiveX;
+    }
+
+    public double GetTargetY() {
+        return (positionGetter != null && positionGetter.y() > 64) ? downHiveY : upHiveY;
     }
 
     public double GetDistance(){
-        double yPosition = positionGetter.y();
+        if (positionGetter == null) return 0;
+        double rx = positionGetter.x();
+        double ry = positionGetter.y();
 
-        if (yPosition > 64){
-            // Down hive
+        double tx = GetTargetX();
+        double ty = GetTargetY();
 
-            double xdist = positionGetter.x() - downHiveX;
-            double ydist = yPosition - downHiveY;
+        double dx = rx - tx;
+        double dy = ry - ty;
 
-            return Math.sqrt(xdist * xdist + ydist * ydist);
-        } else {
-            // Up hive
-
-            double xdist = positionGetter.x() - upHiveX;
-            double ydist = yPosition - upHiveY;
-
-            return Math.sqrt(xdist * xdist + ydist * ydist);
-        }
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
-    public double GetEstimatedTx(){
-        double yPosition = positionGetter.y();
+    public double GetFieldAngleToHive() {
+        if (positionGetter == null) return 0;
+        double rx = positionGetter.x();
+        double ry = positionGetter.y();
 
-        if (yPosition > 64){
-            // Down hive
+        double targetX = GetTargetX();
+        double targetY = GetTargetY();
 
-            double xdist = positionGetter.x() - downHiveX;
-            double ydist = yPosition - downHiveY;
+        double dx = targetX - rx;
+        double dy = targetY - ry;
 
-            return Math.atan2(ydist, xdist);
-        } else {
-            // Up hive
-
-            double xdist = positionGetter.x() - upHiveX;
-            double ydist = yPosition - upHiveY;
-
-            return Math.atan2(ydist, xdist);
-        }
+        return Math.toDegrees(Math.atan2(dy, dx));
     }
 
+    public double GetEstimatedTx() {
+        if (positionGetter == null) return 0;
+        return GetEstimatedTx(positionGetter.r(), 0);
+    }
+
+    public double GetEstimatedTx(double robotHeadingDeg, double turretRelativeAngleDeg) {
+        double targetFieldAngle = GetFieldAngleToHive();
+        double currentTurretFieldAngle = robotHeadingDeg + turretRelativeAngleDeg;
+
+        double tx = targetFieldAngle - currentTurretFieldAngle;
+
+        // Wrap to [-180, 180] degrees
+        while (tx > 180.0) tx -= 360.0;
+        while (tx < -180.0) tx += 360.0;
+
+        return tx;
+    }
 }
