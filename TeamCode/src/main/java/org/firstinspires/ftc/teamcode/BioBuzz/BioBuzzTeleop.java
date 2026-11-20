@@ -147,7 +147,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
             telemetry.addData("Cluster error", e.toString());
         }
 
-        turretAimer.ChangeAngleSetPosition(tx + (gamepad2.right_trigger > 0.1 ? gamepad2.right_trigger : 0) - (gamepad2.left_trigger > 0.1 ? gamepad2.left_trigger : 0), posGet.getVr());
+        turretAimer.ChangeAngleSetPosition(tx + (gamepad2.right_trigger > 0.1 ? gamepad2.right_trigger * 10 : 0) - (gamepad2.left_trigger > 0.1 ? gamepad2.left_trigger * 10 : 0), posGet.getVr());
 
         double positionChange = MiscUtils.getMotorPositionFromDegrees(tx, 537.7);
 
