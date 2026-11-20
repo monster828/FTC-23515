@@ -21,7 +21,6 @@ import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.MovementUtils;
 import org.firstinspires.ftc.teamcode.Utils.Positioning.DistanceToHive;
-import org.firstinspires.ftc.teamcode.Utils.Shooting.Turret;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.TurretConfigurator;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -135,7 +134,9 @@ public class AutoDriveMain extends LinearOpMode2026 {
 
             turretConfigurator.runTurret(distanceToHive.GetDistance());
 
-            DoTurret();
+            if (notBailed){
+                DoTurret();
+            }
 
             telemetry.update();
         }
