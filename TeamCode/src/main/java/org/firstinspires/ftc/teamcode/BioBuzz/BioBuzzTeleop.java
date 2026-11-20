@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.BioBuzz;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Utils.Controls.ControlsTrigger;
 import org.firstinspires.ftc.teamcode.Utils.Controls.GamepadButton;
@@ -53,6 +54,9 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
         ControlsTrigger inverseLiftTrigger = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.left_bumper));
         ControlsTrigger resetPositon = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.left_stick_button));
         ControlsTrigger controlTurret = new ControlsTrigger(new GamepadButton(gamepad2, GamepadButton.GButton.cross));
+        ControlsTrigger opSquare = new ControlsTrigger(new GamepadButton(gamepad2, GamepadButton.GButton.square));
+        boolean doesControlTurret = false;
+
         toggleClusterTelem = new ControlsTrigger(new GamepadButton(gamepad1, GamepadButton.GButton.triangle));
 
 
@@ -73,7 +77,23 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
             try {
                 teleopMovementUtil.UpdateDrive();
                 telemetry.addLine("--- BioBuzz Teleop ---");
-                DoTurret(); // also runs hiveTargeting.update()
+
+                if (controlTurret.IsTriggered()){
+                    doesControlTurret = !doesControlTurret;
+                }
+
+                if (doesControlTurret){
+                    turret.setTargetPosition(((gamepad2.dpad_right ? 1 : 0) - (gamepad2.dpad_left ? 1 : 0)) * 50);
+                    turret.setPower(0.5);
+
+                    if (opSquare.IsTriggered()){
+                        turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    }
+                }else {
+                    DoTurret(); // also runs hiveTargeting.update()
+                }
+
                 goalDistance = getGoalDistance();
                 telemetry.addLine("--- Turret Configurator ---");
                 turretConfigurator.runTurret(goalDistance);
