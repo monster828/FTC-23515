@@ -220,10 +220,10 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 instant(() -> {
                     MovementUtils.autoEndPose = follower.pose();
                 }),
+                follow(follower,park()),
                 instant(() -> {
                     turretAimer.SetTargetPosition( MiscUtils.getMotorPositionFromDegrees(-90, 537.7));
-                }),
-                follow(follower,park())
+                })
                 );
         notBailed = false;
     }
