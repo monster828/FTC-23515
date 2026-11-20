@@ -16,6 +16,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.pedropathing.paths.interpolator.Interpolator;
 
+import org.firstinspires.ftc.teamcode.Utils.Shooting.Turret;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.MovementUtils;
@@ -29,13 +30,13 @@ public class AutoDriveMain extends LinearOpMode2026 {
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
     private final Pose start = poseFactory.of(57, 9, 180);
-    private final Pose point1 = poseFactory.of(9.75, 9.5, 180);
+    private final Pose point1 = poseFactory.of(9.5, 9.5, 180);
     private final Pose point2 = poseFactory.of(64.9433, 131.1091, -90.8781);
     private final Pose point2Control1 = poseFactory.of(30.0, 29.9094, 0);
     private final Pose point2Control2 = poseFactory.of(0, 125.7339, 0);
     private final Pose point2Control3 = poseFactory.of(64.5333, 104.3615, 0);
     private final Pose point2Segment1Heading = poseFactory.of(64.9433, 131.1091, 180);
-    private final Pose point3 = poseFactory.of(10, 106.6598, -178.837);
+    private final Pose point3 = poseFactory.of(10, 120.6598, -178.837);
     private final Pose point3Control1 = poseFactory.of(64.8796, 98.922, 0);
     private final Pose point3Control2 = poseFactory.of(42.9879, 107.3295, 0);
     private final Pose path4 = poseFactory.of(57, 10, -178.9092);
@@ -208,6 +209,9 @@ public class AutoDriveMain extends LinearOpMode2026 {
         Scheduler.schedule(
                 instant(() -> {
                     MovementUtils.autoEndPose = follower.pose();
+                }),
+                instant(() -> {
+                    turretAimer.SetTargetPosition( MiscUtils.getMotorPositionFromDegrees(-90, 537.7));
                 }),
                 follow(follower,park())
                 );
