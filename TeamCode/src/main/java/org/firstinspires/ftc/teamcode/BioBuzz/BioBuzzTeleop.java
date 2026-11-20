@@ -36,6 +36,8 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
     ControlsTrigger toggleClusterTelem; // created in runOpMode, gamepad1 is still null here
     boolean showClusterTelem = false;
 
+    double tx = 0;
+
     @Override
     public void runOpMode(){
         config();
@@ -65,12 +67,14 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
         waitForStart();
 
         while (opModeIsActive()){
+            double goalDistance = distanceToHive.GetDistance(); // replaced by Limelight distance below when it sees the hive
             try {
                 teleopMovementUtil.UpdateDrive();
                 telemetry.addLine("--- BioBuzz Teleop ---");
-                DoTurret();
+                DoTurret(); // also runs hiveTargeting.update()
+                goalDistance = getGoalDistance();
                 telemetry.addLine("--- Turret Configurator ---");
-                turretConfigurator.runTurret(distanceToHive.GetDistance());
+                turretConfigurator.runTurret(goalDistance);
 
                 if (gamepad1.right_bumper){
                     startShot = System.currentTimeMillis();
@@ -100,7 +104,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
                     il.setPosition(.611);
                 }
 
-                lla.setPosition(LimelightAngle.getAngle(distanceToHive.GetDistance()));
+                lla.setPosition(LimelightAngle.getAngle(goalDistance));
 
             } catch (Exception e) {
                 // Show what crashed instead of freezing on the init screen
@@ -111,11 +115,31 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
                 }
             }
 
-            telemetry.addData("Distance From Goal: ", distanceToHive.GetDistance());
+            telemetry.addData("Distance From Goal: ", goalDistance);
+            telemetry.addData("Distance source: ", lastDistanceFromLimelight ? "Limelight" : "Odometry");
+            telemetry.addData("Odometry distance: ", distanceToHive.GetDistance());
 
             telemetry.update();
-            lla.setPosition(LimelightAngle.getAngle(distanceToHive.GetDistance()));
+            lla.setPosition(LimelightAngle.getAngle(goalDistance));
         }
+    }
+
+    boolean lastDistanceFromLimelight = false;
+
+    /**
+     * Distance to the hive opening from the Limelight (April tag cluster) when it can see the hive,
+     * otherwise the odometry distance. Call after DoTurret() so hiveTargeting is up to date.
+     */
+    public double getGoalDistance(){
+        double limelightDistance = -1;
+        try {
+            limelightDistance = hiveTargeting.getDistanceInches(); // -1 if no target / no 3D / unbelievable
+        } catch (Exception e) {
+            telemetry.addData("Cluster distance error", e.toString());
+        }
+
+        lastDistanceFromLimelight = limelightDistance > 0;
+        return lastDistanceFromLimelight ? limelightDistance : distanceToHive.GetDistance();
     }
 
     public void DoShoot(){
@@ -134,9 +158,8 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
 
     public void DoTurret(){
-        // This will turn the turret to the april tags (if it sees it)
 
-        double tx = turretAimer.UpdateTxValue(limelight);
+
 
 // cluster code (wrapped so a bug here can't stop the turret / shooter)
         try {
@@ -146,6 +169,11 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
         } catch (Exception e) {
             telemetry.addData("Cluster error", e.toString());
         }
+        // This will turn the turret to the april tags (if it sees it)
+
+         tx = turretAimer.UpdateTxValue(limelight);
+
+
 
         turretAimer.ChangeAngleSetPosition(tx + (gamepad2.right_trigger > 0.1 ? gamepad2.right_trigger * 10 : 0) - (gamepad2.left_trigger > 0.1 ? gamepad2.left_trigger * 10 : 0), posGet.getVr());
 

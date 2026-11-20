@@ -38,12 +38,11 @@ public class TurretConfigurator {
     // A new point within this many inches of an existing point replaces it
     static final double MERGE_DISTANCE = 2.0;
 
-    static final String CURVE_PATH = MiscUtils.dataFolder + "/shooterCurve.txt";
+    static final String CURVE_PATH = MiscUtils.dataFolder + "/shooterCurveLL.txt"; //changed from "/shooterCurve.txt"
 
     // Seed points: {distanceToGoal, flywheel RPM, hood}
     static final double[][] SEED_POINTS = {
-            {40.23, 2200, 0.20},
-            {52.65, 2400, 0.24},
+            //no seed points yet
     };
 
     /** distance -> {rpm, hood}, sorted by distance */

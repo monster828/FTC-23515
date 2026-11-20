@@ -88,7 +88,7 @@ public class AprilTagClusterTargeting {
 
     /** Camera position relative to the turret pivot, inches (+right, +forward). 0 if the camera is on the pivot. */
     public double cameraOffsetRightIn = 0;
-    public double cameraOffsetForwardIn = 0;
+    public double cameraOffsetForwardIn = 7;
 
     /** Unregistered tags closer than this (inches, 3D) or this (degrees, no 3D) count as the same cluster. */
     public double clusterRadiusIn = 30;
@@ -110,6 +110,14 @@ public class AprilTagClusterTargeting {
      * the turret aims at (current position - tx), so a held tx keeps pushing the target while it moves.
      */
     public long holdTimeMs = 0;
+
+    /** 0..1 smoothing for the distance only (1 = none). */
+    public double distanceSmoothing = 0.3;
+    /** Added to the camera distance so it matches what the shooter tables were tuned with (DistanceToHive). */
+    public double distanceOffsetIn = 0;
+    /** Camera distances outside this range are thrown out (getDistanceInches returns -1). */
+    public double minDistanceIn = 6;
+    public double maxDistanceIn = 200;
 
     /** Safety limits on tx (see safeTx). The opening can be at most this far from the tags' own tx. */
     public double maxCorrectionDeg = 10;
@@ -624,10 +632,14 @@ public class AprilTagClusterTargeting {
         double a = hadValue ? clamp(smoothing, 0, 1) : 1;
         tx = clamp(tx + (newTx - tx) * a, -maxTxDeg, maxTxDeg);
         ty = ty + (aim[1] - ty) * a;
-        if (aim[2] < 0) {
-            distanceIn = -1;
+        double newDist = aim[2] < 0 ? -1 : aim[2] + distanceOffsetIn;
+        if (newDist < minDistanceIn || newDist > maxDistanceIn || Double.isNaN(newDist)) {
+            distanceIn = -1; // no 3D, or not believable -> caller falls back to odometry
         } else {
-            distanceIn = (hadValue && distanceIn >= 0) ? distanceIn + (aim[2] - distanceIn) * a : aim[2];
+            // Distance has its own smoothing: it is not in the turret loop, and it drives the
+            // camera tilt servo, so damping it keeps the servo from twitching
+            double da = clamp(distanceSmoothing, 0, 1);
+            distanceIn = (hadValue && distanceIn >= 0) ? distanceIn + (newDist - distanceIn) * da : newDist;
         }
         heightIn = heightIn + (aim[3] - heightIn) * a;
 
@@ -684,7 +696,7 @@ public class AprilTagClusterTargeting {
     public double getTy() { return ty; }
 
     /** Horizontal distance from turret pivot to the opening in inches, or -1 if no 3D data. */
-    public double getDistanceInches() { return distanceIn; }
+    public double getDistanceInches() { return hasTarget ? distanceIn : -1; }
 
     /** Height of the opening relative to the camera, inches. Only meaningful with 3D data. */
     public double getHeightInches() { return heightIn; }
