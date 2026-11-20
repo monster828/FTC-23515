@@ -42,7 +42,8 @@ public class TurretConfigurator {
 
     // Seed points: {distanceToGoal, flywheel RPM, hood}
     static final double[][] SEED_POINTS = {
-            //no seed points yet
+            {80, 2200, 0.2},
+            {60, 2100, 0.15}
     };
 
     /** distance -> {rpm, hood}, sorted by distance */
