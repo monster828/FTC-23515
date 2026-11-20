@@ -104,6 +104,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
         flywheel.setVelocity(2200 * TICKS_PER_REV / 60.0); // 2400 was really good
         hood.setPosition(0.2);
         intake.setPower(0);
+        lift.setPower(-0.1);
 
         while (Math.abs(flywheel.getVelocity() - (2100 * TICKS_PER_REV / 60.0)) > 80){
             telemetry.addData("Flywheel velocity", flywheel.getVelocity());
@@ -168,7 +169,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
             instant(() -> intake.setPower(INTAKE_POWER)),
             instant(() -> lift.setPower(LIFT_POWER)),
             waitMs(1500),
-            instant(() -> lift.setPower(0))
+            instant(() -> lift.setPower(-0.1))
         );
     }
 
