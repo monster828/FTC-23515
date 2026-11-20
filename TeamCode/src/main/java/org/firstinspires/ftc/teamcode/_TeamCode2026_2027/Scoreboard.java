@@ -26,7 +26,8 @@ public class Scoreboard extends LinearOpMode2026 {
         }
         RoNumInput scoreIn = new RoNumInput("Score",5,0,telemetry);
         RoButton addScore = new RoButton(telemetry,"Add Score");
-        gui.add(P1); gui.add(P2); gui.add(scoreIn); gui.add(addScore);
+        RoButton clear = new RoButton(telemetry,"Clear");
+        gui.add(P1); gui.add(P2); gui.add(scoreIn); gui.add(addScore); gui.add(clear);
         waitForStart();
         while(opModeIsActive()) {
             gui.defaultLoop();
@@ -44,6 +45,9 @@ public class Scoreboard extends LinearOpMode2026 {
             telemetry.update();
             if((boolean) addScore.getOutput()) {
                 scores.addScore((Integer) P1.getOutput()+1,(Integer) P2.getOutput()+1,(int)((float)((Float) scoreIn.getOutput())));
+            }
+            if((boolean) clear.getOutput()) {
+                scores.clear();
             }
             sleep(10);
         }

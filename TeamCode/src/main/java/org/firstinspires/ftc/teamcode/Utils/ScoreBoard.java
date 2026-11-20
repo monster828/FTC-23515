@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ScoreBoard {
@@ -54,6 +55,16 @@ public class ScoreBoard {
         }
         for(byte b : out) {
             data.add(b);
+        }
+    }
+
+    public void clear() {
+        try {
+            data.clear();
+            file.delete();
+            file.createNewFile();
+        } catch (IOException e) {
+
         }
     }
 
