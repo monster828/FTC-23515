@@ -36,7 +36,7 @@ public class TurretConfigurator {
     static final double HOOD_MAX = 0.6;
 
     // A new point within this many inches of an existing point replaces it
-    static final double MERGE_DISTANCE = 2.0;
+    static final double MERGE_DISTANCE = 5.0;
 
     static final String CURVE_PATH = MiscUtils.dataFolder + "/shooterCurveLL.txt"; //changed from "/shooterCurve.txt"
 

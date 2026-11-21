@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.pedropathing.paths.interpolator.Interpolator;
 
 import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagClusterTargeting;
+import org.firstinspires.ftc.teamcode.Utils.Shooting.LimelightAngle;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.LimelightMotionCompensator;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.LimelightMotionCompensator.ShotSolution;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.Turret;
@@ -151,6 +152,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
             }
 
             double shotDist = (currentSolution != null) ? currentSolution.virtualDistance : distanceToHive.GetDistance();
+            lla.setPosition(LimelightAngle.getAngle(shotDist));
             turretConfigurator.runTurret(shotDist);
 
             if (notBailed){
