@@ -193,7 +193,7 @@ public class Turret {
         }else {
 
             if (waitTillNotSee || !canSee) { // Rotate the 180 a little slower
-                dcMotorEx.setPower(0.5);
+                dcMotorEx.setPower(0.45);
 
                 double timeDiff = (System.currentTimeMillis() - seeTime) / 1000.0;
 
@@ -224,7 +224,7 @@ public class Turret {
 
                 previousHeading = currentHeading;
             }else{
-                dcMotorEx.setPower(Math.max(0.7, Math.abs(GetTurretTargetPosition(dcMotorEx) - GetTurretCurrentPosition(dcMotorEx)) / 1000));  // LLA max .69  min .43
+                dcMotorEx.setPower(Math.max(0.7, Math.abs(GetTurretTargetPosition(dcMotorEx) - GetTurretCurrentPosition(dcMotorEx)) / 500));  // LLA max .69  min .43
             }
         }
     }
