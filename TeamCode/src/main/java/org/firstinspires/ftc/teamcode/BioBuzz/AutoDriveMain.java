@@ -218,7 +218,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
             {
                 goalDistance = getGoalDistance();
                 turretConfigurator.runTurret(goalDistance);
-                intake.setPower(INTAKE_POWER);
+                intake.setPower(INTAKE_POWER / 1.4);
                 lift.setPower(LIFT_POWER);
             }),
             waitMs(1500),
