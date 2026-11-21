@@ -4,6 +4,8 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
+import org.firstinspires.ftc.teamcode.Utils.Positioning.DistanceToHive;
+import org.firstinspires.ftc.teamcode.Utils.Shooting.AprilTagClusterTargeting;
 
 import java.util.Arrays;
 
@@ -27,16 +29,26 @@ public class Turret_Testing extends LinearOpMode2026 {
     boolean wasCrossPressed = true;
     boolean intakeOn = false;
     boolean wasRightBumperPressed = false;
-
     int[] velocityIncrements = {10, 100, 500};
     double[] servoIncrements = {0.01, 0.05, 0.1};
     int selectedTune = 0;
     int selectedIncrement = 0;
+    AprilTagClusterTargeting hiveTargeting;
+    DistanceToHive distanceToHive;
+    boolean lastDistanceFromLimelight = false;
 
     @Override
     public void runOpMode(){
         config();
 
+        distanceToHive = new DistanceToHive(posGet);
+
+        hiveTargeting = new AprilTagClusterTargeting();      // picks pipeline 4 red / 3 blue
+        hiveTargeting.setTiltServo(lla);
+        hiveTargeting.setDistanceToHive(distanceToHive);
+        hiveTargeting.allowedHives.add(isCurrentAllienceRed
+                ? AprilTagClusterTargeting.RED_SCORING
+                : AprilTagClusterTargeting.BLUE_SCORING);
         waitForStart();
 
         while(!isStopRequested()){
@@ -136,6 +148,17 @@ public class Turret_Testing extends LinearOpMode2026 {
         }
     }
 
+    public double getGoalDistance(){
+        double limelightDistance = -1;
+        try {
+            limelightDistance = hiveTargeting.getDistanceInches(); // -1 if no target / no 3D / unbelievable
+        } catch (Exception e) {
+            telemetry.addData("Cluster distance error", e.toString());
+        }
+
+        lastDistanceFromLimelight = limelightDistance > 0;
+        return lastDistanceFromLimelight ? limelightDistance : distanceToHive.GetDistance();
+    }
     void showTelemetry() {
         telemetry.addData("Flywheel Wanted RPM ", velocity);
         telemetry.addData("Flywheel Current RPM ", flywheel.getVelocity() * 60.0 / TICKS_PER_REV);
@@ -143,6 +166,7 @@ public class Turret_Testing extends LinearOpMode2026 {
         telemetry.addData("Camera Angle","%.2f", cameraAngle);
         telemetry.addData("Intake", intakeOn ? "ON" : "OFF");
         telemetry.addData("Lift", gamepad1.left_bumper ? "ON" : "OFF");
+        telemetry.addData("Distance to Goal", getGoalDistance());
 
         int pipeline = LinearOpMode2026.isCurrentAllienceRed ? 4 : 3;
 

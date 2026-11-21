@@ -99,7 +99,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
                 turretConfigurator.runTurret(goalDistance);
 
                 if (gamepad1.right_bumper){
-                    startShot = System.currentTimeMillis();
+//                    startShot = System.currentTimeMillis();
                     lift.setPower(.6);
                 }
                 if (inverseLiftTrigger.IsButtonPressed()){
@@ -122,6 +122,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
                     if (isIntakeReversed){
                         isIntakeReversed = false;
                         intake.setPower(-INTAKE_POWER);
+                        lift.setPower(-1.0);
                     }else {
                         isIntakeReversed = true;
                         intake.setPower(INTAKE_POWER);

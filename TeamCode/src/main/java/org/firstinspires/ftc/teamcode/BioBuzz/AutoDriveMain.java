@@ -206,6 +206,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
     }
 
     public Command waitForLimelightTx() {
+        final long[] startMS = {0};
         return infinite(this::DoTurret).until(() -> {
             DoTurret();
             LLResult result = limelight.getLatestResult();
@@ -213,6 +214,20 @@ public class AutoDriveMain extends LinearOpMode2026 {
 
             return result != null && result.isValid() && Math.abs(tx) < 0.5;
         });
+    }
+
+    /** Same as waitForLimelightTx(), but gives up after timeoutMs so a hive that isn't visible can't stall the routine. */
+    public Command waitForLimelightTx(long timeoutMs) {
+        final long[] startMs = {0};
+        return sequential(
+                instant(() -> startMs[0] = System.currentTimeMillis()),
+                infinite(this::DoTurret).until(() -> {
+                    LLResult result = limelight.getLatestResult();
+                    boolean aimed = result != null && result.isValid()
+                            && currentSolution != null && Math.abs(currentSolution.compensatedTx) < 0.5;
+                    return aimed || System.currentTimeMillis() - startMs[0] > timeoutMs;
+                })
+        );
     }
 
     public void bail() {
@@ -230,11 +245,28 @@ public class AutoDriveMain extends LinearOpMode2026 {
         notBailed = false;
     }
 
+    /**
+     * Checks the hive from the corner (point1).
+     * Hive still up  -> drive back to start, shoot, isBackAtStart = true  (then startToFlower).
+     * Hive tipped    -> stay at the corner, isBackAtStart stays false     (then crossField, which starts at point1).
+     */
     public Command goBackIfHiveIsNotDown() {
         return sequential(
-                follow(follower, backToStart()),
-                waitForLimelightTx(),
-                conditional(() -> limelight.getLatestResult().isValid(), shoot(), instant(() -> {isBackAtStart = true;}))
+                waitForLimelightTx(1500),
+                conditional(this::hiveVisible,
+                        sequential(
+                                follow(follower, backToStart()),
+                                waitForLimelightTx(),
+                                shoot(),
+                                instant(() -> {isBackAtStart = true;})
+                        ),
+                        instant(() -> {})
+                )
         );
+    }
+
+    private boolean hiveVisible() {
+        LLResult result = limelight.getLatestResult();
+        return result != null && result.isValid();
     }
 }
