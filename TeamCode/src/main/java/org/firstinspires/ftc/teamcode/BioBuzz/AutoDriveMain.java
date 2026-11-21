@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.Utils.Shooting.LimelightMotionCompensator;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.LimelightMotionCompensator.ShotSolution;
 import org.firstinspires.ftc.teamcode.Utils.Shooting.Turret;
 import org.firstinspires.ftc.teamcode.Utils.LinearOpMode2026;
+import org.firstinspires.ftc.teamcode.BioBuzz.BioBuzzTeleop;
 import org.firstinspires.ftc.teamcode.Utils.MiscUtils;
 import org.firstinspires.ftc.teamcode.Utils.Movement.MovementUtils;
 import org.firstinspires.ftc.teamcode.Utils.Positioning.DistanceToHive;
@@ -116,8 +117,6 @@ public class AutoDriveMain extends LinearOpMode2026 {
 
         waitForStart();
         long start = System.currentTimeMillis();
-        flywheel.setVelocity(2200 * TICKS_PER_REV / 60.0);
-        hood.setPosition(0.2);
         intake.setPower(0);
         lift.setPower(-0.1);
 
@@ -183,8 +182,22 @@ public class AutoDriveMain extends LinearOpMode2026 {
     public Path startToFlower() {
         return Paths.curve(start, path5Control1, path5).heading(Interpolator.piecewise().until(0.01, Interpolator.constant(path5Segment1Heading)).until(0.9361, Interpolator.tangent.reverse()).until(1, Interpolator.linear(path5Segment3Start, path5Segment3End)));
     }
+    double goalDistance;
+    public double getGoalDistance(){
+        double limelightDistance = -1;
+        try {
+            limelightDistance = hiveTargeting.getDistanceInches(); // -1 if no target / no 3D / unbelievable
+        } catch (Exception e) {
+            telemetry.addData("Cluster distance error", e.toString());
+        }
+
+        boolean lastDistanceFromLimelight = limelightDistance > 0;
+        return lastDistanceFromLimelight ? limelightDistance : distanceToHive.GetDistance();
+    }
     public Command shoot(){
         return  sequential(
+            instant(() -> goalDistance = getGoalDistance()),
+            instant (() -> turretConfigurator.runTurret(goalDistance)),   
             instant(() -> intake.setPower(INTAKE_POWER)),
             instant(() -> lift.setPower(LIFT_POWER)),
             waitMs(1500),
