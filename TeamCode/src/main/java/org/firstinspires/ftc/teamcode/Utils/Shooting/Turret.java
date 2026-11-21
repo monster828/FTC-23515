@@ -98,7 +98,7 @@ public class Turret {
 //    }
 
     public void ChangeAngleSetPosition(double tx, double rotationV){
-        SetTargetPosition (GetTurretCurrentPosition(dcMotorEx) - MiscUtils.getMotorPositionFromDegrees(tx * 1.04 - rotationV * 0.05, 537.7));
+        SetTargetPosition (GetTurretCurrentPosition(dcMotorEx) - MiscUtils.getMotorPositionFromDegrees(tx * 1.1 - rotationV * 0.05, 537.7)); // was tx * 1.04
     }
 
 

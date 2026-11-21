@@ -63,6 +63,8 @@ public class AutoDriveMain extends LinearOpMode2026 {
     boolean isBackAtStart = false;
     boolean notBailed = true;
 
+    boolean doTurret = true;
+
     TurretConfigurator turretConfigurator;
 
     // Autonomous routine
@@ -73,18 +75,26 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 follow(follower, corner()),
                 waitMs(2000),
                 goBackIfHiveIsNotDown(),
+                instant(() -> {
+                    doTurret = false;
+                    if (isBackAtStart){
+                        turretAimer.SetTargetPositionOverrideAllAround(MiscUtils.getDegreesFromMotor(0, 537.7));
+                    }else {
+                        turretAimer.SetTargetPositionOverrideAllAround(MiscUtils.getDegreesFromMotor(-90, 537.7));
+                    }
+                }),
                 waitMs(500),
                 conditional( () -> isBackAtStart,
                         follow(follower, startToFlower()),
                         follow(follower, crossField())
                 ),
+                instant(() -> doTurret = true),
                 turnIntakeOff(),
                 waitMs(100),
                 waitForLimelightTx(),
                 shoot(),
                 instant(() -> {
                     notBailed = false;
-                    turretAimer.SetTargetPosition( MiscUtils.getMotorPositionFromDegrees(-90, 537.7));
                 }),
                 follow(follower, park()),
                 conditional( () -> !isCompetition,
@@ -130,7 +140,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
 
             telemetry.addData("Flywheel velocity", flywheel.getVelocity());
             telemetry.addData("Wanted velocity", wantedVelocity);
-            if(notBailed) DoTurret();
+            if(notBailed && doTurret) DoTurret();
 
             telemetry.update();
         }
@@ -161,7 +171,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
             lla.setPosition(LimelightAngle.getAngle(shotDist));
             turretConfigurator.runTurret(shotDist);
 
-            if (notBailed){
+            if (notBailed & doTurret){
                 DoTurret();
             }
 
@@ -191,6 +201,10 @@ public class AutoDriveMain extends LinearOpMode2026 {
         return Paths.curve(start, path5Control1, path5).heading(Interpolator.piecewise().until(0.01, Interpolator.constant(path5Segment1Heading)).until(0.9361, Interpolator.tangent.reverse()).until(1, Interpolator.linear(path5Segment3Start, path5Segment3End)));
     }
     double goalDistance;
+    public int waitTimeTillSwitch = 1000;
+    public double previousSeeTime;
+    public double previousDistance;
+
     public double getGoalDistance(){
         double limelightDistance = -1;
         try {
@@ -199,16 +213,36 @@ public class AutoDriveMain extends LinearOpMode2026 {
             telemetry.addData("Cluster distance error", e.toString());
         }
 
-        boolean lastDistanceFromLimelight = limelightDistance > 0;
-        return lastDistanceFromLimelight ? limelightDistance : distanceToHive.GetDistance();
+        if (limelightDistance > 0){
+            previousSeeTime = System.currentTimeMillis();
+            previousDistance = limelightDistance;
+            return limelightDistance;
+        }
+
+        if (System.currentTimeMillis() - previousSeeTime > waitTimeTillSwitch || previousDistance == 0){
+            return distanceToHive.GetDistance();
+        }else {
+            return previousDistance;
+        }
     }
+//    public double getGoalDistance(){
+//        double limelightDistance = -1;
+//        try {
+//            limelightDistance = hiveTargeting.getDistanceInches(); // -1 if no target / no 3D / unbelievable
+//        } catch (Exception e) {
+//            telemetry.addData("Cluster distance error", e.toString());
+//        }
+//
+//        boolean lastDistanceFromLimelight = limelightDistance > 0;
+//        return lastDistanceFromLimelight ? limelightDistance : distanceToHive.GetDistance();
+//    }
     public Command shoot(){
         return  sequential(
             instant(() ->
             {
                 goalDistance = getGoalDistance();
                 turretConfigurator.runTurret(goalDistance);
-                intake.setPower(INTAKE_POWER);
+                intake.setPower(INTAKE_POWER / 1.4);
                 lift.setPower(LIFT_POWER);
             }),
             waitMs(1500),

@@ -66,6 +66,11 @@ public class TurretConfigurator {
     int selectedTune = 0;
     int selectedIncrement = 0;
 
+    public int previousFlywheelVelocity;
+    public double previousHoodPosition;
+    public int waitTimeTillSwitch = 1000;
+    public double previousSeeTime;
+
     public TurretConfigurator(LinearOpMode2026 op) {
         this.op = op;
 
@@ -159,6 +164,8 @@ public class TurretConfigurator {
         // velocity is in RPM; setVelocity takes ticks per second
         op.flywheel.setVelocity(velocity * TICKS_PER_REV / 60.0);
         op.hood.setPosition(hoodAngle);
+        previousFlywheelVelocity = velocity;
+        previousHoodPosition = hoodAngle;
 
         showTelemetry(distance);
 
