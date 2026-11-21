@@ -80,6 +80,10 @@ public class AutoDriveMain extends LinearOpMode2026 {
                 waitMs(100),
                 waitForLimelightTx(),
                 shoot(),
+                instant(() -> {
+                    notBailed = false;
+                    turretAimer.SetTargetPosition( MiscUtils.getMotorPositionFromDegrees(-90, 537.7));
+                }),
                 follow(follower, park()),
                 conditional( () -> !isCompetition,
                         follow(follower, toStart()),
@@ -220,12 +224,12 @@ public class AutoDriveMain extends LinearOpMode2026 {
         follower.stop();
         Scheduler.schedule(
                 instant(() -> {
+                    turretAimer.SetTargetPosition( MiscUtils.getMotorPositionFromDegrees(-90, 537.7));
+                }),
+                instant(() -> {
                     MovementUtils.autoEndPose = follower.pose();
                 }),
-                follow(follower,park()),
-                instant(() -> {
-                    turretAimer.SetTargetPosition( MiscUtils.getMotorPositionFromDegrees(-180, 537.7));
-                })
+                follow(follower,park())
                 );
         notBailed = false;
     }
