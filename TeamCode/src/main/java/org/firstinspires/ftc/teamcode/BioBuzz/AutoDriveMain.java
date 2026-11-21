@@ -201,6 +201,10 @@ public class AutoDriveMain extends LinearOpMode2026 {
         return Paths.curve(start, path5Control1, path5).heading(Interpolator.piecewise().until(0.01, Interpolator.constant(path5Segment1Heading)).until(0.9361, Interpolator.tangent.reverse()).until(1, Interpolator.linear(path5Segment3Start, path5Segment3End)));
     }
     double goalDistance;
+    public int waitTimeTillSwitch = 1000;
+    public double previousSeeTime;
+    public double previousDistance;
+
     public double getGoalDistance(){
         double limelightDistance = -1;
         try {
@@ -209,9 +213,29 @@ public class AutoDriveMain extends LinearOpMode2026 {
             telemetry.addData("Cluster distance error", e.toString());
         }
 
-        boolean lastDistanceFromLimelight = limelightDistance > 0;
-        return lastDistanceFromLimelight ? limelightDistance : distanceToHive.GetDistance();
+        if (limelightDistance > 0){
+            previousSeeTime = System.currentTimeMillis();
+            previousDistance = limelightDistance;
+            return limelightDistance;
+        }
+
+        if (System.currentTimeMillis() - previousSeeTime > waitTimeTillSwitch || previousDistance == 0){
+            return distanceToHive.GetDistance();
+        }else {
+            return previousDistance;
+        }
     }
+//    public double getGoalDistance(){
+//        double limelightDistance = -1;
+//        try {
+//            limelightDistance = hiveTargeting.getDistanceInches(); // -1 if no target / no 3D / unbelievable
+//        } catch (Exception e) {
+//            telemetry.addData("Cluster distance error", e.toString());
+//        }
+//
+//        boolean lastDistanceFromLimelight = limelightDistance > 0;
+//        return lastDistanceFromLimelight ? limelightDistance : distanceToHive.GetDistance();
+//    }
     public Command shoot(){
         return  sequential(
             instant(() ->

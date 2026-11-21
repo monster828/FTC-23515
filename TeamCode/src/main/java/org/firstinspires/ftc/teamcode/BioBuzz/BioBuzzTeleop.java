@@ -38,6 +38,10 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
     boolean showClusterTelem = false;
     boolean liftHighReverse = false;
 
+    public int waitTimeTillSwitch = 1000;
+    public double previousSeeTime;
+    public double previousDistance;
+
     double tx = 0;
 
     @Override
@@ -171,7 +175,17 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
         }
 
         lastDistanceFromLimelight = limelightDistance > 0;
-        return lastDistanceFromLimelight ? limelightDistance : distanceToHive.GetDistance();
+        if (lastDistanceFromLimelight){
+            previousSeeTime = System.currentTimeMillis();
+            previousDistance = limelightDistance;
+            return limelightDistance;
+        }
+
+        if (System.currentTimeMillis() - previousSeeTime > waitTimeTillSwitch || previousDistance == 0){
+            return distanceToHive.GetDistance();
+        }else {
+            return previousDistance;
+        }
     }
 
     public void DoShoot(){
