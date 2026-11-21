@@ -99,7 +99,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
                 turretConfigurator.runTurret(goalDistance);
 
                 if (gamepad1.right_bumper){
-//                    startShot = System.currentTimeMillis();
+                    startShot = System.currentTimeMillis();
                     lift.setPower(.6);
                 }
                 if (inverseLiftTrigger.IsButtonPressed()){
@@ -175,7 +175,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
     }
 
     public void DoShoot(){
-        if (startShot != -1 && System.currentTimeMillis() - startShot < 10){ // This should be 1500 if button is trigger
+        if (startShot != -1 && System.currentTimeMillis() - startShot < 40){ // This should be 1500 if button is trigger
             if (!shooting){
                 shooting = true;
                 lift.setPower(LIFT_POWER);
