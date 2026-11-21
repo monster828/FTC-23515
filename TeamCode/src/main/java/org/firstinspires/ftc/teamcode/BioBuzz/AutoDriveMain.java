@@ -239,6 +239,16 @@ public class AutoDriveMain extends LinearOpMode2026 {
             DoTurret();
             LLResult result = limelight.getLatestResult();
             double tx = (currentSolution != null) ? currentSolution.compensatedTx : turretAimer.UpdateTxValue(limelight);
+            try {
+                if (hiveTargeting.update(limelight)) {
+                    tx = hiveTargeting.getTx();
+                }
+            } catch (Exception e) {
+                telemetry.addData("Cluster error", e.toString());
+            }
+            // This will turn the turret to the april tags (if it sees it)
+
+            tx = turretAimer.UpdateTxValue(limelight);
 
             return result != null && result.isValid() && Math.abs(tx) < 0.5;
         });
