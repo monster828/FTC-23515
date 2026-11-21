@@ -84,7 +84,7 @@ public class BioBuzzTeleop extends LinearOpMode2026 {
 
                 if (doesControlTurret){
                     turretAimer.SetTargetPositionOverrideAllAround((((gamepad2.dpad_right ? 1 : 0) - (gamepad2.dpad_left ? 1 : 0)) * 50) + turret.getCurrentPosition());
-                    turret.setPower(0.5);
+                    turret.setPower(0.7);
 
                     if (opSquare.IsTriggered()){
                         turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
