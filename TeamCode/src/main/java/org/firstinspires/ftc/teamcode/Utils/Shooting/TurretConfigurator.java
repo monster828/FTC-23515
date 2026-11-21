@@ -85,7 +85,7 @@ public class TurretConfigurator {
      * Call every loop.
      * @param distance current distance to the goal (same units as the seed points)
      */
-    public void runTurret(double distance) {
+    public double runTurret(double distance) {
         // Each trigger is true only once per press
         boolean dpadUp = dpadUpTrigger.IsTriggered();
         boolean dpadDown = dpadDownTrigger.IsTriggered();
@@ -161,6 +161,8 @@ public class TurretConfigurator {
         op.hood.setPosition(hoodAngle);
 
         showTelemetry(distance);
+
+        return velocity * TICKS_PER_REV / 60.0;
     }
 
     /** @return {rpm, hood} for this distance, clamped to safe ranges */
