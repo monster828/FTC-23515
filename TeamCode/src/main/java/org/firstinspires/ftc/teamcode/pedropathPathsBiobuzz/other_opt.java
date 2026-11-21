@@ -30,7 +30,7 @@ public class other_opt extends LinearOpMode2026 {
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
     private final Pose start = poseFactory.of(60, 132, 270);
-    private final Pose point1 = poseFactory.of(17.7869, 124.0861, 180);
+    private final Pose point1 = poseFactory.of(12.0, 120.0, 180);
     private final Pose point1Control1 = poseFactory.of(46.2072, 113.3212, 0);
 
     // Bailout: at BAIL_TIME_MS after start, drop the routine and drive straight to park
