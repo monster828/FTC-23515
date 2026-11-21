@@ -123,7 +123,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
 
         double wantedVelocity = 1000;
 
-        while (Math.abs(flywheel.getVelocity() - wantedVelocity) > 80){
+        while (opModeIsActive() && Math.abs(flywheel.getVelocity() - wantedVelocity) > 80){
 
             goalDistance = getGoalDistance();
             wantedVelocity = turretConfigurator.runTurret(goalDistance);
