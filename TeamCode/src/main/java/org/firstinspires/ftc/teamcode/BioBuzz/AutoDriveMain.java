@@ -41,7 +41,7 @@ public class AutoDriveMain extends LinearOpMode2026 {
     private final Pose point2Control1 = poseFactory.of(30.0, 29.9094, 0);
     private final Pose point2Control2 = poseFactory.of(0, 125.7339, 0);
     private final Pose point2Control3 = poseFactory.of(64.5333, 104.3615, 0);
-    private final Pose point3 = poseFactory.of(10.5, 120.6598, -178.837);
+    private final Pose point3 = poseFactory.of(10.5, 88.6598, -178.837);
     private final Pose point3Control1 = poseFactory.of(64.8796, 98.922, 0);
     private final Pose point3Control2 = poseFactory.of(42.9879, 107.3295, 0);
     private final Pose path4 = poseFactory.of(57, 10, -178.9092);
