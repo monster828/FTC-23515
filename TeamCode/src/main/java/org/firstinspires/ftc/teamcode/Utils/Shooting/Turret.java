@@ -157,7 +157,7 @@ public class Turret {
         }
     }
 
-    private void SetTargetPositionOverrideAllAround(double position){
+    public void SetTargetPositionOverrideAllAround(double position){
         newPosition = position;
 
         double range = maxPosition - minPosition;
